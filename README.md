@@ -6,16 +6,28 @@ A streamlined utility for finding, extracting, and managing notes stored in Curs
 
 Successfully extracted 214 note entries from 163 Cursor workspace databases. Project has been cleaned up to remove unnecessary files and minimize dependencies.
 
-## 🚀 **Quick Setup (Any Computer)**
+## 🚀 **Choose Your Setup Method**
 
-### **Option 1: New Computer Setup (Automated)**
+### **Option 1: Standalone Executable (Easiest) ⭐**
+**Perfect for non-technical users - no setup required!**
+```bash
+# 1. Download CursorNoteSearch.exe (16MB)
+# 2. Double-click to run
+# 3. That's it! No Python, conda, or dependencies needed
+```
+📁 **[Download: CursorNoteSearch.exe](dist/CursorNoteSearch.exe)** (16MB)
+
+### **Option 2: Python Setup (For Developers)**
+**Full source code with customization capabilities**
+
+**New Computer Setup (Automated):**
 ```bash
 # 1. Download/copy the project folder to any computer
 # 2. Double-click this file to set everything up:
 setup_for_new_computer.bat
 ```
 
-### **Option 2: Manual Setup**
+**Manual Setup:**
 ```bash
 # 1. Install Miniconda (if not already installed)
 # Download from: https://docs.conda.io/en/latest/miniconda.html
@@ -24,7 +36,7 @@ setup_for_new_computer.bat
 start_note_search.bat
 ```
 
-### **Option 3: If you have conda already**
+**Expert Setup:**
 ```bash
 conda create -n cursor-notepad-browser python=3.10 -y
 conda activate cursor-notepad-browser
@@ -36,14 +48,27 @@ python note_search_gui.py
 
 **✅ Works on any Windows computer** - No hardcoded paths
 **✅ Works for any user** - Automatically finds the current user's Cursor data
-**✅ Auto-setup** - Creates conda environment if it doesn't exist
-**✅ Minimal dependencies** - Only uses built-in Python modules for core functionality
+**✅ Multiple distribution methods** - Executable or Python source
+**✅ Auto-setup** - Creates conda environment if it doesn't exist (Python version)
+**✅ Zero setup** - Just download and run (Executable version)
 
 ### **What's Automatically Detected:**
 - **User home directory** - `%USERPROFILE%\AppData\Roaming\Cursor\...`
 - **Cursor workspace databases** - Finds all workspace storage automatically  
-- **Conda environment** - Creates one if none exists
-- **Dependencies** - Installs optional PDF/DOCX support
+- **Conda environment** - Creates one if none exists (Python version)
+- **Dependencies** - All included in executable, auto-installed in Python version
+
+## 🎯 **Which Version Should You Choose?**
+
+| Feature | 🚀 Executable Version | 🐍 Python Version |
+|---------|----------------------|-------------------|
+| **Setup Required** | None - just download | conda + dependencies |
+| **File Size** | 16MB standalone | ~1MB source code |
+| **Technical Knowledge** | None required | Basic command line |
+| **Customization** | Limited | Full source access |
+| **Updates** | Download new .exe | Edit source directly |
+| **Performance** | Good (2-5s startup) | Excellent (instant) |
+| **Perfect For** | End users, sharing | Developers, power users |
 
 ## Features
 

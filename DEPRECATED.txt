@@ -1,0 +1,54 @@
+# Deprecated Patterns and Code
+
+This file tracks deprecated patterns, outdated code, and practices that should be avoided in this project.
+
+## Deprecated Patterns
+
+### 1. Direct Database Access
+- **DEPRECATED**: Direct SQLite operations in UI components
+- **REASON**: Violates separation of concerns
+- **ALTERNATIVE**: Use database/ module for all database operations
+
+### 2. Hardcoded Paths
+- **DEPRECATED**: Hardcoded file paths in application code
+- **REASON**: Reduces portability and maintainability
+- **ALTERNATIVE**: Use utils/config.py for path management
+
+### 3. Global Variables for State
+- **DEPRECATED**: Using global variables to maintain application state
+- **REASON**: Makes code harder to test and maintain
+- **ALTERNATIVE**: Use class-based state management
+
+### 4. Insecure SQL Queries
+- **DEPRECATED**: String concatenation for SQL queries
+- **REASON**: Security risk and poor practice
+- **ALTERNATIVE**: Use parameterized queries with sqlite3
+
+### 5. Non-Error Handling
+- **DEPRECATED**: Code without explicit error handling
+- **REASON**: Poor user experience and debugging difficulty
+- **ALTERNATIVE**: Always include try-catch blocks for external operations
+
+## Code Quality Standards
+
+### Required Practices
+1. All database operations must use parameterized queries
+2. All file operations must include error handling
+3. UI components must be modular and reusable
+4. All external dependencies must be minimal and well-justified
+
+### Forbidden Practices
+1. Direct manipulation of UI elements from database layer
+2. Hardcoded paths or configuration values
+3. Synchronous operations that could block the UI
+4. Code without proper documentation
+
+## Migration Notes
+
+When updating existing code:
+1. Replace hardcoded paths with config.py calls
+2. Move database operations to appropriate modules
+3. Add error handling to all external operations
+4. Update documentation to reflect changes
+
+Last updated: [Date of last significant architectural change] 

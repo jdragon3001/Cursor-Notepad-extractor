@@ -1,0 +1,21 @@
+# Cursor Notepad Extractor Requirements
+# Minimal dependencies using Python standard library where possible
+
+# No external dependencies needed for basic functionality
+# All required modules are included with Python:
+# - tkinter (GUI framework)
+# - sqlite3 (database operations)
+# - os, pathlib (file operations)
+# - json (data parsing)
+
+# Optional dependencies for enhanced functionality:
+# pandas>=1.3.0    # For advanced data export (uncomment if needed)
+# openpyxl>=3.0.0  # For Excel export (uncomment if needed)
+
+# Required dependencies
+tkinter
+pathlib
+
+# Optional dependencies for enhanced export capabilities
+reportlab>=4.0.0  # PDF export
+python-docx>=0.8.11  # DOCX export 

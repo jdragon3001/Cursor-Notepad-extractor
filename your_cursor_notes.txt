@@ -1,0 +1,352 @@
+Your Cursor Notepad Content
+Found in Cursor workspace databases
+============================================================
+
+NOTEPAD ENTRY #1:
+------------------------------
+select tool to download as batch
+- copy link for others to download from lin.k
+- package as zip or folder for download as link
+- delete on download in settings as default
+- select and download as folder or zip
+- delete uploaded files
+Share chat session option
+- 1, 5, 10, 30, 1 hr sessions
+site refresh
+files refresh button
+upload/dowmload speed
+
+============================================================
+
+NOTEPAD ENTRY #2:
+------------------------------
+select tool to download as batch
+- copy link for others to download from lin.k
+- package as zip or folder for download as link
+- delete on download in settings as default
+- select and download as folder or zip
+- delete uploaded files
+Share chat session option
+- 1, 5, 10, 30, 1 hr sessions
+site refresh
+files refresh button
+upload/dowmload speed
+
+============================================================
+
+NOTEPAD ENTRY #3:
+------------------------------
+Below is a Product Requirements Document (PRD) for the Multi-Modal RAG System, consolidating the core requirements, system architecture, feature specifications, and success criteria. This document is intended to guide stakeholders and developers through the entire project scope.
+1. Introduction
+1.1 Purpose
+The purpose of this project is to develop a Retrieval-Augmented Generation (RAG) system that can:
+Ingest and index various file types (text, images, spreadsheets, code) from a local folder or via uploads.
+Provide semantic search capabilities.
+Generate context-aware responses with citations using Anthropic’s Claude API.
+Handle large datasets while maintaining efficient performance and preserving data privacy.
+1.2 Objectives
+Multi-Modal Input Support: Seamlessly parse text documents, spreadsheets, PDFs, images (with OCR and scene understanding), and code files.
+Flexible Retrieval: Provide a robust indexing mechanism that allows semantic search across a diverse corpus.
+Co...
+
+============================================================
+
+NOTEPAD ENTRY #4:
+------------------------------
+Below is a Product Requirements Document (PRD) for the Multi-Modal RAG System, consolidating the core requirements, system architecture, feature specifications, and success criteria. This document is intended to guide stakeholders and developers through the entire project scope.
+1. Introduction
+1.1 Purpose
+The purpose of this project is to develop a Retrieval-Augmented Generation (RAG) system that can:
+Ingest and index various file types (text, images, spreadsheets, code) from a local folder or via uploads.
+Provide semantic search capabilities.
+Generate context-aware responses with citations using Anthropic’s Claude API.
+Handle large datasets while maintaining efficient performance and preserving data privacy.
+1.2 Objectives
+Multi-Modal Input Support: Seamlessly parse text documents, spreadsheets, PDFs, images (with OCR and scene understanding), and code files.
+Flexible Retrieval: Provide a robust indexing mechanism that allows semantic search across a diverse corpus.
+Co...
+
+============================================================
+
+NOTEPAD ENTRY #5:
+------------------------------
+1. Overview
+Product Name: Macro Recorder & Replayer
+Description: A cross-platform desktop application written in C++ that records all user keystrokes and mouse actions, then replays them on-demand with adjustable speed and repetition settings.
+2. Objectives & Goals
+High Performance & Accuracy
+Use C++’s native speed to handle large, high-frequency input recordings without slowdowns.
+Easy Recording & Playback
+Provide a simple workflow to record and replay keystrokes/mouse actions across different applications.
+Flexible Playback Options
+Allow speed adjustments, custom delays, and repeated loops during playback.
+Macros Management
+Store, edit, rename, and organize multiple recorded “macro” files.
+Cross-Platform Support
+Target Windows, macOS, and Linux using a unified C++ codebase (e.g., with Qt or similar).
+3. Scope
+In-Scope
+Recording keyboard and mouse actions, including movement, clicks, scroll, special keys (shortcuts).
+Saving and loading macros to a local data forma...
+
+============================================================
+
+NOTEPAD ENTRY #6:
+------------------------------
+1. Overview
+Product Name: Macro Recorder & Replayer
+Description: A cross-platform desktop application written in C++ that records all user keystrokes and mouse actions, then replays them on-demand with adjustable speed and repetition settings.
+2. Objectives & Goals
+High Performance & Accuracy
+Use C++’s native speed to handle large, high-frequency input recordings without slowdowns.
+Easy Recording & Playback
+Provide a simple workflow to record and replay keystrokes/mouse actions across different applications.
+Flexible Playback Options
+Allow speed adjustments, custom delays, and repeated loops during playback.
+Macros Management
+Store, edit, rename, and organize multiple recorded “macro” files.
+Cross-Platform Support
+Target Windows, macOS, and Linux using a unified C++ codebase (e.g., with Qt or similar).
+3. Scope
+In-Scope
+Recording keyboard and mouse actions, including movement, clicks, scroll, special keys (shortcuts).
+Saving and loading macros to a local data forma...
+
+============================================================
+
+NOTEPAD ENTRY #7:
+------------------------------
+{"notepadId":"76bbe76e-572f-41fb-89ad-528acba1cb91"}
+
+============================================================
+
+NOTEPAD ENTRY #8:
+------------------------------
+1. Overview
+Objective:
+Develop a lightweight, AI-powered 8-bit ghost widget that resides on the user’s desktop. The ghost dynamically changes color, expressions, and mood in response to user interactions (e.g., mouse movements) and system events, and it leverages basic AI functionality for conversational and adaptive behavior.
+Target Platform:
+Desktop environments: Windows, Mac, and Linux
+Easy installation/uninstallation with a small footprint
+Key Differentiators:
+Charming Animations & Varied Expressions: A richly animated ghost with a spectrum of moods (idle, happy, playful, tired) that reacts in real time.
+Dynamic AI Interactions: Optional AI connectivity to provide conversational responses and deeper mood adaptation.
+Seamless Desktop Integration: The widget stays on top of other windows and integrates naturally with desktop activity.
+2. User Stories
+Idle Ghost:
+As a user, I want to see a calm, neutral 8-bit ghost in a grayscale idle state when I’m not int...
+
+============================================================
+
+NOTEPAD ENTRY #9:
+------------------------------
+1. Overview
+Objective:
+Develop a lightweight, AI-powered 8-bit ghost widget that resides on the user’s desktop. The ghost dynamically changes color, expressions, and mood in response to user interactions (e.g., mouse movements) and system events, and it leverages basic AI functionality for conversational and adaptive behavior.
+Target Platform:
+Desktop environments: Windows, Mac, and Linux
+Easy installation/uninstallation with a small footprint
+Key Differentiators:
+Charming Animations & Varied Expressions: A richly animated ghost with a spectrum of moods (idle, happy, playful, tired) that reacts in real time.
+Dynamic AI Interactions: Optional AI connectivity to provide conversational responses and deeper mood adaptation.
+Seamless Desktop Integration: The widget stays on top of other windows and integrates naturally with desktop activity.
+2. User Stories
+Idle Ghost:
+As a user, I want to see a calm, neutral 8-bit ghost in a grayscale idle state when I’m not int...
+
+============================================================
+
+NOTEPAD ENTRY #10:
+------------------------------
+1. Overview
+1.1 Purpose
+You have a dataset of ~2000 nonprofit organizations in an Excel (XLSX) file. The goal is to automate finding each nonprofit’s website and insert that information into a new column. If no website can be found, those entries will be left blank or skipped.
+1.2 Objectives
+Automate Data Enrichment: Eliminate manual searching and data entry.
+Maintain Data Accuracy: Only insert valid URLs.
+Save Time & Resources: Ensure efficient and fast processing of 2000+ nonprofits.
+2. Scope
+2.1 In-Scope
+File Ingestion: Reading a local XLSX file containing nonprofits’ identifying information (e.g., name, location).
+Website Discovery: Use programmatic methods (e.g., a search engine API or a third-party database/API) to find each nonprofit’s official website.
+Data Output: Write the discovered URLs to a new column in the original XLSX file (or a new file).
+Error Handling: If a website is not found or no valid link is available, skip or leave blank.
+2.2 Out-of-Scope
+Adva...
+
+============================================================
+
+NOTEPAD ENTRY #11:
+------------------------------
+1. Overview
+1.1 Purpose
+You have a dataset of ~2000 nonprofit organizations in an Excel (XLSX) file. The goal is to automate finding each nonprofit’s website and insert that information into a new column. If no website can be found, those entries will be left blank or skipped.
+1.2 Objectives
+Automate Data Enrichment: Eliminate manual searching and data entry.
+Maintain Data Accuracy: Only insert valid URLs.
+Save Time & Resources: Ensure efficient and fast processing of 2000+ nonprofits.
+2. Scope
+2.1 In-Scope
+File Ingestion: Reading a local XLSX file containing nonprofits’ identifying information (e.g., name, location).
+Website Discovery: Use programmatic methods (e.g., a search engine API or a third-party database/API) to find each nonprofit’s official website.
+Data Output: Write the discovered URLs to a new column in the original XLSX file (or a new file).
+Error Handling: If a website is not found or no valid link is available, skip or leave blank.
+2.2 Out-of-Scope
+Adva...
+
+============================================================
+
+NOTEPAD ENTRY #12:
+------------------------------
+{"notepadId":"38b031f1-c376-4657-867f-0d65d944291a"}
+
+============================================================
+
+NOTEPAD ENTRY #13:
+------------------------------
+{"notepadId":"a5ef3f99-ba7d-4d10-aa3f-66b8cf6e89fe"}
+
+============================================================
+
+NOTEPAD ENTRY #14:
+------------------------------
+🛠 Product Requirements Document: Open Source Mail Merge (OSMM)
+📌 Product Name (Working Title): MailMerge+
+1. Overview
+MailMerge+ is an open-source Google Workspace add-on that allows users to send personalized email campaigns directly from Gmail using data from Google Sheets. It offers a privacy-first, cost-free alternative to commercial mail merge solutions like YAMM, focused on transparency, extensibility, and community contribution.
+2. Goals
+Allow non-technical users to send personalized emails from Gmail using a Google Sheet.
+Enable open collaboration and contribution from developers.
+Avoid daily email limits where possible by batching or queuing intelligently.
+Respect privacy: No third-party tracking or data sharing.
+Provide extensibility for developers to add custom logic or integrations (e.g., via Apps Script triggers or GitHub Actions).
+3. Key Features
+✅ MVP Features
+Feature	Description
+Google Sheets Add-on	UI button to trigger mail merge (custom sideba...
+
+============================================================
+
+NOTEPAD ENTRY #15:
+------------------------------
+🛠 Product Requirements Document: Open Source Mail Merge (OSMM)
+📌 Product Name (Working Title): MailMerge+
+1. Overview
+MailMerge+ is an open-source Google Workspace add-on that allows users to send personalized email campaigns directly from Gmail using data from Google Sheets. It offers a privacy-first, cost-free alternative to commercial mail merge solutions like YAMM, focused on transparency, extensibility, and community contribution.
+2. Goals
+Allow non-technical users to send personalized emails from Gmail using a Google Sheet.
+Enable open collaboration and contribution from developers.
+Avoid daily email limits where possible by batching or queuing intelligently.
+Respect privacy: No third-party tracking or data sharing.
+Provide extensibility for developers to add custom logic or integrations (e.g., via Apps Script triggers or GitHub Actions).
+3. Key Features
+✅ MVP Features
+Feature	Description
+Google Sheets Add-on	UI button to trigger mail merge (custom sideba...
+
+============================================================
+
+NOTEPAD ENTRY #16:
+------------------------------
+I'll provide detailed instructions for an AI developer to create your Roku City-inspired driving experience:
+Roku City Driving Experience - Developer Instructions
+Concept Overview
+Create a 3D driving experience inspired by Roku City (the screensaver environment from Roku devices) where:
+The user is permanently inside a car traveling along a predefined path
+The car automatically drives through the cityscape
+Users can look around 360° but cannot control the car's movement or exit the vehicle
+The experience follows a scenic route along futuristic buildings, waterfront areas, and other iconic Roku City elements
+Key Visual Elements from Roku City
+Futuristic, slightly retro-futuristic architecture with neon accents
+Tall skyscrapers with distinct shapes and illuminated windows
+Art deco and cyberpunk aesthetic influences
+Vibrant color palette dominated by blues, purples, and neon highlights
+Water elements reflecting city lights
+Animated billboards and signs
+Constant nightt...
+
+============================================================
+
+NOTEPAD ENTRY #17:
+------------------------------
+I'll provide detailed instructions for an AI developer to create your Roku City-inspired driving experience:
+Roku City Driving Experience - Developer Instructions
+Concept Overview
+Create a 3D driving experience inspired by Roku City (the screensaver environment from Roku devices) where:
+The user is permanently inside a car traveling along a predefined path
+The car automatically drives through the cityscape
+Users can look around 360° but cannot control the car's movement or exit the vehicle
+The experience follows a scenic route along futuristic buildings, waterfront areas, and other iconic Roku City elements
+Key Visual Elements from Roku City
+Futuristic, slightly retro-futuristic architecture with neon accents
+Tall skyscrapers with distinct shapes and illuminated windows
+Art deco and cyberpunk aesthetic influences
+Vibrant color palette dominated by blues, purples, and neon highlights
+Water elements reflecting city lights
+Animated billboards and signs
+Constant nightt...
+
+============================================================
+
+NOTEPAD ENTRY #18:
+------------------------------
+https://docs.google.com/forms/u/0/d/e/1FAIpQLScIOOC_rT97YVqWofWsH371y0XT-zYDXPg3UYU1agKX93yNrw/formResponseA
+1176142099
+1709749491
+1428234618
+
+============================================================
+
+NOTEPAD ENTRY #19:
+------------------------------
+https://docs.google.com/forms/u/0/d/e/1FAIpQLScIOOC_rT97YVqWofWsH371y0XT-zYDXPg3UYU1agKX93yNrw/formResponseA
+1176142099
+1709749491
+1428234618
+
+============================================================
+
+NOTEPAD ENTRY #20:
+------------------------------
+Maker the edit steps page bigger, picture too hard to see
+- Make more like scribe, scroll through steps almost like you are on the tutorial so picture is bigger, ability to go to steps for multi select and delete or rearrangig order
+- add drag to rearrange
+- Also add movement with arrow keys
+- make intuitive to edit etc so just scrolling thru steps you see step title, page where you can optionally add a decription of the tutoria, and then all the steps as you continue scrolling title, pic, description
+- Main edit steps screen should be the new one where you can scroll through, but the step list should essentially be the old one and when you multiselect it should
+    - keep the currently selected step selected
+    - Change step selection as you select new ones witrh multiselect
+Text selection is still weird, happened in step description it got stuck and couldnt type in the desctiption
+Listeer should only be active while recording -- might be async with description
+Add a record...
+
+============================================================
+
+NOTEPAD ENTRY #21:
+------------------------------
+Maker the edit steps page bigger, picture too hard to see
+- Make more like scribe, scroll through steps almost like you are on the tutorial so picture is bigger, ability to go to steps for multi select and delete or rearrangig order
+- add drag to rearrange
+- Also add movement with arrow keys
+- make intuitive to edit etc so just scrolling thru steps you see step title, page where you can optionally add a decription of the tutoria, and then all the steps as you continue scrolling title, pic, description
+- Main edit steps screen should be the new one where you can scroll through, but the step list should essentially be the old one and when you multiselect it should
+    - keep the currently selected step selected
+    - Change step selection as you select new ones witrh multiselect
+Text selection is still weird, happened in step description it got stuck and couldnt type in the desctiption
+Listeer should only be active while recording -- might be async with description
+Add a record...
+
+============================================================
+
+NOTEPAD ENTRY #22:
+------------------------------
+{"notepadId":"bf62672f-84c6-4edf-87ac-3299e1002f45"}
+
+============================================================
+
+NOTEPAD ENTRY #23:
+------------------------------
+{"notepadId":"6f6d5e2b-2095-47f3-b2bb-97163dd58297"}
+
+============================================================
+

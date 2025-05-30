@@ -1,6 +1,6 @@
 # Cursor Notepad Extractor
 
-A streamlined utility for finding, extracting, and managing notes stored in Cursor editor databases.
+A streamlined utility for finding, extracting, and managing notes stored in Cursor editor databases. Features a modern, clean interface with sophisticated UI design for production-ready user experience.
 
 ## ✅ **Project Status: Cleaned & Optimized**
 
@@ -72,11 +72,12 @@ python note_search_gui.py
 
 ## Features
 
+- **Modern, clean UI** - Professional design with smooth interactions and visual feedback
 - **Auto-scanning on startup** - Automatically finds your notes when you open the GUI
 - **Smart search** - Search through notes content and titles with real-time filtering  
 - **Individual note parsing** - Separates individual notes within notepad files
 - **Multiple export formats** - Export to TXT, PDF, DOCX, and Markdown formats
-- **Copy to clipboard** - Quick copying of note content
+- **Copy to clipboard** - Quick copying of note content with visual confirmation
 - **Sort and filter** - Sort notes by title or modification date
 
 ## 📁 **Project Structure (Portable)**

@@ -9,7 +9,7 @@ Successfully extracted 214 note entries from 163 Cursor workspace databases, inc
 
 ### **Primary Application**
 ```
-note_search_gui.py              # ⭐ Main GUI application with auto-scanning, search, and export
+note_search_gui.py              # ⭐ Main GUI application with modern UI, auto-scanning, search, and export
 note_finder.py                  # ⭐ Database scanner for extracting notes from Cursor workspaces
 note_parser.py                  # ⭐ Individual note parser for separating notes within notepad files
 ```
@@ -106,9 +106,9 @@ your_cursor_notes.txt            # 23 notepad entries (clean)
 - **NoteFinder class** - Memory-efficient scanning
 
 ### **GUI Layer:**
-- **SimpleNoteSearch** - Reliable search interface (recommended)
+- **ModernNoteSearchGUI** - Clean, modern interface with sophisticated styling (recommended)
+- **SimpleNoteSearch** - Alternative search interface (legacy)
 - **MainWindow** - Full browser interface (legacy)
-- **NoteSearchGUI** - Alternative interface (has issues)
 
 ### **Data Processing:**
 - **Parameterized queries** - Prevents SQL injection issues

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Simple GUI for searching and exporting specific Cursor notes.
+Modern, clean GUI for searching and exporting Cursor notes.
+Redesigned with sophisticated UI matching modern design standards.
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
+from tkinter import ttk, messagebox, filedialog, font
 import json
 import re
 from pathlib import Path
@@ -32,14 +33,298 @@ try:
 except ImportError:
     DOCX_SUPPORT = False
 
-class NoteSearchGUI:
-    """Simple GUI for searching through Cursor notes."""
+class RoundedFrame(tk.Canvas):
+    """A frame with rounded corners"""
+    
+    def __init__(self, parent, bg="#FFFFFF", width=200, height=100, corner_radius=15, 
+                 highlightthickness=0, **kwargs):
+        # Get parent background color safely
+        try:
+            parent_bg = parent.cget('bg')
+        except:
+            parent_bg = '#FFFFFF'  # Default to white
+            
+        tk.Canvas.__init__(self, parent, width=width, height=height, 
+                          highlightthickness=highlightthickness, bg=parent_bg, **kwargs)
+        
+        self.bg = bg
+        self.corner_radius = corner_radius
+        
+        # Draw rounded rectangle
+        self._draw_rounded_rect()
+        
+        # Bind configure event to redraw when resized
+        self.bind("<Configure>", self._on_resize)
+        
+    def _draw_rounded_rect(self):
+        """Draw the rounded rectangle background"""
+        self.delete("rounded_rect")
+        
+        width = self.winfo_width()
+        height = self.winfo_height()
+        
+        # Create rounded rectangle
+        self.create_rounded_rect(0, 0, width, height, 
+                               self.corner_radius, fill=self.bg, 
+                               outline="", tags="rounded_rect")
+    
+    def create_rounded_rect(self, x1, y1, x2, y2, radius, **kwargs):
+        """Create a rounded rectangle"""
+        points = [
+            x1 + radius, y1,
+            x2 - radius, y1,
+            x2, y1,
+            x2, y1 + radius,
+            x2, y2 - radius,
+            x2, y2,
+            x2 - radius, y2,
+            x1 + radius, y2,
+            x1, y2,
+            x1, y2 - radius,
+            x1, y1 + radius,
+            x1, y1
+        ]
+        
+        return self.create_polygon(points, smooth=True, **kwargs)
+    
+    def _on_resize(self, event):
+        """Handle resize event"""
+        self._draw_rounded_rect()
+
+class RoundedButton:
+    """Custom rounded button using Canvas."""
+    
+    def __init__(self, parent, text, command, bg="#2D2D2D", fg="#FFFFFF", 
+                 hover_bg="#404040", width=120, height=35, corner_radius=8, font_obj=None):
+        self.parent = parent
+        self.text = text
+        self.command = command
+        self.bg = bg
+        self.fg = fg
+        self.hover_bg = hover_bg
+        self.width = width
+        self.height = height
+        self.corner_radius = corner_radius
+        self.font_obj = font_obj or ('Segoe UI', 10)
+        self.is_hovered = False
+        
+        # Get parent background color safely
+        try:
+            parent_bg = parent.cget('bg')
+        except:
+            parent_bg = '#FFFFFF'  # Default to white
+        
+        # Create canvas
+        self.canvas = tk.Canvas(parent, width=width, height=height, 
+                               highlightthickness=0, bd=0, bg=parent_bg)
+        
+        # Draw button
+        self._draw_button()
+        
+        # Bind events
+        self.canvas.bind('<Button-1>', self._on_click)
+        self.canvas.bind('<Enter>', self._on_enter)
+        self.canvas.bind('<Leave>', self._on_leave)
+        
+    def _draw_button(self):
+        """Draw the rounded rectangle button."""
+        self.canvas.delete("all")
+        
+        # Choose color based on hover state
+        current_bg = self.hover_bg if self.is_hovered else self.bg
+        
+        # Draw rounded rectangle
+        self._draw_rounded_rect(0, 0, self.width, self.height, 
+                               self.corner_radius, fill=current_bg, outline="")
+        
+        # Draw text
+        self.canvas.create_text(self.width//2, self.height//2, 
+                               text=self.text, fill=self.fg, 
+                               font=self.font_obj, anchor='center')
+    
+    def _draw_rounded_rect(self, x1, y1, x2, y2, radius, **kwargs):
+        """Draw a rounded rectangle on canvas."""
+        points = []
+        
+        # Top side
+        points.extend([x1 + radius, y1])
+        points.extend([x2 - radius, y1])
+        
+        # Top right corner
+        points.extend([x2, y1])
+        points.extend([x2, y1 + radius])
+        
+        # Right side
+        points.extend([x2, y2 - radius])
+        
+        # Bottom right corner
+        points.extend([x2, y2])
+        points.extend([x2 - radius, y2])
+        
+        # Bottom side
+        points.extend([x1 + radius, y2])
+        
+        # Bottom left corner
+        points.extend([x1, y2])
+        points.extend([x1, y2 - radius])
+        
+        # Left side
+        points.extend([x1, y1 + radius])
+        
+        # Top left corner
+        points.extend([x1, y1])
+        points.extend([x1 + radius, y1])
+        
+        return self.canvas.create_polygon(points, smooth=True, **kwargs)
+    
+    def _on_click(self, event):
+        """Handle button click."""
+        if self.command:
+            self.command()
+    
+    def _on_enter(self, event):
+        """Handle mouse enter."""
+        self.is_hovered = True
+        self._draw_button()
+        self.canvas.config(cursor='hand2')
+    
+    def _on_leave(self, event):
+        """Handle mouse leave."""
+        self.is_hovered = False
+        self._draw_button()
+        self.canvas.config(cursor='')
+    
+    def pack(self, **kwargs):
+        """Pack the canvas."""
+        self.canvas.pack(**kwargs)
+    
+    def grid(self, **kwargs):
+        """Grid the canvas."""
+        self.canvas.grid(**kwargs)
+
+class RoundedDropdown:
+    """A dropdown menu with rounded corners."""
+    
+    def __init__(self, parent, values, variable, command=None, width=100, height=28, 
+                corner_radius=10, bg="#FFFFFF", fg="#333333", font_obj=None):
+        self.parent = parent
+        self.values = values
+        self.variable = variable
+        self.command = command
+        self.width = width
+        self.height = height
+        self.corner_radius = corner_radius
+        self.bg = bg
+        self.fg = fg
+        self.font_obj = font_obj or ('Segoe UI', 9)
+        self.is_dropped = False
+        
+        # Get parent background color safely
+        try:
+            parent_bg = parent.cget('bg')
+        except:
+            parent_bg = '#FFFFFF'  # Default to white
+        
+        # Create container frame
+        self.frame = ttk.Frame(parent)
+        
+        # Create button to display selected value
+        self.container = RoundedFrame(self.frame, bg=self.bg, corner_radius=corner_radius, width=width, height=height)
+        self.container.pack(fill=tk.BOTH, expand=True)
+        
+        # Create display label and dropdown button in container
+        self.display = tk.Label(self.container, 
+                              textvariable=variable,
+                              font=self.font_obj,
+                              bg=self.bg,
+                              fg=self.fg,
+                              padx=10)
+        self.display.pack(side=tk.LEFT, fill=tk.Y)
+        
+        # Dropdown arrow button
+        self.arrow = tk.Label(self.container, 
+                           text="▼", 
+                           font=('Segoe UI', 8),
+                           bg=self.bg,
+                           fg=self.fg,
+                           padx=5)
+        self.arrow.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Bind events
+        self.container.bind("<Button-1>", self._on_click)
+        self.display.bind("<Button-1>", self._on_click)
+        self.arrow.bind("<Button-1>", self._on_click)
+        
+        # Set initial value if provided
+        if values and len(values) > 0:
+            if not variable.get():
+                variable.set(values[0])
+    
+    def _on_click(self, event):
+        """Show dropdown menu when clicked."""
+        # Create a toplevel menu
+        menu = tk.Menu(self.parent, tearoff=0)
+        
+        # Add menu items
+        for value in self.values:
+            menu.add_command(label=value, 
+                           command=lambda v=value: self._select_item(v))
+        
+        # Get container position
+        x = self.container.winfo_rootx()
+        y = self.container.winfo_rooty() + self.container.winfo_height()
+        
+        # Show the menu
+        menu.post(x, y)
+    
+    def _select_item(self, value):
+        """Handle item selection."""
+        self.variable.set(value)
+        if self.command:
+            self.command(value)
+    
+    def pack(self, **kwargs):
+        """Pack the frame."""
+        self.frame.pack(**kwargs)
+    
+    def grid(self, **kwargs):
+        """Grid the frame."""
+        self.frame.grid(**kwargs)
+
+class ModernNoteSearchGUI:
+    """Modern, clean GUI for searching through Cursor notes."""
+    
+    # Color scheme - softer, more professional colors
+    COLORS = {
+        'bg': '#FFFFFF',           # White background
+        'card_bg': '#F8F9FA',      # Very light grey for cards (softer)
+        'text': '#333333',         # Dark grey text (softer than black)
+        'text_secondary': '#757575', # Secondary text
+        'text_light': '#9E9E9E',   # Light text for metadata
+        'border': '#E0E0E0',       # Light grey borders
+        'button_bg': '#333333',    # Dark grey buttons (changed from blue-grey)
+        'button_text': '#FFFFFF',  # White button text
+        'button_hover': '#505050', # Lighter grey on hover
+        'button_secondary': '#F1F3F4', # Light secondary buttons
+        'button_secondary_hover': '#E4E8E9',
+        'accent': '#5B9BD5',       # Softer blue accent
+        'success': '#66BB6A',      # Softer green for success
+        'error': '#EF5350',        # Softer red for errors
+        'code_bg': '#F8F9FA',      # Light background for code
+        'separator': '#EEEEEE',    # Lighter separator lines
+        'shadow': '#E0E0E0',       # Shadow color
+        'search_border': '#CCCCCC' # Border for search box (more visible)
+    }
     
     def __init__(self):
-        """Initialize the GUI."""
+        """Initialize the modern GUI."""
         self.root = tk.Tk()
         self.root.title("Cursor Note Search & Export")
-        self.root.geometry("1000x700")
+        self.root.geometry("1200x800")
+        self.root.minsize(1000, 600)
+        
+        # Set window background
+        self.root.configure(bg=self.COLORS['bg'])
         
         # Data
         self.all_notes = []
@@ -49,119 +334,412 @@ class NoteSearchGUI:
         # Get Downloads folder path
         self.downloads_folder = str(Path.home() / "Downloads")
         
+        # Configure styles
+        self._configure_styles()
+        
         # Create UI
         self._create_widgets()
+        
+        # Center window on screen
+        self._center_window()
         
         # Auto-scan for notes on startup
         self._auto_scan_on_startup()
     
+    def _configure_styles(self):
+        """Configure ttk styles for modern appearance."""
+        self.style = ttk.Style()
+        
+        # Configure fonts
+        self.fonts = {
+            'default': font.Font(family='Segoe UI', size=10),
+            'heading': font.Font(family='Segoe UI', size=16, weight='normal'),
+            'subheading': font.Font(family='Segoe UI', size=12, weight='bold'),
+            'small': font.Font(family='Segoe UI', size=9),
+            'button': font.Font(family='Segoe UI', size=10),
+            'code': font.Font(family='Consolas', size=10),
+            'metadata': font.Font(family='Segoe UI', size=9, slant='italic')
+        }
+        
+        # Configure button style
+        self.style.configure('Modern.TButton',
+                           background=self.COLORS['button_bg'],
+                           foreground=self.COLORS['button_text'],
+                           borderwidth=0,
+                           focuscolor='none',
+                           padding=(15, 8),
+                           font=self.fonts['button'])
+        
+        self.style.map('Modern.TButton',
+                      background=[('active', self.COLORS['button_hover']),
+                                ('pressed', self.COLORS['button_hover'])])
+        
+        # Configure secondary button style
+        self.style.configure('Secondary.TButton',
+                           background=self.COLORS['bg'],
+                           foreground=self.COLORS['text'],
+                           borderwidth=1,
+                           relief='solid',
+                           focuscolor='none',
+                           padding=(15, 8),
+                           font=self.fonts['button'])
+        
+        # Configure entry style
+        self.style.configure('Modern.TEntry',
+                           fieldbackground=self.COLORS['bg'],
+                           borderwidth=1,
+                           relief='solid',
+                           padding=8)
+        
+        # Configure frame styles
+        self.style.configure('Card.TFrame',
+                           background=self.COLORS['card_bg'])
+        
+        self.style.configure('White.TFrame',
+                           background=self.COLORS['bg'])
+        
+        # Configure shadow frame style
+        self.style.configure('Shadow.TFrame',
+                           background=self.COLORS['bg'])
+        
+        # Configure scrollbar style
+        self.style.configure('Modern.Vertical.TScrollbar',
+                           background=self.COLORS['card_bg'],
+                           troughcolor=self.COLORS['bg'],
+                           borderwidth=0,
+                           arrowsize=14)
+    
+    def _center_window(self):
+        """Center the window on screen."""
+        self.root.update_idletasks()
+        width = self.root.winfo_width()
+        height = self.root.winfo_height()
+        x = (self.root.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.root.winfo_screenheight() // 2) - (height // 2)
+        self.root.geometry(f'{width}x{height}+{x}+{y}')
+    
     def _create_widgets(self):
-        """Create the GUI widgets."""
+        """Create the modern GUI widgets."""
         
-        # Top frame - Controls
-        control_frame = ttk.Frame(self.root)
-        control_frame.pack(fill=tk.X, padx=10, pady=5)
+        # Main container with padding
+        main_container = ttk.Frame(self.root, style='White.TFrame')
+        main_container.pack(fill=tk.BOTH, expand=True, padx=40, pady=30)
         
-        # Scan button
-        ttk.Button(control_frame, text="Rescan Databases", 
-                  command=self._scan_notes).pack(side=tk.LEFT, padx=5)
+        # Header section
+        self._create_header(main_container)
         
-        # Status label
-        self.status_label = ttk.Label(control_frame, text="Ready")
-        self.status_label.pack(side=tk.RIGHT, padx=5)
+        # Content section with two columns
+        content_container = ttk.Frame(main_container, style='White.TFrame')
+        content_container.pack(fill=tk.BOTH, expand=True, pady=(0, 0))
         
-        # Search frame
-        search_frame = ttk.Frame(self.root)
-        search_frame.pack(fill=tk.X, padx=10, pady=5)
-        
-        ttk.Label(search_frame, text="Search:").pack(side=tk.LEFT)
-        
-        self.search_var = tk.StringVar()
-        self.search_entry = ttk.Entry(search_frame, textvariable=self.search_var, width=40)
-        self.search_entry.pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
-        self.search_entry.bind('<KeyRelease>', self._on_search_change)
-        
-        ttk.Button(search_frame, text="Clear", 
-                  command=self._clear_search).pack(side=tk.LEFT, padx=5)
-        
-        # Sort options
-        sort_frame = ttk.Frame(self.root)
-        sort_frame.pack(fill=tk.X, padx=10, pady=2)
-        
-        ttk.Label(sort_frame, text="Sort by:").pack(side=tk.LEFT)
-        
-        self.sort_var = tk.StringVar(value="Title")
-        sort_options = ["Title", "Most Recent"]
-        self.sort_combobox = ttk.Combobox(sort_frame, textvariable=self.sort_var, 
-                                          values=sort_options, width=15, state="readonly")
-        self.sort_combobox.pack(side=tk.LEFT, padx=5)
-        self.sort_combobox.bind("<<ComboboxSelected>>", self._apply_sort)
-        
-        # Sort direction
-        self.sort_direction = tk.StringVar(value="Ascending")
-        sort_direction_options = ["Ascending", "Descending"]
-        self.sort_direction_combobox = ttk.Combobox(sort_frame, textvariable=self.sort_direction, 
-                                                    values=sort_direction_options, width=12, state="readonly")
-        self.sort_direction_combobox.pack(side=tk.LEFT, padx=5)
-        self.sort_direction_combobox.bind("<<ComboboxSelected>>", self._apply_sort)
-        
-        # Main content frame
-        main_frame = ttk.Frame(self.root)
-        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        # Configure grid weights
+        content_container.grid_rowconfigure(0, weight=1)
+        content_container.grid_columnconfigure(0, weight=3)  # Left panel slightly smaller
+        content_container.grid_columnconfigure(1, weight=5)  # Right panel larger
         
         # Left panel - Note list
-        left_frame = ttk.Frame(main_frame)
-        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self._create_left_panel(content_container)
         
-        ttk.Label(left_frame, text="Found Notes:").pack(anchor=tk.W)
+        # Right panel - Note content
+        self._create_right_panel(content_container)
+    
+    def _create_header(self, parent):
+        """Create the header section."""
+        header_frame = ttk.Frame(parent, style='White.TFrame')
+        header_frame.pack(fill=tk.X, pady=(0, 20))
         
-        # Note listbox with scrollbar
-        list_frame = ttk.Frame(left_frame)
-        list_frame.pack(fill=tk.BOTH, expand=True, pady=5)
+        # Title
+        title_label = tk.Label(header_frame, 
+                              text="Cursor Note Search & Export",
+                              font=self.fonts['heading'],
+                              bg=self.COLORS['bg'],
+                              fg=self.COLORS['text'])
+        title_label.pack(side=tk.LEFT)
         
-        self.note_listbox = tk.Listbox(list_frame, width=50)
-        list_scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.note_listbox.yview)
-        self.note_listbox.configure(yscrollcommand=list_scrollbar.set)
+        # Status on the right
+        self.status_label = tk.Label(header_frame,
+                                   text="Ready",
+                                   font=self.fonts['small'],
+                                   bg=self.COLORS['bg'],
+                                   fg=self.COLORS['text_secondary'])
+        self.status_label.pack(side=tk.RIGHT)
         
-        self.note_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        list_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        # Rescan button using RoundedButton
+        rescan_btn = RoundedButton(header_frame,
+                                 text="Rescan Databases",
+                                 command=self._scan_notes,
+                                 bg=self.COLORS['button_bg'],
+                                 fg=self.COLORS['button_text'],
+                                 hover_bg=self.COLORS['button_hover'],
+                                 width=140,
+                                 height=35,
+                                 corner_radius=18,
+                                 font_obj=self.fonts['button'])
+        rescan_btn.pack(side=tk.RIGHT, padx=(0, 20))
+        
+        # Search section - more prominent
+        search_frame = ttk.Frame(parent, style='White.TFrame')
+        search_frame.pack(fill=tk.X, pady=(15, 25))
+        
+        # Search label
+        search_label = tk.Label(search_frame,
+                              text="Search:",
+                              font=self.fonts['subheading'],
+                              bg=self.COLORS['bg'],
+                              fg=self.COLORS['text'])
+        search_label.pack(side=tk.LEFT, padx=(0, 15))
+        
+        # Search entry container with rounded appearance and visible border
+        search_container = RoundedFrame(search_frame, bg=self.COLORS['search_border'], corner_radius=20)
+        search_container.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 15), pady=2)
+        
+        # Inner frame for border effect - creating a visible border
+        search_inner = RoundedFrame(search_container, bg=self.COLORS['bg'], corner_radius=19)
+        search_inner.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
+        
+        # Search entry with custom styling
+        self.search_var = tk.StringVar()
+        self.search_entry = tk.Entry(search_inner,
+                                   textvariable=self.search_var,
+                                   font=self.fonts['default'],
+                                   bg=self.COLORS['bg'],
+                                   fg=self.COLORS['text'],
+                                   bd=0,
+                                   highlightthickness=0)
+        self.search_entry.pack(fill=tk.BOTH, expand=True, padx=15, pady=10)
+        self.search_entry.bind('<KeyRelease>', self._on_search_change)
+        
+        # Clear button using RoundedButton
+        clear_btn = RoundedButton(search_frame,
+                                text="Clear",
+                                command=self._clear_search,
+                                bg=self.COLORS['button_secondary'],
+                                fg=self.COLORS['text'],
+                                hover_bg=self.COLORS['button_secondary_hover'],
+                                width=80,
+                                height=40,
+                                corner_radius=20,
+                                font_obj=self.fonts['button'])
+        clear_btn.pack(side=tk.LEFT)
+
+    def _create_left_panel(self, parent):
+        """Create the left panel with note list."""
+        # Create frame for shadow effect
+        shadow_frame = ttk.Frame(parent, style='White.TFrame')
+        shadow_frame.grid(row=0, column=0, sticky='nsew', padx=(5, 20), pady=5)
+        
+        # Left panel with rounded corners
+        left_panel = RoundedFrame(shadow_frame, bg=self.COLORS['card_bg'], corner_radius=15)
+        left_panel.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
+        
+        # Create shadow effect
+        shadow_frame.configure(style='Shadow.TFrame')
+        
+        # Inner container with padding
+        inner_left = ttk.Frame(left_panel, style='Card.TFrame')
+        inner_left.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        
+        # Header with sort options
+        header_frame = ttk.Frame(inner_left, style='Card.TFrame')
+        header_frame.pack(fill=tk.X, pady=(0, 15))
+        
+        # Found Notes title
+        list_header = tk.Label(header_frame,
+                             text="Found Notes",
+                             font=self.fonts['subheading'],
+                             bg=self.COLORS['card_bg'],
+                             fg=self.COLORS['text'])
+        list_header.pack(side=tk.LEFT)
+        
+        # Sort options on the right
+        sort_container = ttk.Frame(header_frame, style='Card.TFrame')
+        sort_container.pack(side=tk.RIGHT)
+        
+        tk.Label(sort_container,
+                text="Sort by:",
+                font=self.fonts['small'],
+                bg=self.COLORS['card_bg'],
+                fg=self.COLORS['text_secondary']).pack(side=tk.LEFT, padx=(0, 5))
+        
+        # Use RoundedDropdown for sort options
+        self.sort_var = tk.StringVar(value="Title")
+        sort_menu = RoundedDropdown(sort_container, 
+                                  ["Title", "Recently Modified"], 
+                                  self.sort_var, 
+                                  command=self._apply_sort,
+                                  bg=self.COLORS['card_bg'],
+                                  fg=self.COLORS['text'],
+                                  corner_radius=10)
+        sort_menu.pack(side=tk.LEFT)
+        
+        self.sort_direction = tk.StringVar(value="Ascending")
+        direction_menu = RoundedDropdown(sort_container, 
+                                       ["Ascending", "Descending"], 
+                                       self.sort_direction, 
+                                       command=self._apply_sort,
+                                       bg=self.COLORS['card_bg'],
+                                       fg=self.COLORS['text'],
+                                       corner_radius=10)
+        direction_menu.pack(side=tk.LEFT, padx=(5, 0))
+        
+        # Note listbox with custom styling and rounded corners
+        list_frame = RoundedFrame(inner_left, bg=self.COLORS['bg'], corner_radius=10, highlightthickness=0)
+        list_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Create listbox with scrollbar
+        scrollbar = tk.Scrollbar(list_frame, orient=tk.VERTICAL, bg=self.COLORS['card_bg'])
+        self.note_listbox = tk.Listbox(list_frame,
+                                     font=self.fonts['default'],
+                                     bg=self.COLORS['bg'],
+                                     fg=self.COLORS['text'],
+                                     selectbackground=self.COLORS['accent'],
+                                     selectforeground=self.COLORS['button_text'],
+                                     activestyle='none',
+                                     bd=0,
+                                     highlightthickness=0,
+                                     yscrollcommand=scrollbar.set)
+        scrollbar.config(command=self.note_listbox.yview)
+        
+        self.note_listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=8, pady=8)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         self.note_listbox.bind('<<ListboxSelect>>', self._on_note_select)
         
-        # Separator
-        ttk.Separator(main_frame, orient=tk.VERTICAL).pack(side=tk.LEFT, fill=tk.Y, padx=10)
+    def _create_right_panel(self, parent):
+        """Create the right panel with note content."""
+        # Create frame for shadow effect
+        shadow_frame = ttk.Frame(parent, style='White.TFrame')
+        shadow_frame.grid(row=0, column=1, sticky='nsew', padx=5, pady=5)
         
-        # Right panel - Note content
-        right_frame = ttk.Frame(main_frame)
-        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+        # Right panel with rounded corners
+        right_panel = RoundedFrame(shadow_frame, bg=self.COLORS['card_bg'], corner_radius=15)
+        right_panel.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
         
-        # Content header
-        content_header = ttk.Frame(right_frame)
-        content_header.pack(fill=tk.X)
+        # Create shadow effect
+        shadow_frame.configure(style='Shadow.TFrame')
         
-        ttk.Label(content_header, text="Note Content:").pack(side=tk.LEFT)
+        # Inner container with padding
+        inner_right = ttk.Frame(right_panel, style='Card.TFrame')
+        inner_right.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        # Action buttons
-        action_frame = ttk.Frame(content_header)
+        # Header with action buttons
+        header_frame = ttk.Frame(inner_right, style='Card.TFrame')
+        header_frame.pack(fill=tk.X, pady=(0, 15))
+        
+        content_label = tk.Label(header_frame,
+                               text="Note Content",
+                               font=self.fonts['subheading'],
+                               bg=self.COLORS['card_bg'],
+                               fg=self.COLORS['text'])
+        content_label.pack(side=tk.LEFT)
+        
+        # Action buttons container
+        action_frame = ttk.Frame(header_frame, style='Card.TFrame')
         action_frame.pack(side=tk.RIGHT)
         
-        ttk.Button(action_frame, text="Copy", 
-                  command=self._copy_note).pack(side=tk.LEFT, padx=2)
-        ttk.Button(action_frame, text="Export", 
-                  command=self._export_note).pack(side=tk.LEFT, padx=2)
-        ttk.Button(action_frame, text="Export All Filtered", 
-                  command=self._export_filtered).pack(side=tk.LEFT, padx=2)
+        # Export all button
+        export_all_btn = RoundedButton(action_frame,
+                                     text="Export All Filtered",
+                                     command=self._export_filtered,
+                                     bg=self.COLORS['button_bg'],
+                                     fg=self.COLORS['button_text'],
+                                     hover_bg=self.COLORS['button_hover'],
+                                     width=130,
+                                     height=32,
+                                     corner_radius=16,
+                                     font_obj=self.fonts['button'])
+        export_all_btn.pack(side=tk.LEFT, padx=(0, 8))
         
-        # Content text area
-        content_frame = ttk.Frame(right_frame)
-        content_frame.pack(fill=tk.BOTH, expand=True, pady=5)
+        # Export button
+        export_btn = RoundedButton(action_frame,
+                                 text="Export",
+                                 command=self._export_note,
+                                 bg=self.COLORS['button_bg'],
+                                 fg=self.COLORS['button_text'],
+                                 hover_bg=self.COLORS['button_hover'],
+                                 width=80,
+                                 height=32,
+                                 corner_radius=16,
+                                 font_obj=self.fonts['button'])
+        export_btn.pack(side=tk.LEFT, padx=(0, 8))
         
-        self.content_text = tk.Text(content_frame, wrap=tk.WORD, state=tk.DISABLED)
-        content_scrollbar = ttk.Scrollbar(content_frame, orient=tk.VERTICAL, command=self.content_text.yview)
-        self.content_text.configure(yscrollcommand=content_scrollbar.set)
+        # Copy button
+        copy_btn = RoundedButton(action_frame,
+                               text="Copy",
+                               command=self._copy_note,
+                               bg=self.COLORS['button_bg'],
+                               fg=self.COLORS['button_text'],
+                               hover_bg=self.COLORS['button_hover'],
+                               width=80,
+                               height=32,
+                               corner_radius=16,
+                               font_obj=self.fonts['button'])
+        copy_btn.pack(side=tk.LEFT)
+        
+        # Content text area with custom styling
+        content_frame = RoundedFrame(inner_right, bg=self.COLORS['bg'], corner_radius=10, highlightthickness=0)
+        content_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Create text widget with scrollbar
+        scrollbar = tk.Scrollbar(content_frame, orient=tk.VERTICAL, bg=self.COLORS['card_bg'])
+        self.content_text = tk.Text(content_frame,
+                                  font=self.fonts['default'],
+                                  bg=self.COLORS['bg'],
+                                  fg=self.COLORS['text'],
+                                  wrap=tk.WORD,
+                                  bd=0,
+                                  highlightthickness=0,
+                                  padx=15,
+                                  pady=15,
+                                  state=tk.DISABLED,
+                                  yscrollcommand=scrollbar.set)
+        scrollbar.config(command=self.content_text.yview)
         
         self.content_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        content_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Configure text tags for better formatting
+        self._configure_text_tags()
+    
+    def _configure_text_tags(self):
+        """Configure text formatting tags for better display."""
+        # Metadata header tag
+        self.content_text.tag_configure("metadata_header", 
+                                       font=self.fonts['subheading'],
+                                       foreground=self.COLORS['text'],
+                                       spacing1=10, spacing3=5)
+        
+        # Metadata tag
+        self.content_text.tag_configure("metadata", 
+                                       font=self.fonts['metadata'],
+                                       foreground=self.COLORS['text_light'],
+                                       spacing3=2)
+        
+        # Separator tag
+        self.content_text.tag_configure("separator", 
+                                       font=self.fonts['default'],
+                                       foreground=self.COLORS['separator'],
+                                       spacing1=5, spacing3=10)
+        
+        # Content header tag
+        self.content_text.tag_configure("content_header", 
+                                       font=self.fonts['subheading'],
+                                       foreground=self.COLORS['text'],
+                                       spacing1=15, spacing3=5)
+        
+        # Code/content tag - removed grey background
+        self.content_text.tag_configure("content", 
+                                       font=self.fonts['code'],
+                                       foreground=self.COLORS['text'],
+                                       spacing1=5,
+                                       lmargin1=10, lmargin2=10,
+                                       rmargin=10)
+        
+        # Title tag
+        self.content_text.tag_configure("title", 
+                                       font=self.fonts['heading'],
+                                       foreground=self.COLORS['text'],
+                                       spacing3=8)
     
     def _process_findings_into_individual_notes(self, findings):
         """
@@ -356,41 +934,113 @@ class NoteSearchGUI:
         self.root.update_idletasks()
     
     def _on_note_select(self, event):
-        """Handle note selection."""
+        """Handle note selection with smooth visual transition."""
         selection = self.note_listbox.curselection()
         if not selection:
             return
         
         index = selection[0]
         if index < len(self.filtered_notes):
+            # Save current position for smooth scroll
+            old_position = self.content_text.yview()[0]
+            
+            # Update selected note
             self.selected_note = self.filtered_notes[index]
-            self._display_note_content()
+            
+            # Display with smooth transition
+            self._display_note_content(old_position)
     
-    def _display_note_content(self):
-        """Display the selected note content."""
+    def _display_note_content(self, old_position=0):
+        """Display the selected note content with rich formatting."""
         if not self.selected_note:
             return
         
         note = self.selected_note
         
-        # Prepare content for display
-        title = note.get('title', '')
-        original_key = note.get('original_key', note['key'])
-        
-        content = f"Key: {original_key}\n"
-        if title:
-            content += f"Title: {title}\n"
-        content += f"Database: {note['database']}\n"
-        content += f"Table: {note['table']}\n"
-        content += f"Size: {note['size']} bytes\n"
-        content += "=" * 50 + "\n\n"
-        content += note['content']
-        
-        # Update text widget
+        # Clear existing content
         self.content_text.config(state=tk.NORMAL)
         self.content_text.delete(1.0, tk.END)
-        self.content_text.insert(1.0, content)
+        
+        # Title section (if available)
+        title = note.get('title', '')
+        if title:
+            self.content_text.insert(tk.END, f"{title}\n", "title")
+        
+        # Metadata section
+        self.content_text.insert(tk.END, "Note Details\n", "metadata_header")
+        
+        # Metadata with nice formatting
+        original_key = note.get('original_key', note['key'])
+        metadata_items = [
+            ("Key", original_key),
+            ("Database", note['database']),
+            ("Table", note['table']),
+            ("Size", f"{note['size']} bytes")
+        ]
+        
+        for label, value in metadata_items:
+            self.content_text.insert(tk.END, f"{label}: {value}\n", "metadata")
+        
+        # Separator
+        self.content_text.insert(tk.END, "─" * 50 + "\n", "separator")
+        
+        # Content header
+        self.content_text.insert(tk.END, "Content\n", "content_header")
+        
+        # Note content with code formatting
+        content = note['content']
+        
+        # Split content into lines for better formatting
+        lines = content.split('\n')
+        formatted_content = ""
+        
+        for i, line in enumerate(lines):
+            # Add line numbers for code-like content if it looks like code
+            if self._looks_like_code(content):
+                formatted_content += f"{i+1:3d} | {line}\n"
+            else:
+                formatted_content += f"{line}\n"
+        
+        self.content_text.insert(tk.END, formatted_content, "content")
+        
+        # Disable editing
         self.content_text.config(state=tk.DISABLED)
+        
+        # Smooth scrolling to top with animation
+        self._smooth_scroll_to(0, old_position)
+    
+    def _smooth_scroll_to(self, target_pos, current_pos, steps=10):
+        """Smooth scroll animation."""
+        if steps <= 0:
+            # Final position
+            self.content_text.yview_moveto(target_pos)
+            return
+        
+        # Calculate step size
+        step = (target_pos - current_pos) / steps
+        next_pos = current_pos + step
+        
+        # Set next position
+        self.content_text.yview_moveto(next_pos)
+        
+        # Schedule next step
+        self.root.after(20, lambda: self._smooth_scroll_to(target_pos, next_pos, steps-1))
+    
+    def _looks_like_code(self, content):
+        """Determine if content looks like code based on heuristics."""
+        code_indicators = [
+            '{', '}', '[', ']', '(', ')',  # Brackets
+            '=', ';', ':', '#',             # Common symbols
+            'function', 'class', 'def',     # Keywords
+            'import', 'export', 'const',    # More keywords
+            'var', 'let', 'if', 'else'      # Basic keywords
+        ]
+        
+        # Count indicators
+        indicator_count = sum(1 for indicator in code_indicators if indicator in content)
+        
+        # If we have multiple code indicators and the content is substantial
+        return indicator_count >= 3 and len(content) > 50
     
     def _copy_note(self):
         """Copy the selected note to clipboard."""
@@ -401,9 +1051,25 @@ class NoteSearchGUI:
         try:
             self.root.clipboard_clear()
             self.root.clipboard_append(self.selected_note['content'])
-            messagebox.showinfo("Success", "Note copied to clipboard!")
+            self._show_success_status("Note copied to clipboard!")
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to copy note: {e}")
+            self._show_error_status(f"Failed to copy note: {e}")
+    
+    def _show_success_status(self, message):
+        """Show a success status message."""
+        self.status_label.config(text=message, fg=self.COLORS['success'])
+        # Reset to normal after 3 seconds
+        self.root.after(3000, lambda: self.status_label.config(text="Ready", fg=self.COLORS['text_secondary']))
+    
+    def _show_error_status(self, message):
+        """Show an error status message."""
+        self.status_label.config(text=message, fg=self.COLORS['error'])
+        # Reset to normal after 5 seconds
+        self.root.after(5000, lambda: self.status_label.config(text="Ready", fg=self.COLORS['text_secondary']))
+    
+    def _show_info_status(self, message):
+        """Show an info status message."""
+        self.status_label.config(text=message, fg=self.COLORS['accent'])
     
     def _export_note(self):
         """Export the selected note to a file."""
@@ -832,7 +1498,7 @@ class NoteSearchGUI:
         if sort_by == "Title":
             # Sort by title
             self.filtered_notes.sort(key=lambda x: x.get('title', '').lower(), reverse=reverse)
-        elif sort_by == "Most Recent":
+        elif sort_by == "Recently Modified":
             # Sort by modification time
             self.filtered_notes.sort(key=lambda x: x.get('modified', 0), reverse=not reverse)
         
@@ -845,8 +1511,8 @@ class NoteSearchGUI:
 
 def main():
     """Main function."""
-    app = NoteSearchGUI()
+    app = ModernNoteSearchGUI()
     app.run()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main() 

@@ -20,16 +20,23 @@
 
 ## 📁 **Project Structure**
 
-### **Data Exploration Scripts**
+### **Data Exploration Scripts (Reference)**
 ```
 recover_all_chat_data.py       # ⭐ CRITICAL: Multi-source data recovery
-find_earliest_entry.py         # Find timeline boundaries
+extract_daily_stats.py         # Daily usage extraction
 verify_model_and_tokens.py     # Validate model/token data
+deep_model_token_search.py     # Deep model/token search
+check_all_sources_deep.py      # Content verification
+final_comprehensive_check.py   # Complete verification
 exhaustive_exploration.py      # Complete data catalog
 explore_cursorDiskKV.py        # Deep dive chat data
+find_earliest_entry.py         # Find timeline boundaries
 quick_analysis.py              # Quick stats overview
 map_all_cursor_data.py         # Filesystem mapping
+comprehensive_data_explorer.py # Initial deep dive
 ```
+
+**Note:** These scripts were used during exploration and serve as reference for implementation.
 
 ### **Data Documentation**
 ```
@@ -54,30 +61,24 @@ cursor-data-docs/
 ### **Project Planning**
 ```
 nextsteps/
-└── CURSOR-DATA-EXTRACTION-PLAN.md     # Implementation roadmap
+├── APP-ARCHITECTURE.md            # ⭐ Complete app design
+└── CURSOR-DATA-EXTRACTION-PLAN.md # Implementation roadmap
 ```
 
-### **Original Note Extractor (Foundation)**
+### **Core Modules (Existing)**
 ```
-note_search_gui.py             # Main GUI application
-note_finder.py                 # Database scanner
-note_parser.py                 # Note parser
-
 database/
-├── cursor_db.py               # Database access layer
-└── __init__.py
+├── __init__.py
+├── cursor_db.py               # ⭐ CursorDatabase class (SQLite access)
+└── __pycache__/
 
 utils/
-├── config.py                  # Configuration
-└── __init__.py
+├── __init__.py
+├── config.py                  # ⭐ Config class (paths, DB discovery)
+└── __pycache__/
 ```
 
-### **Output Files**
-```
-cursor_notes_found.txt         # Note scan results
-your_cursor_notes.txt          # Filtered notepad content
-EXHAUSTIVE_DATA_REPORT.md      # Exploration report
-```
+**Note:** See `nextsteps/APP-ARCHITECTURE.md` for complete module structure to be built.
 
 ### **Project Documentation**
 ```
@@ -85,10 +86,12 @@ README.md                      # Usage guide
 STRUCTURE.md                   # This file
 EXPLORATION-COMPLETE.md        # ⭐ Final exploration summary
 QUICK-REFERENCE.md             # ⭐ Developer quick reference
+COMPLETE-STATS-CATALOG.md      # ⭐ ALL possible stats/metrics (600+)
+CLEANUP-SUMMARY.md             # Project cleanup log
+EXHAUSTIVE_DATA_REPORT.md      # Data exploration report
 PROBLEM_LOG.txt                # Known issues
 DEPRECATED.txt                 # Deprecated patterns
 requirements.txt               # Dependencies
-cmds.md                        # Commands reference
 ```
 
 ---

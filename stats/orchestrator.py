@@ -8,10 +8,13 @@ from stats.extractors.message_extractor import MessageExtractor
 from stats.extractors.session_extractor import SessionExtractor
 from stats.extractors.code_diff_extractor import CodeDiffExtractor
 from stats.extractors.code_tracking_extractor import CodeTrackingExtractor
+from stats.extractors.daily_stat_extractor import DailyStatExtractor
 from stats.models.code_diff import CodeDiff, CodeTrackingLine
+from stats.models.daily_stat import DailyStat
 from stats.calculators.message_stats import MessageCalculator
 from stats.calculators.session_stats import SessionCalculator
 from stats.calculators.code_stats import CodeCalculator
+from stats.calculators.daily_stats import DailyUsageCalculator
 from stats.cache import StatsCache
 
 logger = logging.getLogger(__name__)
@@ -36,6 +39,7 @@ class StatsOrchestrator:
         self._sessions = None
         self._code_diffs = None
         self._tracking_lines = None
+        self._daily_stats = None
         
         logger.info(f"Initialized StatsOrchestrator with DB: {db_path.name}")
     
@@ -54,6 +58,7 @@ class StatsOrchestrator:
                 self._sessions = cached_data.get('sessions')
                 self._code_diffs = cached_data.get('code_diffs')
                 self._tracking_lines = cached_data.get('tracking_lines')
+                self._daily_stats = cached_data.get('daily_stats')
                 logger.info("Loaded data from cache")
                 return
         
@@ -79,13 +84,19 @@ class StatsOrchestrator:
             self._tracking_lines = extractor.extract()
         logger.info(f"  Extracted {len(self._tracking_lines)} tracking lines")
         
+        # Extract daily stats
+        with DailyStatExtractor(self.db_path) as extractor:
+            self._daily_stats = extractor.extract()
+        logger.info(f"  Extracted {len(self._daily_stats)} daily stats")
+        
         # Cache extracted data
         if self.cache:
             self.cache.save_extracted_data({
                 'messages': self._messages,
                 'sessions': self._sessions,
                 'code_diffs': self._code_diffs,
-                'tracking_lines': self._tracking_lines
+                'tracking_lines': self._tracking_lines,
+                'daily_stats': self._daily_stats
             })
     
     def calculate_all_stats(self, force: bool = False) -> Dict[str, Any]:
@@ -127,9 +138,14 @@ class StatsOrchestrator:
         code_calc = CodeCalculator(self._code_diffs, self._tracking_lines)
         all_stats['code'] = code_calc.calculate_all()
         
+        # Calculate daily usage stats
+        logger.info("  Calculating daily usage stats...")
+        daily_calc = DailyUsageCalculator(self._daily_stats)
+        all_stats['daily'] = daily_calc.calculate_all()
+        
         # TODO: Add more calculators here as they're built
-        # daily_calc = DailyUsageCalculator(...)
-        # all_stats['daily'] = daily_calc.calculate_all()
+        # token_calc = TokenCalculator(...)
+        # all_stats['tokens'] = token_calc.calculate_all()
         
         # Cache results
         if self.cache:
@@ -165,6 +181,7 @@ class StatsOrchestrator:
         self._sessions = None
         self._code_diffs = None
         self._tracking_lines = None
+        self._daily_stats = None
         logger.info("Invalidated cache")
     
     # ==================== DATA ACCESS ====================
@@ -201,6 +218,7 @@ class StatsOrchestrator:
             'total_sessions': len(self._sessions) if self._sessions else 0,
             'total_code_diffs': len(self._code_diffs) if self._code_diffs else 0,
             'total_tracking_lines': len(self._tracking_lines) if self._tracking_lines else 0,
+            'total_daily_stats': len(self._daily_stats) if self._daily_stats else 0,
             'database_path': str(self.db_path),
             'cache_enabled': self.cache is not None
         }

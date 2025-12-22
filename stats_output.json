@@ -1,40 +1,40 @@
 {
   "messages": {
     "total_messages": {
-      "value": 69667,
+      "value": 69787,
       "label": "Total messages",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count"
     },
     "user_messages": {
-      "value": 4031,
+      "value": 4034,
       "label": "User messages",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "percentage": 5.79,
+      "percentage": 5.78,
       "breakdown": {
-        "total": 69667,
-        "user": 4031,
-        "ai": 65636
+        "total": 69787,
+        "user": 4034,
+        "ai": 65753
       }
     },
     "ai_messages": {
-      "value": 65624,
+      "value": 65741,
       "label": "AI messages",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
       "percentage": 94.2,
       "breakdown": {
-        "total": 69667,
-        "user": 4043,
-        "ai": 65624
+        "total": 69787,
+        "user": 4046,
+        "ai": 65741
       }
     },
     "messages_per_session": {
-      "value": 187.2768817204301,
+      "value": 187.5994623655914,
       "label": "Messages per session",
       "category": "Messages",
       "data_source": "bubbleId",
@@ -43,11 +43,11 @@
       "min": 2.0,
       "max": 1629.0,
       "p95": 542.25,
-      "std_dev": 200.73973735590369,
+      "std_dev": 201.4292701171456,
       "sample_size": 372
     },
     "message_text_length": {
-      "value": 402.7795319054979,
+      "value": 402.2616333498541,
       "label": "Message text length (characters)",
       "category": "Messages",
       "data_source": "bubbleId",
@@ -56,42 +56,42 @@
       "min": 1.0,
       "max": 162635.0,
       "p95": 1588.0,
-      "std_dev": 1994.5706452575391,
-      "sample_size": 18116
+      "std_dev": 1992.329457222091,
+      "sample_size": 18159
     },
     "messages_with_text": {
-      "value": 18116,
+      "value": 18159,
       "label": "Messages with text",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "percentage": 26.0,
+      "percentage": 26.02,
       "breakdown": {
-        "with_text": 18116,
-        "without_text": 51551
+        "with_text": 18159,
+        "without_text": 51628
       }
     },
     "messages_with_code_blocks": {
-      "value": 12814,
+      "value": 12834,
       "label": "Messages with code blocks",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
       "percentage": 18.39,
       "breakdown": {
-        "with_code": 12814,
-        "without_code": 56853
+        "with_code": 12834,
+        "without_code": 56953
       }
     },
     "code_blocks_generated": {
-      "value": 14509,
+      "value": 14529,
       "label": "Code blocks generated",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count"
     },
     "lines_of_code_in_blocks": {
-      "value": 14509,
+      "value": 14529,
       "label": "Lines of code in code blocks",
       "category": "Messages",
       "data_source": "bubbleId",
@@ -116,19 +116,19 @@
       "total_references": 0
     },
     "messages_with_thinking": {
-      "value": 18743,
+      "value": 18745,
       "label": "Messages with thinking",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "percentage": 26.9,
+      "percentage": 26.86,
       "breakdown": {
-        "with_thinking": 18743,
-        "without_thinking": 50924
+        "with_thinking": 18745,
+        "without_thinking": 51042
       }
     },
     "thinking_text_length": {
-      "value": 454.47735154457666,
+      "value": 454.5271805814884,
       "label": "Thinking text length (characters)",
       "category": "Messages",
       "data_source": "bubbleId",
@@ -136,12 +136,12 @@
       "median": 215.0,
       "min": 3.0,
       "max": 16364.0,
-      "p95": 1598.8999999999978,
-      "std_dev": 651.4773488531314,
-      "sample_size": 18743
+      "p95": 1598.7999999999993,
+      "std_dev": 651.4613296160735,
+      "sample_size": 18745
     },
     "thinking_duration": {
-      "value": 3.379690119989788,
+      "value": 3.3798005820186856,
       "label": "Thinking duration (seconds)",
       "category": "Messages",
       "data_source": "bubbleId",
@@ -149,9 +149,9 @@
       "median": 1.444,
       "min": -1.0,
       "max": 525.26,
-      "p95": 10.757599999999995,
-      "std_dev": 8.462408617257239,
-      "sample_size": 19585
+      "p95": 10.756900000000005,
+      "std_dev": 8.461984202275527,
+      "sample_size": 19587
     },
     "thinking_blocks_per_message": {
       "value": 1.0,
@@ -164,7 +164,7 @@
       "max": 1.0,
       "p95": 1.0,
       "std_dev": 0.0,
-      "sample_size": 19605
+      "sample_size": 19607
     },
     "messages_with_tools": {
       "value": 0,
@@ -175,7 +175,7 @@
       "percentage": 0.0,
       "breakdown": {
         "with_tools": 0,
-        "without_tools": 69667
+        "without_tools": 69787
       }
     },
     "tool_invocations": {
@@ -374,7 +374,7 @@
       "sample_size": 0
     },
     "messages_with_git_diffs": {
-      "value": 69655,
+      "value": 69775,
       "label": "Messages with git diffs",
       "category": "Messages",
       "data_source": "bubbleId",
@@ -398,15 +398,15 @@
       "percentage": 0.0
     },
     "messages_with_model_info": {
-      "value": 8005,
+      "value": 8012,
       "label": "Messages with model info",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "percentage": 11.49,
+      "percentage": 11.48,
       "breakdown": {
-        "with_model_info": 8005,
-        "without_model_info": 61662
+        "with_model_info": 8012,
+        "without_model_info": 61775
       }
     },
     "model_usage_breakdown": {
@@ -418,7 +418,7 @@
       "model_breakdown": [
         [
           "claude-4.5-sonnet-thinking",
-          5736
+          5743
         ],
         [
           "claude-4.5-opus-high-thinking",
@@ -453,8 +453,8 @@
           5
         ]
       ],
-      "total_messages_with_model": 8005,
-      "coverage_percentage": 11.49
+      "total_messages_with_model": 8012,
+      "coverage_percentage": 11.48
     },
     "model_switches": {
       "value": 101,
@@ -467,59 +467,59 @@
       "percentage_sessions": 13.17
     },
     "input_tokens": {
-      "value": 298383488,
+      "value": 298643914,
       "label": "Total input tokens",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "average_per_message": 119162.73482428116,
+      "average_per_message": 119171.5538707103,
       "median": 104332.0,
       "min": 1087.0,
       "max": 709979.0,
-      "p95": 285361.5,
-      "messages_with_tokens": 2504,
+      "p95": 285356.5,
+      "messages_with_tokens": 2506,
       "coverage": 3.59
     },
     "output_tokens": {
-      "value": 3847696,
+      "value": 3875448,
       "label": "Total output tokens",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "average_per_message": 1536.6198083067093,
+      "average_per_message": 1546.4676775738228,
       "median": 573.0,
       "min": 1.0,
       "max": 51241.0,
-      "p95": 7113.549999999997,
-      "messages_with_tokens": 2504,
+      "p95": 7132.0,
+      "messages_with_tokens": 2506,
       "coverage": 3.59
     },
     "total_tokens": {
-      "value": 302231184,
+      "value": 302519362,
       "label": "Total tokens (input + output)",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "average_per_message": 120699.35463258786,
-      "median": 106646.5,
+      "average_per_message": 120718.02154828412,
+      "median": 106696.0,
       "min": 1105.0,
       "max": 710260.0,
-      "p95": 286034.99999999994,
-      "messages_with_tokens": 2504,
+      "p95": 285985.0,
+      "messages_with_tokens": 2506,
       "coverage": 3.59
     },
     "tokens_per_message": {
-      "value": 120699.35463258786,
+      "value": 120718.02154828412,
       "label": "Tokens per message (average)",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "numeric",
-      "median": 106646.5,
+      "median": 106696.0,
       "min": 1105.0,
       "max": 710260.0,
-      "p95": 286034.99999999994,
-      "std_dev": 84187.35175318494,
-      "sample_size": 2504
+      "p95": 285985.0,
+      "std_dev": 84162.74226707529,
+      "sample_size": 2506
     },
     "tokens_by_model": {
       "value": 1,
@@ -536,36 +536,36 @@
       "total_tokens": 1221402
     },
     "agentic_messages": {
-      "value": 3915,
+      "value": 3918,
       "label": "Agentic messages (agent mode)",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "percentage": 5.62,
+      "percentage": 5.61,
       "breakdown": {
-        "agentic": 3915,
-        "chat": 65752
+        "agentic": 3918,
+        "chat": 65869
       }
     },
     "chat_messages": {
-      "value": 65752,
+      "value": 65869,
       "label": "Chat messages (non-agent mode)",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "percentage": 94.38,
+      "percentage": 94.39,
       "breakdown": {
-        "chat": 65752,
-        "agentic": 3915
+        "chat": 65869,
+        "agentic": 3918
       }
     },
     "messages_with_checkpoints": {
-      "value": 14238,
+      "value": 14260,
       "label": "Messages with checkpoints",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "percentage": 20.44
+      "percentage": 20.43
     },
     "messages_with_lints": {
       "value": 0,
@@ -618,35 +618,35 @@
       "percentage": 0.24
     },
     "messages_with_server_references": {
-      "value": 20897,
+      "value": 20955,
       "label": "Messages with server references",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "percentage": 30.0
+      "percentage": 30.03
     },
     "message_timestamps": {
-      "value": 69667,
+      "value": 69787,
       "label": "Message timestamps",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "first_message": "2025-12-22T10:52:45.300142",
-      "last_message": "2025-12-22T10:52:53.802361",
+      "first_message": "2025-12-22T11:14:48.432265",
+      "last_message": "2025-12-22T11:14:56.500652",
       "time_span_days": 0
     },
     "time_between_messages": {
-      "value": 0.00012204258892429593,
+      "value": 0.0001156161264436993,
       "label": "Time between messages (seconds)",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "numeric",
       "median": 0.0,
       "min": 0.0,
-      "max": 0.796014,
+      "max": 0.829634,
       "p95": 0.000999,
-      "std_dev": 0.004779325634943447,
-      "sample_size": 69666
+      "std_dev": 0.004741667622803896,
+      "sample_size": 69786
     },
     "active_days": {
       "value": 1,
@@ -676,16 +676,16 @@
       "current_streak": 1
     },
     "peak_activity_hours": {
-      "value": 10,
+      "value": 11,
       "label": "Peak activity hour",
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "count",
-      "peak_message_count": 69667,
+      "peak_message_count": 69787,
       "hour_breakdown": [
         [
-          10,
-          69667
+          11,
+          69787
         ]
       ],
       "percentage_in_peak_hour": 100.0
@@ -696,11 +696,11 @@
       "category": "Messages",
       "data_source": "bubbleId",
       "type": "text",
-      "peak_message_count": 69667,
+      "peak_message_count": 69787,
       "day_breakdown": [
         [
           "Monday",
-          69667
+          69787
         ]
       ],
       "percentage_on_peak_day": 100.0
@@ -747,7 +747,7 @@
       }
     },
     "session_duration": {
-      "value": 491.60567776686315,
+      "value": 491.64665276686316,
       "label": "Session duration (minutes)",
       "category": "Sessions",
       "data_source": "composerData",
@@ -756,7 +756,7 @@
       "min": 0.0,
       "max": 50450.764683333335,
       "p95": 1220.3232749999993,
-      "std_dev": 3299.8998256220702,
+      "std_dev": 3300.02951230667,
       "sample_size": 1018
     },
     "sessions_by_duration_bucket": {
@@ -774,12 +774,12 @@
       }
     },
     "lines_added": {
-      "value": 446905,
+      "value": 447575,
       "label": "Total lines added",
       "category": "Sessions",
       "data_source": "composerData",
       "type": "count",
-      "average_per_session": 1446.294498381877,
+      "average_per_session": 1448.462783171521,
       "median": 475.0,
       "sessions_with_additions": 309
     },
@@ -794,12 +794,12 @@
       "sessions_with_removals": 299
     },
     "net_lines": {
-      "value": 371935,
+      "value": 372605,
       "label": "Net lines (added - removed)",
       "category": "Sessions",
       "data_source": "composerData",
       "type": "count",
-      "average_per_session": 365.35854616895875,
+      "average_per_session": 366.016699410609,
       "median": 0.0,
       "positive_sessions": 285,
       "negative_sessions": 23
@@ -846,13 +846,13 @@
       "top_modified_files": []
     },
     "context_tokens_used": {
-      "value": 35455610,
+      "value": 35425083,
       "label": "Total context tokens used",
       "category": "Sessions",
       "data_source": "composerData",
       "type": "count",
-      "average_per_session": 98487.80555555556,
-      "median": 80650.5,
+      "average_per_session": 98403.00833333333,
+      "median": 79972.5,
       "max": 596094.0,
       "sessions_tracked": 360
     },
@@ -886,7 +886,7 @@
       ]
     },
     "context_usage_percentage": {
-      "value": 22.895731426252993,
+      "value": 22.84910538652239,
       "label": "Average context usage (%)",
       "category": "Sessions",
       "data_source": "composerData",
@@ -894,7 +894,7 @@
       "median": 14.57760238647461,
       "min": 1.2328033447265625,
       "max": 96.70284080505371,
-      "p95": 65.17010231018067,
+      "p95": 63.59641056060788,
       "sample_size": 372
     },
     "sessions_near_context_limit": {
@@ -906,7 +906,7 @@
       "percentage": 0.49
     },
     "conversation_length": {
-      "value": 187.2768817204301,
+      "value": 187.5994623655914,
       "label": "Conversation length (messages)",
       "category": "Sessions",
       "data_source": "composerData + bubbleId",
@@ -918,7 +918,7 @@
       "sample_size": 372
     },
     "user_messages_per_session": {
-      "value": 10.836021505376344,
+      "value": 10.844086021505376,
       "label": "User messages per session",
       "category": "Sessions",
       "data_source": "bubbleId",
@@ -929,7 +929,7 @@
       "sample_size": 372
     },
     "ai_messages_per_session": {
-      "value": 176.40860215053763,
+      "value": 176.7231182795699,
       "label": "AI messages per session",
       "category": "Sessions",
       "data_source": "bubbleId",
@@ -940,7 +940,7 @@
       "sample_size": 372
     },
     "user_ai_message_ratio": {
-      "value": 0.0764391131410958,
+      "value": 0.07640449219961042,
       "label": "User/AI message ratio",
       "category": "Sessions",
       "data_source": "bubbleId",
@@ -1226,14 +1226,14 @@
   },
   "code": {
     "code_diffs_total": {
-      "value": 10767,
+      "value": 10791,
       "label": "Total code diffs",
       "category": "Code & Diffs",
       "data_source": "codeBlockDiff",
       "type": "count"
     },
     "diffs_per_session": {
-      "value": 34.072784810126585,
+      "value": 34.14873417721519,
       "label": "Diffs per session",
       "category": "Code & Diffs",
       "data_source": "codeBlockDiff",
@@ -1245,7 +1245,7 @@
       "sample_size": 316
     },
     "lines_changed_per_diff": {
-      "value": 309.36546856134487,
+      "value": 309.55342414975445,
       "label": "Lines changed per diff",
       "category": "Code & Diffs",
       "data_source": "codeBlockDiff",
@@ -1253,11 +1253,11 @@
       "median": 120.0,
       "min": 0.0,
       "max": 5531.0,
-      "p95": 1248.699999999999,
-      "total_lines": 3330938.0
+      "p95": 1248.0,
+      "total_lines": 3340391.0
     },
     "diff_line_spans": {
-      "value": 122.98850459816073,
+      "value": 122.90466693258875,
       "label": "Diff line spans",
       "category": "Code & Diffs",
       "data_source": "codeBlockDiff",
@@ -1265,8 +1265,8 @@
       "median": 3.0,
       "min": 1.0,
       "max": 5524.0,
-      "p95": 589.0500000000047,
-      "sample_size": 10004
+      "p95": 576.9499999999989,
+      "sample_size": 10028
     },
     "edit_distance": {
       "value": 0,
@@ -1285,12 +1285,12 @@
       "note": "Requires implementation of similarity calculation"
     },
     "character_changes": {
-      "value": 117139205.0,
+      "value": 117475955.0,
       "label": "Total character changes",
       "category": "Code & Diffs",
       "data_source": "codeBlockDiff",
       "type": "count",
-      "average_per_change": 776.6152300889063,
+      "average_per_change": 778.6361798586901,
       "median": 88.0
     },
     "tracked_code_lines": {
@@ -1585,6 +1585,185 @@
           22
         ]
       ]
+    }
+  },
+  "daily": {
+    "daily_suggested_lines_composer": {
+      "value": 146490,
+      "label": "Total composer suggested lines",
+      "category": "Daily Usage",
+      "data_source": "aiCodeTracking.dailyStats",
+      "type": "count",
+      "average_per_day": 5231.785714285715,
+      "median": 2753.5,
+      "min": 20.0,
+      "max": 24654.0,
+      "p95": 15127.55,
+      "days_tracked": 28,
+      "daily_breakdown": [
+        {
+          "date": "2025-11-20",
+          "lines": 570
+        },
+        {
+          "date": "2025-11-21",
+          "lines": 2375
+        },
+        {
+          "date": "2025-11-22",
+          "lines": 7110
+        },
+        {
+          "date": "2025-11-23",
+          "lines": 9735
+        },
+        {
+          "date": "2025-11-24",
+          "lines": 9146
+        },
+        {
+          "date": "2025-11-25",
+          "lines": 4278
+        },
+        {
+          "date": "2025-11-26",
+          "lines": 4900
+        }
+      ]
+    },
+    "daily_accepted_lines_composer": {
+      "value": 78090,
+      "label": "Total composer accepted lines",
+      "category": "Daily Usage",
+      "data_source": "aiCodeTracking.dailyStats",
+      "type": "count",
+      "average_per_day": 2788.9285714285716,
+      "median": 1603.5,
+      "min": 0.0,
+      "max": 14102.0,
+      "p95": 9907.349999999995,
+      "days_tracked": 28,
+      "daily_breakdown": [
+        {
+          "date": "2025-11-20",
+          "lines": 570
+        },
+        {
+          "date": "2025-11-21",
+          "lines": 2846
+        },
+        {
+          "date": "2025-11-22",
+          "lines": 2263
+        },
+        {
+          "date": "2025-11-23",
+          "lines": 0
+        },
+        {
+          "date": "2025-11-24",
+          "lines": 4323
+        },
+        {
+          "date": "2025-11-25",
+          "lines": 3835
+        },
+        {
+          "date": "2025-11-26",
+          "lines": 3899
+        }
+      ]
+    },
+    "daily_suggested_lines_tab": {
+      "value": 195,
+      "label": "Total tab suggested lines",
+      "category": "Daily Usage",
+      "data_source": "aiCodeTracking.dailyStats",
+      "type": "count",
+      "average_per_day": 6.964285714285714,
+      "median": 0.0,
+      "days_tracked": 28
+    },
+    "daily_accepted_lines_tab": {
+      "value": 2,
+      "label": "Total tab accepted lines",
+      "category": "Daily Usage",
+      "data_source": "aiCodeTracking.dailyStats",
+      "type": "count",
+      "average_per_day": 0.07142857142857142,
+      "median": 0.0,
+      "days_tracked": 28
+    },
+    "daily_acceptance_rate": {
+      "value": 53.23789071820568,
+      "label": "Overall acceptance rate (%)",
+      "category": "Daily Usage",
+      "data_source": "aiCodeTracking.dailyStats",
+      "type": "percentage",
+      "composer_rate": 53.30739299610895,
+      "tab_rate": 1.0256410256410255,
+      "total_suggested": 146685,
+      "total_accepted": 78092,
+      "daily_rates": [
+        {
+          "date": "2025-11-20",
+          "rate": 100.0,
+          "composer_rate": 100.0,
+          "tab_rate": 0.0
+        },
+        {
+          "date": "2025-11-21",
+          "rate": 119.83157894736843,
+          "composer_rate": 119.83157894736843,
+          "tab_rate": 0.0
+        },
+        {
+          "date": "2025-11-22",
+          "rate": 31.828410689170184,
+          "composer_rate": 31.828410689170184,
+          "tab_rate": 0.0
+        },
+        {
+          "date": "2025-11-23",
+          "rate": 0.0,
+          "composer_rate": 0.0,
+          "tab_rate": 0.0
+        },
+        {
+          "date": "2025-11-24",
+          "rate": 47.266564618412424,
+          "composer_rate": 47.266564618412424,
+          "tab_rate": 0.0
+        },
+        {
+          "date": "2025-11-25",
+          "rate": 89.64469378214119,
+          "composer_rate": 89.64469378214119,
+          "tab_rate": 0.0
+        },
+        {
+          "date": "2025-11-26",
+          "rate": 79.57142857142857,
+          "composer_rate": 79.57142857142857,
+          "tab_rate": 0.0
+        }
+      ]
+    },
+    "composer_vs_tab_usage": {
+      "value": 146685,
+      "label": "Total lines suggested (composer + tab)",
+      "category": "Daily Usage",
+      "data_source": "aiCodeTracking.dailyStats",
+      "type": "count",
+      "composer_lines": 146490,
+      "composer_percentage": 99.86706207178648,
+      "composer_avg_per_active_day": 5231.785714285715,
+      "days_with_composer": 28,
+      "tab_lines": 195,
+      "tab_percentage": 0.13293792821351877,
+      "tab_avg_per_active_day": 27.857142857142858,
+      "days_with_tab": 7,
+      "total_days": 28
     }
   }
 }

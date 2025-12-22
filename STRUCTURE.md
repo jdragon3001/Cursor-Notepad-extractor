@@ -1,17 +1,18 @@
 # Cursor Data Extractor - Project Structure
 
-## 🎯 **CURRENT STATUS: 105 STATS COMPLETE**
+## 🎯 **CURRENT STATUS: 111 STATS COMPLETE**
 
 **December 22, 2025** - Core stats extraction and calculation pipeline is operational.
 
 ### ✅ Completed
-- **Data Models**: Message, Session, CodeDiff, CodeTrackingLine (70+ total properties)
-- **Extractors**: MessageExtractor, SessionExtractor, CodeDiffExtractor, CodeTrackingExtractor
+- **Data Models**: Message, Session, CodeDiff, DailyStat, CodeTrackingLine (80+ total properties)
+- **Extractors**: MessageExtractor, SessionExtractor, CodeDiffExtractor, CodeTrackingExtractor, DailyStatExtractor
 - **Calculators**: 
   - **MessageCalculator with ALL 66 message stats** ✅
   - **SessionCalculator with ALL 27 session stats** ✅
   - **CodeCalculator with ALL 12 code & diffs stats** ✅
-  - Modular architecture: 20 focused modules total
+  - **DailyUsageCalculator with ALL 6 daily usage stats** ✅
+  - Modular architecture: 21 focused modules total
   - Each module: 3-7 methods, ~150-200 lines
   - Clean, maintainable, testable code
 - **Orchestrator**: Coordinates extraction and calculation
@@ -19,28 +20,31 @@
 - **Test Pipeline**: Validates end-to-end functionality
 
 ### 🔍 Verified Results (Latest Test)
-- **69,667 messages** extracted (0 errors)
+- **69,787 messages** extracted (0 errors)
 - **1,018 sessions** extracted (0 errors)
-- **10,767 code diffs** extracted (0 errors)
+- **10,791 code diffs** extracted (0 errors)
 - **10,000 tracking lines** extracted (0 errors)
+- **28 daily stats** extracted (0 errors)
 - **66 message stats** calculated successfully ✅
 - **27 session stats** calculated successfully ✅
 - **12 code stats** calculated successfully ✅
-- **Total: 105 stats** working perfectly ✅
+- **6 daily stats** calculated successfully ✅
+- **Total: 111 stats** working perfectly ✅
+- **Progress: 111/232 stats (47.8%)**
 
-### 📊 Sample Stats (105 Stats Working!)
-- Total messages: 69,667
-- User messages: 4,031 (5.8%)
-- AI messages: 65,624 (94.2%)
-- Messages per session: avg 187, median 124
-- Messages with code: 12,814 (18.4%)
-- Messages with thinking: 18,743 (26.9%)
+### 📊 Sample Stats (111 Stats Working!)
+- Total messages: 69,787
+- User messages: 4,034 (5.8%)
+- AI messages: 65,741 (94.2%)
+- Messages per session: avg 188, median 124
+- Messages with code: 12,834 (18.4%)
+- Messages with thinking: 18,745 (26.9%)
 - Total sessions: 1,018
 - Agent mode sessions: 45.2%
-- Chat mode sessions: 54.8%
-- Code diffs: 10,767
+- Code diffs: 10,791
 - Tracked code lines: 10,000
-- Unique file types: ~50
+- Composer suggested lines: 146,490 (28 days)
+- Composer acceptance rate: 53.3%
 
 ---
 
@@ -101,12 +105,15 @@ stats/                         # ⭐ Stats calculation system (modular architect
 │       ├── base.py            # Shared utilities
 │       ├── diff_metrics.py    # Stats 94-100: Diff metrics
 │       └── tracking_lines.py  # Stats 101-105: Tracking lines
+│   └── daily_stats/           # ⭐ Daily usage stats (6 stats) ✅
+│       └── __init__.py        # DailyUsageCalculator (all stats in one module)
 │
 └── models/                    # Data models (dataclasses)
     ├── __init__.py
     ├── message.py             # ✅ Message model (30+ properties)
     ├── session.py             # ✅ Session model (20+ properties)
-    └── code_diff.py           # ✅ CodeDiff, DiffChange, CodeTrackingLine models
+    ├── code_diff.py           # ✅ CodeDiff, DiffChange, CodeTrackingLine models
+    └── daily_stat.py          # ✅ DailyStat model
 ```
 
 ### **Scripts (Reference & Utilities)**
@@ -245,20 +252,21 @@ python scripts/validation/extract_daily_stats.py
 1. ✅ **Message Calculator** - All 66 message stats complete
 2. ✅ **Session Calculator** - All 27 session stats complete
 3. ✅ **Code & Diffs Calculator** - All 12 code stats complete
-4. **Daily Usage Calculator** - Implement daily patterns (stats 106-111) - 6 stats ⬅️ NEXT
+4. ✅ **Daily Usage Calculator** - All 6 daily stats complete
+5. **Token & Model Usage Calculator** - Next target (stats 112-139) - 28 stats
 
 ### Short Term
-5. **Token & Model Usage Calculator** - Comprehensive usage stats (stats 112-139) - 28 stats
 6. **Error Calculator** - Extract lints and console logs (stats 140-149) - 10 stats
 7. **Git Activity Calculator** - Version control metrics (stats 150-159) - 10 stats
 8. **Notepad Calculator** - Notepad usage stats (stats 160-169) - 10 stats
 9. **Effectiveness Calculator** - Analyze prompt effectiveness (stats 170-200) - 31 stats
+10. **Remaining stats** - Complete all 232 stats (121 remaining)
 
 ### Medium Term
-10. **Add Workspace Extraction** - Extract from 227 workspace DBs for full history
-11. **Build Streamlit Dashboard** - 7-page UI (Overview, Browse, Stats, Analytics, Calendar, Intelligence, Export)
-12. **Full-text Search** - Implement Whoosh for message/session search
-13. **Export System** - JSON, CSV, PDF exports
+11. **Add Workspace Extraction** - Extract from 227 workspace DBs for full history
+12. **Build Streamlit Dashboard** - 7-page UI (Overview, Browse, Stats, Analytics, Calendar, Intelligence, Export)
+13. **Full-text Search** - Implement Whoosh for message/session search
+14. **Export System** - JSON, CSV, PDF exports
 
 See `docs/planning/APP-ARCHITECTURE.md` for complete roadmap.
 

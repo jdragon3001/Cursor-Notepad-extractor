@@ -1,0 +1,1590 @@
+{
+  "messages": {
+    "total_messages": {
+      "value": 69667,
+      "label": "Total messages",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count"
+    },
+    "user_messages": {
+      "value": 4031,
+      "label": "User messages",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 5.79,
+      "breakdown": {
+        "total": 69667,
+        "user": 4031,
+        "ai": 65636
+      }
+    },
+    "ai_messages": {
+      "value": 65624,
+      "label": "AI messages",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 94.2,
+      "breakdown": {
+        "total": 69667,
+        "user": 4043,
+        "ai": 65624
+      }
+    },
+    "messages_per_session": {
+      "value": 187.2768817204301,
+      "label": "Messages per session",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 123.5,
+      "min": 2.0,
+      "max": 1629.0,
+      "p95": 542.25,
+      "std_dev": 200.73973735590369,
+      "sample_size": 372
+    },
+    "message_text_length": {
+      "value": 402.7795319054979,
+      "label": "Message text length (characters)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 120.0,
+      "min": 1.0,
+      "max": 162635.0,
+      "p95": 1588.0,
+      "std_dev": 1994.5706452575391,
+      "sample_size": 18116
+    },
+    "messages_with_text": {
+      "value": 18116,
+      "label": "Messages with text",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 26.0,
+      "breakdown": {
+        "with_text": 18116,
+        "without_text": 51551
+      }
+    },
+    "messages_with_code_blocks": {
+      "value": 12814,
+      "label": "Messages with code blocks",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 18.39,
+      "breakdown": {
+        "with_code": 12814,
+        "without_code": 56853
+      }
+    },
+    "code_blocks_generated": {
+      "value": 14509,
+      "label": "Code blocks generated",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count"
+    },
+    "lines_of_code_in_blocks": {
+      "value": 14509,
+      "label": "Lines of code in code blocks",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count"
+    },
+    "code_block_languages": {
+      "value": 0,
+      "label": "Unique code block languages",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "top_languages": [],
+      "total_blocks": 0
+    },
+    "files_referenced_in_code": {
+      "value": 0,
+      "label": "Unique files referenced in code",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "top_files": [],
+      "total_references": 0
+    },
+    "messages_with_thinking": {
+      "value": 18743,
+      "label": "Messages with thinking",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 26.9,
+      "breakdown": {
+        "with_thinking": 18743,
+        "without_thinking": 50924
+      }
+    },
+    "thinking_text_length": {
+      "value": 454.47735154457666,
+      "label": "Thinking text length (characters)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 215.0,
+      "min": 3.0,
+      "max": 16364.0,
+      "p95": 1598.8999999999978,
+      "std_dev": 651.4773488531314,
+      "sample_size": 18743
+    },
+    "thinking_duration": {
+      "value": 3.379690119989788,
+      "label": "Thinking duration (seconds)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 1.444,
+      "min": -1.0,
+      "max": 525.26,
+      "p95": 10.757599999999995,
+      "std_dev": 8.462408617257239,
+      "sample_size": 19585
+    },
+    "thinking_blocks_per_message": {
+      "value": 1.0,
+      "label": "Thinking blocks per message",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 1.0,
+      "min": 1.0,
+      "max": 1.0,
+      "p95": 1.0,
+      "std_dev": 0.0,
+      "sample_size": 19605
+    },
+    "messages_with_tools": {
+      "value": 0,
+      "label": "Messages with tools",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0,
+      "breakdown": {
+        "with_tools": 0,
+        "without_tools": 69667
+      }
+    },
+    "tool_invocations": {
+      "value": 0,
+      "label": "Tool invocations",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count"
+    },
+    "tools_per_message": {
+      "value": 0,
+      "label": "Tools per message",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "sample_size": 0
+    },
+    "tool_usage_by_type": {
+      "value": 0,
+      "label": "Unique tool types",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "top_tools": [],
+      "total_invocations": 0
+    },
+    "tool_success_failure": {
+      "value": 0,
+      "label": "Successful tool invocations",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "failures": 0,
+      "total": 0,
+      "success_rate": 0,
+      "breakdown": {
+        "successes": 0,
+        "failures": 0,
+        "total": 0
+      }
+    },
+    "attached_code_chunks": {
+      "value": 0,
+      "label": "Attached code chunks",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "messages_with_chunks": 0,
+      "percentage": 0.0
+    },
+    "codebase_context_chunks": {
+      "value": 0,
+      "label": "Codebase context chunks (auto-retrieved)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "messages_with_chunks": 0,
+      "percentage": 0.0
+    },
+    "lines_in_attached_chunks": {
+      "value": 0,
+      "label": "Lines in attached chunks",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "sample_size": 0
+    },
+    "relevant_files": {
+      "value": 0,
+      "label": "Unique relevant files",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "top_files": [],
+      "total_references": 0
+    },
+    "recently_viewed_files": {
+      "value": 0,
+      "label": "Unique recently viewed files",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "top_files": [],
+      "total_references": 0
+    },
+    "unique_files_in_context": {
+      "value": 0,
+      "label": "Unique files in context (all sources)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count"
+    },
+    "web_references": {
+      "value": 0,
+      "label": "Web references",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "messages_with_refs": 0,
+      "percentage": 0.0,
+      "top_references": []
+    },
+    "web_searches_performed": {
+      "value": 0,
+      "label": "Web searches performed",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "docs_references": {
+      "value": 0,
+      "label": "Documentation references",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "messages_with_refs": 0,
+      "percentage": 0.0,
+      "top_sources": []
+    },
+    "messages_using_web": {
+      "value": 0,
+      "label": "Messages using web capability",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "suggested_code_blocks": {
+      "value": 0,
+      "label": "Suggested code blocks",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "messages_with_suggestions": 0,
+      "percentage": 0.0
+    },
+    "suggestion_action_types": {
+      "value": 0,
+      "label": "Unique suggestion action types",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "action_breakdown": [],
+      "total_suggestions": 0
+    },
+    "assistant_suggested_diffs": {
+      "value": 0,
+      "label": "Assistant suggested diffs",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count"
+    },
+    "accepted_suggestions": {
+      "value": 0,
+      "label": "Accepted suggestions",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "note": "Limited data: acceptance tracking may be incomplete"
+    },
+    "rejected_suggestions": {
+      "value": 0,
+      "label": "Rejected suggestions",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "note": "Limited data: rejection tracking may be incomplete"
+    },
+    "modified_suggestions": {
+      "value": 0,
+      "label": "Modified suggestions",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "note": "Limited data: modification tracking may be incomplete"
+    },
+    "acceptance_rate": {
+      "value": 0,
+      "label": "Suggestion acceptance rate (%)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "percentage",
+      "accepted": 0,
+      "rejected": 0,
+      "total_tracked": 0,
+      "note": "Based on suggestions with status tracking"
+    },
+    "response_time_to_suggestions": {
+      "value": 0,
+      "label": "Response time to suggestions (seconds)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "note": "Insufficient data: response timing not tracked locally",
+      "sample_size": 0
+    },
+    "messages_with_git_diffs": {
+      "value": 69655,
+      "label": "Messages with git diffs",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 99.98
+    },
+    "messages_with_diff_histories": {
+      "value": 0,
+      "label": "Messages with diff histories",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "messages_with_human_changes": {
+      "value": 0,
+      "label": "Messages with human changes",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "messages_with_model_info": {
+      "value": 8005,
+      "label": "Messages with model info",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 11.49,
+      "breakdown": {
+        "with_model_info": 8005,
+        "without_model_info": 61662
+      }
+    },
+    "model_usage_breakdown": {
+      "value": 9,
+      "label": "Unique models used",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "model_breakdown": [
+        [
+          "claude-4.5-sonnet-thinking",
+          5736
+        ],
+        [
+          "claude-4.5-opus-high-thinking",
+          1258
+        ],
+        [
+          "gpt-5",
+          537
+        ],
+        [
+          "composer-1",
+          313
+        ],
+        [
+          "gemini-3-pro-preview",
+          114
+        ],
+        [
+          "gemini-3-pro",
+          20
+        ],
+        [
+          "gpt-5.1",
+          12
+        ],
+        [
+          "grok-4-fast-reasoning",
+          10
+        ],
+        [
+          "gpt-5-codex",
+          5
+        ]
+      ],
+      "total_messages_with_model": 8005,
+      "coverage_percentage": 11.49
+    },
+    "model_switches": {
+      "value": 101,
+      "label": "Model switches",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "sessions_with_switches": 49,
+      "sessions_analyzed": 372,
+      "percentage_sessions": 13.17
+    },
+    "input_tokens": {
+      "value": 298383488,
+      "label": "Total input tokens",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "average_per_message": 119162.73482428116,
+      "median": 104332.0,
+      "min": 1087.0,
+      "max": 709979.0,
+      "p95": 285361.5,
+      "messages_with_tokens": 2504,
+      "coverage": 3.59
+    },
+    "output_tokens": {
+      "value": 3847696,
+      "label": "Total output tokens",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "average_per_message": 1536.6198083067093,
+      "median": 573.0,
+      "min": 1.0,
+      "max": 51241.0,
+      "p95": 7113.549999999997,
+      "messages_with_tokens": 2504,
+      "coverage": 3.59
+    },
+    "total_tokens": {
+      "value": 302231184,
+      "label": "Total tokens (input + output)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "average_per_message": 120699.35463258786,
+      "median": 106646.5,
+      "min": 1105.0,
+      "max": 710260.0,
+      "p95": 286034.99999999994,
+      "messages_with_tokens": 2504,
+      "coverage": 3.59
+    },
+    "tokens_per_message": {
+      "value": 120699.35463258786,
+      "label": "Tokens per message (average)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 106646.5,
+      "min": 1105.0,
+      "max": 710260.0,
+      "p95": 286034.99999999994,
+      "std_dev": 84187.35175318494,
+      "sample_size": 2504
+    },
+    "tokens_by_model": {
+      "value": 1,
+      "label": "Models with token data",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "token_breakdown": [
+        [
+          "claude-4.5-sonnet-thinking",
+          1221402
+        ]
+      ],
+      "total_tokens": 1221402
+    },
+    "agentic_messages": {
+      "value": 3915,
+      "label": "Agentic messages (agent mode)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 5.62,
+      "breakdown": {
+        "agentic": 3915,
+        "chat": 65752
+      }
+    },
+    "chat_messages": {
+      "value": 65752,
+      "label": "Chat messages (non-agent mode)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 94.38,
+      "breakdown": {
+        "chat": 65752,
+        "agentic": 3915
+      }
+    },
+    "messages_with_checkpoints": {
+      "value": 14238,
+      "label": "Messages with checkpoints",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 20.44
+    },
+    "messages_with_lints": {
+      "value": 0,
+      "label": "Messages with linter errors",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "linter_errors": {
+      "value": 0,
+      "label": "Total linter errors",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "messages_with_lints": 0,
+      "average_per_message": 0,
+      "top_error_types": []
+    },
+    "messages_with_console_logs": {
+      "value": 0,
+      "label": "Messages with console logs",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "terminal_interactions": {
+      "value": 0,
+      "label": "Messages with terminal interactions",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "refunded_messages": {
+      "value": 0,
+      "label": "Refunded messages",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "nudge_messages": {
+      "value": 166,
+      "label": "Nudge messages",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 0.24
+    },
+    "messages_with_server_references": {
+      "value": 20897,
+      "label": "Messages with server references",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "percentage": 30.0
+    },
+    "message_timestamps": {
+      "value": 69667,
+      "label": "Message timestamps",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "first_message": "2025-12-22T10:52:45.300142",
+      "last_message": "2025-12-22T10:52:53.802361",
+      "time_span_days": 0
+    },
+    "time_between_messages": {
+      "value": 0.00012204258892429593,
+      "label": "Time between messages (seconds)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 0.0,
+      "min": 0.0,
+      "max": 0.796014,
+      "p95": 0.000999,
+      "std_dev": 0.004779325634943447,
+      "sample_size": 69666
+    },
+    "active_days": {
+      "value": 1,
+      "label": "Active days",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "total_days_in_range": 1,
+      "percentage_active": 100.0
+    },
+    "inactive_days": {
+      "value": 0,
+      "label": "Inactive days",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "total_days_in_range": 1,
+      "active_days": 1,
+      "percentage_inactive": 0.0
+    },
+    "activity_streak": {
+      "value": 1,
+      "label": "Longest activity streak (days)",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "current_streak": 1
+    },
+    "peak_activity_hours": {
+      "value": 10,
+      "label": "Peak activity hour",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "count",
+      "peak_message_count": 69667,
+      "hour_breakdown": [
+        [
+          10,
+          69667
+        ]
+      ],
+      "percentage_in_peak_hour": 100.0
+    },
+    "peak_activity_days": {
+      "value": "Monday",
+      "label": "Peak activity day",
+      "category": "Messages",
+      "data_source": "bubbleId",
+      "type": "text",
+      "peak_message_count": 69667,
+      "day_breakdown": [
+        [
+          "Monday",
+          69667
+        ]
+      ],
+      "percentage_on_peak_day": 100.0
+    }
+  },
+  "sessions": {
+    "total_sessions": {
+      "value": 1018,
+      "label": "Total sessions",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count"
+    },
+    "sessions_per_workspace": {
+      "value": 1018,
+      "label": "Sessions per workspace",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "note": "From global DB only - workspace breakdown requires workspace DB extraction"
+    },
+    "agent_mode_sessions": {
+      "value": 738,
+      "label": "Agent mode sessions",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "percentage": 72.5,
+      "breakdown": {
+        "agentic": 738,
+        "chat": 280
+      }
+    },
+    "chat_mode_sessions": {
+      "value": 280,
+      "label": "Chat mode sessions",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "percentage": 27.5,
+      "breakdown": {
+        "chat": 280,
+        "agentic": 738
+      }
+    },
+    "session_duration": {
+      "value": 491.60567776686315,
+      "label": "Session duration (minutes)",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "numeric",
+      "median": 0.0,
+      "min": 0.0,
+      "max": 50450.764683333335,
+      "p95": 1220.3232749999993,
+      "std_dev": 3299.8998256220702,
+      "sample_size": 1018
+    },
+    "sessions_by_duration_bucket": {
+      "value": 1018,
+      "label": "Sessions by duration bucket",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "buckets": {
+        "very_short": 686,
+        "short": 56,
+        "medium": 74,
+        "long": 100,
+        "very_long": 102
+      }
+    },
+    "lines_added": {
+      "value": 446905,
+      "label": "Total lines added",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "average_per_session": 1446.294498381877,
+      "median": 475.0,
+      "sessions_with_additions": 309
+    },
+    "lines_removed": {
+      "value": 74970,
+      "label": "Total lines removed",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "average_per_session": 250.73578595317727,
+      "median": 46.0,
+      "sessions_with_removals": 299
+    },
+    "net_lines": {
+      "value": 371935,
+      "label": "Net lines (added - removed)",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "average_per_session": 365.35854616895875,
+      "median": 0.0,
+      "positive_sessions": 285,
+      "negative_sessions": 23
+    },
+    "sessions_with_code_output": {
+      "value": 311,
+      "label": "Sessions with code output",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "percentage": 30.55
+    },
+    "files_added": {
+      "value": 0,
+      "label": "Files added",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "unique_files": 0,
+      "top_files": []
+    },
+    "files_removed": {
+      "value": 0,
+      "label": "Files removed",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "unique_files": 0,
+      "top_files": []
+    },
+    "files_modified": {
+      "value": 0,
+      "label": "Unique files modified",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count"
+    },
+    "most_modified_files": {
+      "value": 0,
+      "label": "Files with modification data",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "top_modified_files": []
+    },
+    "context_tokens_used": {
+      "value": 35455610,
+      "label": "Total context tokens used",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "average_per_session": 98487.80555555556,
+      "median": 80650.5,
+      "max": 596094.0,
+      "sessions_tracked": 360
+    },
+    "context_token_limit": {
+      "value": 128000,
+      "label": "Most common context token limit",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "limit_distribution": [
+        [
+          128000,
+          658
+        ],
+        [
+          1000000,
+          140
+        ],
+        [
+          200000,
+          93
+        ],
+        [
+          976000,
+          58
+        ],
+        [
+          176000,
+          41
+        ]
+      ]
+    },
+    "context_usage_percentage": {
+      "value": 22.895731426252993,
+      "label": "Average context usage (%)",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "percentage",
+      "median": 14.57760238647461,
+      "min": 1.2328033447265625,
+      "max": 96.70284080505371,
+      "p95": 65.17010231018067,
+      "sample_size": 372
+    },
+    "sessions_near_context_limit": {
+      "value": 5,
+      "label": "Sessions near context limit (>80%)",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "percentage": 0.49
+    },
+    "conversation_length": {
+      "value": 187.2768817204301,
+      "label": "Conversation length (messages)",
+      "category": "Sessions",
+      "data_source": "composerData + bubbleId",
+      "type": "numeric",
+      "median": 123.5,
+      "min": 2.0,
+      "max": 1629.0,
+      "p95": 542.25,
+      "sample_size": 372
+    },
+    "user_messages_per_session": {
+      "value": 10.836021505376344,
+      "label": "User messages per session",
+      "category": "Sessions",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 6.0,
+      "min": 1.0,
+      "max": 186.0,
+      "sample_size": 372
+    },
+    "ai_messages_per_session": {
+      "value": 176.40860215053763,
+      "label": "AI messages per session",
+      "category": "Sessions",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 117.0,
+      "min": 1.0,
+      "max": 1559.0,
+      "sample_size": 372
+    },
+    "user_ai_message_ratio": {
+      "value": 0.0764391131410958,
+      "label": "User/AI message ratio",
+      "category": "Sessions",
+      "data_source": "bubbleId",
+      "type": "numeric",
+      "median": 0.061428242002431764,
+      "sample_size": 372
+    },
+    "sessions_by_model": {
+      "value": 10,
+      "label": "Unique models used in sessions",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "model_breakdown": [
+        [
+          "claude-4.5-sonnet-thinking",
+          684
+        ],
+        [
+          "claude-4.5-opus-high-thinking",
+          139
+        ],
+        [
+          "gpt-5",
+          91
+        ],
+        [
+          "composer-1",
+          75
+        ],
+        [
+          "gemini-3-pro",
+          17
+        ],
+        [
+          "gpt-5.1",
+          4
+        ],
+        [
+          "claude-4.5-sonnet-thinking,claude-4.5-sonnet-thinking",
+          3
+        ],
+        [
+          "default",
+          2
+        ],
+        [
+          "grok-4-fast-reasoning",
+          2
+        ],
+        [
+          "gpt-5-codex",
+          1
+        ]
+      ],
+      "sessions_with_model_data": 1018,
+      "coverage": 100.0
+    },
+    "sessions_with_max_mode": {
+      "value": 0,
+      "label": "Sessions with max context mode",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "percentage": 0.0
+    },
+    "sessions_with_capabilities": {
+      "value": 16,
+      "label": "Unique capabilities used",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "capability_breakdown": [
+        [
+          30,
+          736
+        ],
+        [
+          34,
+          736
+        ],
+        [
+          15,
+          736
+        ],
+        [
+          22,
+          736
+        ],
+        [
+          18,
+          736
+        ],
+        [
+          19,
+          736
+        ],
+        [
+          33,
+          736
+        ],
+        [
+          32,
+          736
+        ],
+        [
+          23,
+          736
+        ],
+        [
+          16,
+          736
+        ],
+        [
+          24,
+          736
+        ],
+        [
+          25,
+          736
+        ],
+        [
+          21,
+          736
+        ],
+        [
+          31,
+          736
+        ],
+        [
+          29,
+          736
+        ],
+        [
+          6,
+          471
+        ]
+      ],
+      "sessions_with_capabilities": 736
+    },
+    "named_sessions": {
+      "value": 373,
+      "label": "Named sessions",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "percentage": 36.64,
+      "breakdown": {
+        "named": 373,
+        "unnamed": 645
+      }
+    },
+    "session_name_keywords": {
+      "value": 656,
+      "label": "Unique keywords in session names",
+      "category": "Sessions",
+      "data_source": "composerData",
+      "type": "count",
+      "top_keywords": [
+        [
+          "page",
+          39
+        ],
+        [
+          "improve",
+          38
+        ],
+        [
+          "section",
+          24
+        ],
+        [
+          "audit",
+          24
+        ],
+        [
+          "profile",
+          22
+        ],
+        [
+          "design",
+          22
+        ],
+        [
+          "files",
+          22
+        ],
+        [
+          "issues",
+          21
+        ],
+        [
+          "portfolio",
+          19
+        ],
+        [
+          "app",
+          19
+        ],
+        [
+          "longest",
+          18
+        ],
+        [
+          "fix",
+          14
+        ],
+        [
+          "identify",
+          14
+        ],
+        [
+          "build",
+          13
+        ],
+        [
+          "update",
+          13
+        ],
+        [
+          "landing",
+          12
+        ],
+        [
+          "startup",
+          12
+        ],
+        [
+          "file",
+          11
+        ],
+        [
+          "functionality",
+          11
+        ],
+        [
+          "plan",
+          10
+        ],
+        [
+          "dashboard",
+          10
+        ],
+        [
+          "check",
+          10
+        ],
+        [
+          "modularization",
+          10
+        ],
+        [
+          "revamp",
+          9
+        ],
+        [
+          "understanding",
+          9
+        ],
+        [
+          "issue",
+          9
+        ],
+        [
+          "visibility",
+          8
+        ],
+        [
+          "process",
+          8
+        ],
+        [
+          "download",
+          8
+        ],
+        [
+          "next.js",
+          8
+        ]
+      ],
+      "total_words": 1651
+    }
+  },
+  "code": {
+    "code_diffs_total": {
+      "value": 10767,
+      "label": "Total code diffs",
+      "category": "Code & Diffs",
+      "data_source": "codeBlockDiff",
+      "type": "count"
+    },
+    "diffs_per_session": {
+      "value": 34.072784810126585,
+      "label": "Diffs per session",
+      "category": "Code & Diffs",
+      "data_source": "codeBlockDiff",
+      "type": "numeric",
+      "median": 21.0,
+      "min": 1.0,
+      "max": 267.0,
+      "p95": 99.5,
+      "sample_size": 316
+    },
+    "lines_changed_per_diff": {
+      "value": 309.36546856134487,
+      "label": "Lines changed per diff",
+      "category": "Code & Diffs",
+      "data_source": "codeBlockDiff",
+      "type": "numeric",
+      "median": 120.0,
+      "min": 0.0,
+      "max": 5531.0,
+      "p95": 1248.699999999999,
+      "total_lines": 3330938.0
+    },
+    "diff_line_spans": {
+      "value": 122.98850459816073,
+      "label": "Diff line spans",
+      "category": "Code & Diffs",
+      "data_source": "codeBlockDiff",
+      "type": "numeric",
+      "median": 3.0,
+      "min": 1.0,
+      "max": 5524.0,
+      "p95": 589.0500000000047,
+      "sample_size": 10004
+    },
+    "edit_distance": {
+      "value": 0,
+      "label": "Edit distance (Levenshtein)",
+      "category": "Code & Diffs",
+      "data_source": "codeBlockDiff",
+      "type": "numeric",
+      "note": "Requires implementation of Levenshtein distance calculation"
+    },
+    "similarity_ratio": {
+      "value": 0,
+      "label": "Similarity ratio",
+      "category": "Code & Diffs",
+      "data_source": "codeBlockDiff",
+      "type": "percentage",
+      "note": "Requires implementation of similarity calculation"
+    },
+    "character_changes": {
+      "value": 117139205.0,
+      "label": "Total character changes",
+      "category": "Code & Diffs",
+      "data_source": "codeBlockDiff",
+      "type": "count",
+      "average_per_change": 776.6152300889063,
+      "median": 88.0
+    },
+    "tracked_code_lines": {
+      "value": 10000,
+      "label": "Tracked code lines",
+      "category": "Code & Diffs",
+      "data_source": "aiCodeTrackingLines (ItemTable)",
+      "type": "count"
+    },
+    "code_by_source": {
+      "value": 1,
+      "label": "Unique code sources",
+      "category": "Code & Diffs",
+      "data_source": "aiCodeTrackingLines (ItemTable)",
+      "type": "count",
+      "source_breakdown": [
+        [
+          "composer",
+          10000
+        ]
+      ],
+      "total_lines": 10000
+    },
+    "code_by_file_type": {
+      "value": 11,
+      "label": "Unique file types",
+      "category": "Code & Diffs",
+      "data_source": "aiCodeTrackingLines (ItemTable)",
+      "type": "count",
+      "file_type_breakdown": [
+        [
+          "md",
+          2972
+        ],
+        [
+          "tsx",
+          2750
+        ],
+        [
+          "py",
+          2273
+        ],
+        [
+          "ts",
+          1492
+        ],
+        [
+          "txt",
+          162
+        ],
+        [
+          "js",
+          156
+        ],
+        [
+          "bat",
+          104
+        ],
+        [
+          "css",
+          21
+        ],
+        [
+          "jsx",
+          15
+        ],
+        [
+          "template",
+          13
+        ],
+        [
+          "json",
+          10
+        ]
+      ],
+      "total_lines": 9968
+    },
+    "code_by_file": {
+      "value": 63,
+      "label": "Unique files modified",
+      "category": "Code & Diffs",
+      "data_source": "aiCodeTrackingLines (ItemTable)",
+      "type": "count",
+      "total_lines": 10000,
+      "average_lines_per_file": 158.73015873015873
+    },
+    "most_modified_files": {
+      "value": 50,
+      "label": "Files with tracked lines",
+      "category": "Code & Diffs",
+      "data_source": "aiCodeTrackingLines (ItemTable)",
+      "type": "count",
+      "most_modified_files": [
+        [
+          "/c:/trace good/src/renderer/components/StepsTab.tsx",
+          1136
+        ],
+        [
+          "/c:/trace good/src/main/services/export/PresentationHtmlExporter.ts",
+          960
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/scrape_brand.py",
+          775
+        ],
+        [
+          "/var/www/jackwilber.net/src/app/portfolio/page.tsx",
+          532
+        ],
+        [
+          "/c:/trace good/src/renderer/components/presentation/PresentationMode.tsx",
+          416
+        ],
+        [
+          "/c:/trace good/src/renderer/hooks/useStepOperations.ts",
+          390
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-phase7-branding-dec-1-2025.md",
+          354
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/scrape_brand_with_ocr.py",
+          346
+        ],
+        [
+          "/c:/trace good/nextsteps/STEPSTAB_MODULARIZATION_PLAN_2025-11-29.md",
+          338
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-phase8-testing-dec-1-2025.md",
+          336
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/scrape_brand_parallel_safe.py",
+          332
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-phase6-admin-ui-dec-1-2025.md",
+          303
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/scrape_brand_with_proxy.py",
+          278
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/rebuild_cache_browser.py",
+          223
+        ],
+        [
+          "/var/www/sparklinedev.com/nextsteps/supabase-branching-research-2024-12-04.md",
+          214
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/cmds.md",
+          172
+        ],
+        [
+          "/c:/lawgic-lsdata-mockup/src/components/Guide/useGuide.js",
+          156
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/PROXY_SETUP_GUIDE.md",
+          151
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/PROBLEM_LOG.txt",
+          149
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-phase5-context-dec-1-2025.md",
+          140
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/brand_verification_checklist.md",
+          131
+        ],
+        [
+          "/var/www/timetracer.net/src/app/(marketing)/privacy/page.tsx",
+          126
+        ],
+        [
+          "/c:/trace good/src/renderer/components/steps/StepListItem.tsx",
+          125
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/PARALLEL_SCRAPING_GUIDE.md",
+          125
+        ],
+        [
+          "/var/www/timetracer.net/src/app/(marketing)/terms/page.tsx",
+          117
+        ],
+        [
+          "/c:/trace good/src/renderer/components/steps/StepsToolbar.tsx",
+          113
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/nextsteps/debugging_timeout_issue_dec9_2025.md",
+          112
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/run_small_brands.bat",
+          104
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-implementation-guide-dec-1-2025.md",
+          98
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/diagnose_manual.py",
+          95
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/scrape_small_brands_sequential.py",
+          90
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-phase4-api-dec-1-2025.md",
+          86
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-phase3-rls-dec-1-2025.md",
+          80
+        ],
+        [
+          "/var/www/sparklinedev.com/nextsteps/supabase-branching-guide-2024-12-05.md",
+          78
+        ],
+        [
+          "/var/www/Sparkline/sparkline/middleware.ts",
+          73
+        ],
+        [
+          "/c:/trace good/src/renderer/components/steps/PasteDialog.tsx",
+          72
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/nextsteps/real_issue_found_dec9_2025.md",
+          67
+        ],
+        [
+          "/var/www/sparklinedev.com/docs/SUPABASE_BRANCHING_WORKFLOW.md",
+          58
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-phase2-database-dec-1-2025.md",
+          51
+        ],
+        [
+          "/var/www/Sparkline/sparkline/src/app/auth/signup/page.tsx",
+          46
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/test_page_speed.py",
+          46
+        ],
+        [
+          "/var/www/Sparkline/sparkline/src/app/api/auth/logout/route.ts",
+          37
+        ],
+        [
+          "/var/www/Sparkline/sparkline/src/app/auth/login/page.tsx",
+          36
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/test_proxy.py",
+          32
+        ],
+        [
+          "/var/www/Sparkline/sparkline/src/app/api/auth/session/route.ts",
+          30
+        ],
+        [
+          "/var/www/timetracer.net/STRUCTURE.md",
+          29
+        ],
+        [
+          "/var/www/timetracer.net/cmds.md",
+          26
+        ],
+        [
+          "/var/www/timetracer.net/nextsteps/whitelabel-phase1-features-dec-1-2025.md",
+          23
+        ],
+        [
+          "/var/www/Sparkline/sparkline/src/components/Sidebar.tsx",
+          23
+        ],
+        [
+          "/c:/manual scraper/hp-manual-scraper/count_by_brand.py",
+          22
+        ]
+      ]
+    }
+  }
+}

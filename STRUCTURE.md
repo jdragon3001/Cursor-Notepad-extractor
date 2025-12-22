@@ -62,6 +62,8 @@ cursor-data-docs/
 ```
 nextsteps/
 ├── APP-ARCHITECTURE.md            # ⭐ Complete app design
+├── UI-UX-DESIGN.md                # ⭐ Complete UI/UX specification
+├── STATS-CALCULATION-ARCHITECTURE.md # ⭐ Stat calculation system design
 └── CURSOR-DATA-EXTRACTION-PLAN.md # Implementation roadmap
 ```
 
@@ -86,7 +88,9 @@ README.md                      # Usage guide
 STRUCTURE.md                   # This file
 EXPLORATION-COMPLETE.md        # ⭐ Final exploration summary
 QUICK-REFERENCE.md             # ⭐ Developer quick reference
-COMPLETE-STATS-CATALOG.md      # ⭐ ALL possible stats/metrics (600+)
+COMPLETE-STATS-CATALOG.md      # All possible stats/metrics (600+)
+PURE-STATS-INDEX.md            # ⭐ Clean stat list (232 core stats)
+BROWSE-PAGE-SUMMARY.md         # Browse page feature summary
 CLEANUP-SUMMARY.md             # Project cleanup log
 EXHAUSTIVE_DATA_REPORT.md      # Data exploration report
 PROBLEM_LOG.txt                # Known issues

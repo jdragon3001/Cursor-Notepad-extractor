@@ -564,6 +564,60 @@
 
 ---
 
+## Data Source: Error Logs & Linting
+
+### Linter Error Stats
+- [ ] Total linter errors (all messages)
+- [ ] Messages with lints (count & %)
+- [ ] Messages with approximateLintErrors (count & %)
+- [ ] Messages with multiFileLinterErrors (count & %)
+- [ ] Unique linter error types
+- [ ] Most common linter errors (top 10)
+- [ ] Linter errors by file
+- [ ] Linter errors by file type
+- [ ] Sessions with linter errors (count & %)
+- [ ] Average linter errors per session
+- [ ] Linter error resolution rate (if trackable)
+
+### Console Error Stats
+- [ ] Messages with consoleLogs (count & %)
+- [ ] Total console logs
+- [ ] Console errors (count)
+- [ ] Console warnings (count)
+- [ ] Console info (count)
+- [ ] Most common console errors (top 10)
+- [ ] Console errors by project
+- [ ] Console errors by session
+
+### Tool Failure Stats
+- [ ] Failed tool invocations (count & %)
+- [ ] Tool failure rate (failures / total invocations)
+- [ ] Failures by tool type
+- [ ] Most unreliable tool
+- [ ] Tool timeout count
+- [ ] Tool error messages (categorized)
+
+### Error Context Stats
+- [ ] Errors with file paths (count & %)
+- [ ] Errors with line numbers (count & %)
+- [ ] Errors with stack traces (count & %)
+- [ ] Most error-prone files (top 10)
+- [ ] Most error-prone projects
+
+### Error Timeline Stats
+- [ ] Errors per day (timeline)
+- [ ] Error trend (increasing/decreasing)
+- [ ] Peak error day
+- [ ] Error-free days (count)
+
+### Error Severity Stats
+- [ ] High severity errors (count)
+- [ ] Medium severity errors (count)
+- [ ] Low severity errors (count)
+- [ ] Unresolved errors (if trackable)
+
+---
+
 ## Data Source: Terminal History
 
 ### Terminal Command Stats

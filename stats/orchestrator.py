@@ -9,12 +9,18 @@ from stats.extractors.session_extractor import SessionExtractor
 from stats.extractors.code_diff_extractor import CodeDiffExtractor
 from stats.extractors.code_tracking_extractor import CodeTrackingExtractor
 from stats.extractors.daily_stat_extractor import DailyStatExtractor
+from stats.extractors.request_context_extractor import MessageRequestContextExtractor
+from stats.extractors.workspace_extractor import WorkspaceExtractor
 from stats.models.code_diff import CodeDiff, CodeTrackingLine
 from stats.models.daily_stat import DailyStat
+from stats.models.request_context import MessageRequestContext
+from stats.models.workspace import Workspace
 from stats.calculators.message_stats import MessageCalculator
 from stats.calculators.session_stats import SessionCalculator
 from stats.calculators.code_stats import CodeCalculator
 from stats.calculators.daily_stats import DailyUsageCalculator
+from stats.calculators.tool_stats import ToolCalculator
+from stats.calculators.context_stats import ContextCalculator
 from stats.cache import StatsCache
 
 logger = logging.getLogger(__name__)
@@ -40,6 +46,8 @@ class StatsOrchestrator:
         self._code_diffs = None
         self._tracking_lines = None
         self._daily_stats = None
+        self._request_contexts = None
+        self._workspaces = None
         
         logger.info(f"Initialized StatsOrchestrator with DB: {db_path.name}")
     
@@ -59,6 +67,8 @@ class StatsOrchestrator:
                 self._code_diffs = cached_data.get('code_diffs')
                 self._tracking_lines = cached_data.get('tracking_lines')
                 self._daily_stats = cached_data.get('daily_stats')
+                self._request_contexts = cached_data.get('request_contexts')
+                self._workspaces = cached_data.get('workspaces')
                 logger.info("Loaded data from cache")
                 return
         
@@ -89,6 +99,16 @@ class StatsOrchestrator:
             self._daily_stats = extractor.extract()
         logger.info(f"  Extracted {len(self._daily_stats)} daily stats")
         
+        # Extract request contexts
+        with MessageRequestContextExtractor(self.db_path) as extractor:
+            self._request_contexts = extractor.extract()
+        logger.info(f"  Extracted {len(self._request_contexts)} request contexts")
+        
+        # Extract workspaces
+        workspace_extractor = WorkspaceExtractor()
+        self._workspaces = workspace_extractor.extract()
+        logger.info(f"  Extracted {len(self._workspaces)} workspaces")
+        
         # Cache extracted data
         if self.cache:
             self.cache.save_extracted_data({
@@ -96,7 +116,9 @@ class StatsOrchestrator:
                 'sessions': self._sessions,
                 'code_diffs': self._code_diffs,
                 'tracking_lines': self._tracking_lines,
-                'daily_stats': self._daily_stats
+                'daily_stats': self._daily_stats,
+                'request_contexts': self._request_contexts,
+                'workspaces': self._workspaces
             })
     
     def calculate_all_stats(self, force: bool = False) -> Dict[str, Any]:
@@ -143,9 +165,15 @@ class StatsOrchestrator:
         daily_calc = DailyUsageCalculator(self._daily_stats)
         all_stats['daily'] = daily_calc.calculate_all()
         
-        # TODO: Add more calculators here as they're built
-        # token_calc = TokenCalculator(...)
-        # all_stats['tokens'] = token_calc.calculate_all()
+        # Calculate tool usage stats
+        logger.info("  Calculating tool usage stats...")
+        tool_calc = ToolCalculator(self._messages)
+        all_stats['tools'] = tool_calc.calculate_all()
+        
+        # Calculate context stats
+        logger.info("  Calculating context stats...")
+        context_calc = ContextCalculator(self._request_contexts)
+        all_stats['context'] = context_calc.calculate_all()
         
         # Cache results
         if self.cache:
@@ -182,6 +210,8 @@ class StatsOrchestrator:
         self._code_diffs = None
         self._tracking_lines = None
         self._daily_stats = None
+        self._request_contexts = None
+        self._workspaces = None
         logger.info("Invalidated cache")
     
     # ==================== DATA ACCESS ====================
@@ -219,6 +249,8 @@ class StatsOrchestrator:
             'total_code_diffs': len(self._code_diffs) if self._code_diffs else 0,
             'total_tracking_lines': len(self._tracking_lines) if self._tracking_lines else 0,
             'total_daily_stats': len(self._daily_stats) if self._daily_stats else 0,
+            'total_request_contexts': len(self._request_contexts) if self._request_contexts else 0,
+            'total_workspaces': len(self._workspaces) if self._workspaces else 0,
             'database_path': str(self.db_path),
             'cache_enabled': self.cache is not None
         }

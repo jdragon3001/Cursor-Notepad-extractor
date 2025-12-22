@@ -79,6 +79,11 @@ class Message:
     console_logs: List[Dict[str, Any]] = field(default_factory=list)
     """Console logs"""
     
+    # ==================== TOOL FIELDS ====================
+    
+    tool_former_data: Optional[Dict[str, Any]] = None
+    """Tool former data (tool status, name, args, results)"""
+    
     # ==================== MODE FIELDS ====================
     
     is_agentic: bool = False
@@ -143,6 +148,7 @@ class Message:
             token_count=data.get('tokenCount'),
             lints=data.get('lints', []),
             console_logs=data.get('consoleLogs', []),
+            tool_former_data=data.get('toolFormerData'),
             is_agentic=data.get('isAgentic', False),
             capabilities=data.get('capabilities', []),
             version=data.get('_v', 10),
@@ -210,6 +216,11 @@ class Message:
         """Check if message has token count."""
         return self.token_count is not None
     
+    @property
+    def has_tool_former_data(self) -> bool:
+        """Check if message has tool former data."""
+        return self.tool_former_data is not None and bool(self.tool_former_data)
+    
     # ==================== HELPER METHODS ====================
     
     def get_text_length(self) -> int:
@@ -275,6 +286,25 @@ class Message:
         if not self.token_count:
             return 0
         return self.token_count.get('total', 0) or (self.get_input_tokens() + self.get_output_tokens())
+    
+    def get_tool_former_status(self) -> Optional[str]:
+        """Get tool former status (error, success, cancelled, etc.)."""
+        if not self.tool_former_data:
+            return None
+        additional_data = self.tool_former_data.get('additionalData', {})
+        return additional_data.get('status') or self.tool_former_data.get('status')
+    
+    def get_tool_former_name(self) -> Optional[str]:
+        """Get tool former name (codebase_search, grep, etc.)."""
+        if not self.tool_former_data:
+            return None
+        return self.tool_former_data.get('name')
+    
+    def get_tool_former_args(self) -> Optional[str]:
+        """Get tool former raw arguments."""
+        if not self.tool_former_data:
+            return None
+        return self.tool_former_data.get('rawArgs')
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert Message to dictionary."""

@@ -1,50 +1,56 @@
 # Cursor Data Extractor - Project Structure
 
-## 🎯 **CURRENT STATUS: 111 STATS COMPLETE**
+## 🎯 **CURRENT STATUS: 124 STATS COMPLETE + TEMPORAL FILTERING**
 
-**December 22, 2025** - Core stats extraction and calculation pipeline is operational.
+**December 23, 2025** - Core stats extraction and calculation pipeline is operational. Temporal filtering and drill-down features added.
 
 ### ✅ Completed
-- **Data Models**: Message, Session, CodeDiff, DailyStat, CodeTrackingLine (80+ total properties)
+- **Data Models**: Message, Session, CodeDiff, DailyStat, CodeTrackingLine, TimeRange (90+ total properties)
 - **Extractors**: MessageExtractor, SessionExtractor, CodeDiffExtractor, CodeTrackingExtractor, DailyStatExtractor
 - **Calculators**: 
   - **MessageCalculator with ALL 66 message stats** ✅
   - **SessionCalculator with ALL 27 session stats** ✅
   - **CodeCalculator with ALL 12 code & diffs stats** ✅
   - **DailyUsageCalculator with ALL 6 daily usage stats** ✅
+  - **ToolCalculator with ALL 10 tool stats** ✅
+  - **ContextCalculator with 18 context stats** ✅
   - Modular architecture: 21 focused modules total
   - Each module: 3-7 methods, ~150-200 lines
   - Clean, maintainable, testable code
-- **Orchestrator**: Coordinates extraction and calculation
+- **Orchestrator**: Coordinates extraction and calculation with time filtering
+- **Temporal Filtering**: Filter stats by time ranges (11 presets + custom)
+- **Time Series**: Generate day/week/month aggregations for drill-downs
 - **Cache System**: Optimizes performance with smart caching
 - **Test Pipeline**: Validates end-to-end functionality
+- **Frontend Dashboard**: React + Tailwind with time filtering and drill-down modals
 
 ### 🔍 Verified Results (Latest Test)
-- **69,787 messages** extracted (0 errors)
-- **1,018 sessions** extracted (0 errors)
-- **10,791 code diffs** extracted (0 errors)
+- **71,204 messages** extracted (0 errors)
+- **1,032 sessions** extracted (0 errors)
+- **11,051 code diffs** extracted (0 errors)
 - **10,000 tracking lines** extracted (0 errors)
-- **28 daily stats** extracted (0 errors)
-- **66 message stats** calculated successfully ✅
-- **27 session stats** calculated successfully ✅
-- **12 code stats** calculated successfully ✅
-- **6 daily stats** calculated successfully ✅
-- **Total: 111 stats** working perfectly ✅
-- **Progress: 111/232 stats (47.8%)**
+- **29 daily stats** extracted (0 errors)
+- **4,230 request contexts** extracted (261 errors)
+- **124 stats** calculated successfully ✅
+- **Temporal filtering** working perfectly ✅
+- **Time series generation** functional ✅
+- **Progress: 124/232 stats (53.4%)**
 
-### 📊 Sample Stats (111 Stats Working!)
-- Total messages: 69,787
-- User messages: 4,034 (5.8%)
-- AI messages: 65,741 (94.2%)
-- Messages per session: avg 188, median 124
-- Messages with code: 12,834 (18.4%)
-- Messages with thinking: 18,745 (26.9%)
-- Total sessions: 1,018
-- Agent mode sessions: 45.2%
-- Code diffs: 10,791
+### 📊 Sample Stats (124 Stats Working!)
+- Total messages: 71,204
+- User messages: 4,109 (5.8%)
+- AI messages: 66,996 (94.1%)
+- Messages per session: avg 189, median 141
+- Messages with code: 12,966 (18.2%)
+- Messages with thinking: 18,824 (26.4%)
+- Total sessions: 1,032
+- Agent mode sessions: 45.4%
+- Code diffs: 11,051
 - Tracked code lines: 10,000
-- Composer suggested lines: 146,490 (28 days)
-- Composer acceptance rate: 53.3%
+- Composer suggested lines: 157,364 (29 days)
+- Composer acceptance rate: 52.8%
+- Tool usage: 10 tool stats tracked
+- Context stats: 18 context stats tracked
 
 ---
 
@@ -64,14 +70,33 @@ utils/
 
 stats/                         # ⭐ Stats calculation system (modular architecture)
 ├── __init__.py
-├── orchestrator.py            # Main coordinator
+├── orchestrator.py            # Main coordinator with temporal filtering
 ├── cache.py                   # Smart caching system
+│
+├── models/                    # Data models (dataclasses)
+│   ├── __init__.py
+│   ├── message.py             # ✅ Message model (30+ properties)
+│   ├── session.py             # ✅ Session model (20+ properties)
+│   ├── code_diff.py           # ✅ CodeDiff, DiffChange, CodeTrackingLine models
+│   ├── daily_stat.py          # ✅ DailyStat model
+│   ├── time_range.py          # ✅ TimeRange model (NEW - temporal filtering)
+│   ├── request_context.py     # ✅ MessageRequestContext model
+│   └── workspace.py           # ✅ Workspace model
+│
+├── filters/                   # ⭐ Data filtering layer (NEW)
+│   ├── __init__.py
+│   └── temporal_filter.py     # ✅ Time-based filtering & time series generation
 │
 ├── extractors/                # Data extraction layer
 │   ├── __init__.py
 │   ├── base_extractor.py     # Base class with DB connection
 │   ├── message_extractor.py  # ✅ Extract bubbleId data
-│   └── session_extractor.py  # ✅ Extract composerData
+│   ├── session_extractor.py  # ✅ Extract composerData
+│   ├── code_diff_extractor.py # ✅ Extract codeBlockDiff data
+│   ├── code_tracking_extractor.py # ✅ Extract aiCodeTrackingLines
+│   ├── daily_stat_extractor.py # ✅ Extract daily usage stats
+│   ├── request_context_extractor.py # ✅ Extract message contexts
+│   └── workspace_extractor.py # ✅ Extract workspace metadata
 │
 ├── calculators/               # Stats calculation layer (modular)
 │   ├── __init__.py
@@ -92,28 +117,32 @@ stats/                         # ⭐ Stats calculation system (modular architect
 │   │   ├── errors.py          # Stats 53-56: Errors in messages
 │   │   ├── metadata.py        # Stats 57-59: Message metadata
 │   │   └── timing.py          # Stats 60-66: Activity timing
-│   └── session_stats/         # ⭐ Modular session stats (27 stats) ✅
-│       ├── __init__.py        # Exports SessionCalculator
-│       ├── base.py            # Shared utilities
-│       ├── counts.py          # Stats 67-70: Session counts
-│       ├── duration_outcomes.py # Stats 71-76: Duration & outcomes
-│       ├── files_context.py   # Stats 77-84: Files & context
-│       ├── conversation_config.py # Stats 85-91: Conversation & config
-│       └── naming.py          # Stats 92-93: Session naming
-│   └── code_stats/            # ⭐ Modular code stats (12 stats) ✅
-│       ├── __init__.py        # Exports CodeCalculator
-│       ├── base.py            # Shared utilities
-│       ├── diff_metrics.py    # Stats 94-100: Diff metrics
-│       └── tracking_lines.py  # Stats 101-105: Tracking lines
-│   └── daily_stats/           # ⭐ Daily usage stats (6 stats) ✅
-│       └── __init__.py        # DailyUsageCalculator (all stats in one module)
-│
-└── models/                    # Data models (dataclasses)
-    ├── __init__.py
-    ├── message.py             # ✅ Message model (30+ properties)
-    ├── session.py             # ✅ Session model (20+ properties)
-    ├── code_diff.py           # ✅ CodeDiff, DiffChange, CodeTrackingLine models
-    └── daily_stat.py          # ✅ DailyStat model
+│   ├── session_stats/         # ⭐ Modular session stats (27 stats) ✅
+│   │   ├── __init__.py        # Exports SessionCalculator
+│   │   ├── base.py            # Shared utilities
+│   │   ├── counts.py          # Stats 67-70: Session counts
+│   │   ├── duration_outcomes.py # Stats 71-76: Duration & outcomes
+│   │   ├── files_context.py   # Stats 77-84: Files & context
+│   │   ├── conversation_config.py # Stats 85-91: Conversation & config
+│   │   └── naming.py          # Stats 92-93: Session naming
+│   ├── code_stats/            # ⭐ Modular code stats (12 stats) ✅
+│   │   ├── __init__.py        # Exports CodeCalculator
+│   │   ├── base.py            # Shared utilities
+│   │   ├── diff_metrics.py    # Stats 94-100: Diff metrics
+│   │   └── tracking_lines.py  # Stats 101-105: Tracking lines
+│   ├── daily_stats/           # ⭐ Daily usage stats (6 stats) ✅
+│   │   └── __init__.py        # DailyUsageCalculator (all stats in one module)
+│   ├── tool_stats/            # ⭐ Tool usage stats (10 stats) ✅
+│   │   ├── __init__.py
+│   │   ├── base.py
+│   │   └── usage.py
+│   └── context_stats/         # ⭐ Context stats (18 stats) ✅
+│       ├── __init__.py
+│       ├── base.py
+│       ├── file_context.py
+│       ├── git.py
+│       ├── linter.py
+│       └── todos.py
 ```
 
 ### **Scripts (Reference & Utilities)**
@@ -139,17 +168,18 @@ scripts/
 ```
 docs/
 ├── planning/                  # Planning & design docs
-│   ├── APP-ARCHITECTURE.md            # ⭐ Complete app design
-│   ├── UI-UX-DESIGN.md                # ⭐ UI/UX specification
-│   ├── STATS-CALCULATION-ARCHITECTURE.md # ⭐ Stat system design
-│   ├── CURSOR-DATA-EXTRACTION-PLAN.md # Implementation roadmap
-│   ├── PURE-STATS-INDEX.md            # ⭐ 232 core stats
-│   ├── COMPLETE-STATS-CATALOG.md      # Detailed stats catalog
-│   ├── BROWSE-PAGE-SUMMARY.md         # Browse feature design
-│   ├── EXPLORATION-COMPLETE.md        # Exploration summary
-│   ├── QUICK-REFERENCE.md             # Developer reference
-│   ├── CLEANUP-SUMMARY.md             # Cleanup log
-│   └── EXHAUSTIVE_DATA_REPORT.md      # Data report
+│   ├── APP-ARCHITECTURE.md                        # ⭐ Complete app design
+│   ├── UI-UX-DESIGN.md                            # ⭐ UI/UX specification
+│   ├── STATS-CALCULATION-ARCHITECTURE.md          # ⭐ Stat system design
+│   ├── TEMPORAL-FILTERING-IMPLEMENTATION-DEC-23-2025.md # ⭐ Phase 1+2 implementation
+│   ├── CURSOR-DATA-EXTRACTION-PLAN.md             # Implementation roadmap
+│   ├── PURE-STATS-INDEX.md                        # ⭐ 232 core stats
+│   ├── COMPLETE-STATS-CATALOG.md                  # Detailed stats catalog
+│   ├── BROWSE-PAGE-SUMMARY.md                     # Browse feature design
+│   ├── EXPLORATION-COMPLETE.md                    # Exploration summary
+│   ├── QUICK-REFERENCE.md                         # Developer reference
+│   ├── CLEANUP-SUMMARY.md                         # Cleanup log
+│   └── EXHAUSTIVE_DATA_REPORT.md                  # Data report
 └── (cursor-data-docs moved here later)
 
 cursor-data-docs/              # Data source documentation
@@ -229,7 +259,7 @@ def extract_all_data():
 
 ```bash
 # Activate environment
-conda activate cursor-notepad-browser
+conda activate cursor-extractor
 
 # Run data recovery (comprehensive)
 python scripts/validation/recover_all_chat_data.py
@@ -253,20 +283,25 @@ python scripts/validation/extract_daily_stats.py
 2. ✅ **Session Calculator** - All 27 session stats complete
 3. ✅ **Code & Diffs Calculator** - All 12 code stats complete
 4. ✅ **Daily Usage Calculator** - All 6 daily stats complete
-5. **Token & Model Usage Calculator** - Next target (stats 112-139) - 28 stats
+5. ✅ **Tool Stats Calculator** - All 10 tool stats complete
+6. ✅ **Context Stats Calculator** - 18 context stats complete
+7. ✅ **Temporal Filtering** - Phase 1+2 complete (filtering + drill-down)
+8. **Token & Model Usage Calculator** - Next target (stats 112-139) - 28 stats
 
 ### Short Term
-6. **Error Calculator** - Extract lints and console logs (stats 140-149) - 10 stats
-7. **Git Activity Calculator** - Version control metrics (stats 150-159) - 10 stats
-8. **Notepad Calculator** - Notepad usage stats (stats 160-169) - 10 stats
-9. **Effectiveness Calculator** - Analyze prompt effectiveness (stats 170-200) - 31 stats
-10. **Remaining stats** - Complete all 232 stats (121 remaining)
+9. **Error Calculator** - Extract lints and console logs (stats 140-149) - 10 stats
+10. **Git Activity Calculator** - Version control metrics (stats 150-159) - 10 stats
+11. **Notepad Calculator** - Notepad usage stats (stats 160-169) - 10 stats
+12. **Effectiveness Calculator** - Analyze prompt effectiveness (stats 170-200) - 31 stats
+13. **Remaining stats** - Complete all 232 stats (108 remaining)
 
-### Medium Term
-11. **Add Workspace Extraction** - Extract from 227 workspace DBs for full history
-12. **Build Streamlit Dashboard** - 7-page UI (Overview, Browse, Stats, Analytics, Calendar, Intelligence, Export)
-13. **Full-text Search** - Implement Whoosh for message/session search
-14. **Export System** - JSON, CSV, PDF exports
+### Medium Term (Future Phases)
+14. **Period Comparison** - Phase 3: Compare two time ranges side-by-side
+15. **Advanced Drill-Down** - Show underlying messages/sessions in modals
+16. **Add Workspace Extraction** - Extract from 246 workspace DBs for full history
+17. **Build Streamlit Dashboard** - 7-page UI (Overview, Browse, Stats, Analytics, Calendar, Intelligence, Export)
+18. **Full-text Search** - Implement Whoosh for message/session search
+19. **Export System** - JSON, CSV, PDF exports
 
 See `docs/planning/APP-ARCHITECTURE.md` for complete roadmap.
 
@@ -283,4 +318,4 @@ See `docs/planning/APP-ARCHITECTURE.md` for complete roadmap.
 
 ---
 
-*Last updated: December 22, 2025*
+*Last updated: December 23, 2025 - Temporal Filtering & Drill-Down Implementation Complete*

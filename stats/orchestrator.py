@@ -15,12 +15,14 @@ from stats.models.code_diff import CodeDiff, CodeTrackingLine
 from stats.models.daily_stat import DailyStat
 from stats.models.request_context import MessageRequestContext
 from stats.models.workspace import Workspace
+from stats.models.time_range import TimeRange
 from stats.calculators.message_stats import MessageCalculator
 from stats.calculators.session_stats import SessionCalculator
 from stats.calculators.code_stats import CodeCalculator
 from stats.calculators.daily_stats import DailyUsageCalculator
 from stats.calculators.tool_stats import ToolCalculator
 from stats.calculators.context_stats import ContextCalculator
+from stats.filters.temporal_filter import TemporalFilter
 from stats.cache import StatsCache
 
 logger = logging.getLogger(__name__)
@@ -121,18 +123,23 @@ class StatsOrchestrator:
                 'workspaces': self._workspaces
             })
     
-    def calculate_all_stats(self, force: bool = False) -> Dict[str, Any]:
+    def calculate_all_stats(
+        self, 
+        force: bool = False,
+        time_range: Optional[TimeRange] = None
+    ) -> Dict[str, Any]:
         """
         Calculate all stats.
         
         Args:
             force: Force recalculation even if cached
+            time_range: Optional TimeRange to filter data by
             
         Returns:
             Dictionary of all stats organized by category
         """
-        # Check cache
-        if not force and self.cache:
+        # Check cache (only for unfiltered queries)
+        if not force and self.cache and time_range is None:
             cached_stats = self.cache.load_stats()
             if cached_stats:
                 logger.info("Loaded stats from cache")
@@ -142,57 +149,84 @@ class StatsOrchestrator:
         if self._messages is None:
             self.extract_all_data()
         
+        # Apply time filtering if requested
+        if time_range:
+            logger.info(f"Applying time filter: {time_range}")
+            filtered_messages = TemporalFilter.filter_messages(self._messages, time_range)
+            filtered_sessions = TemporalFilter.filter_sessions(self._sessions, time_range)
+            filtered_code_diffs = TemporalFilter.filter_code_diffs(
+                self._code_diffs, filtered_sessions, time_range
+            )
+            filtered_tracking_lines = TemporalFilter.filter_tracking_lines(
+                self._tracking_lines, time_range
+            )
+            filtered_daily_stats = TemporalFilter.filter_daily_stats(
+                self._daily_stats, time_range
+            )
+            filtered_request_contexts = TemporalFilter.filter_request_contexts(
+                self._request_contexts, filtered_sessions, time_range
+            )
+        else:
+            # No filtering - use all data
+            filtered_messages = self._messages
+            filtered_sessions = self._sessions
+            filtered_code_diffs = self._code_diffs
+            filtered_tracking_lines = self._tracking_lines
+            filtered_daily_stats = self._daily_stats
+            filtered_request_contexts = self._request_contexts
+        
         logger.info("Calculating stats...")
         all_stats = {}
         
         # Calculate message stats
         logger.info("  Calculating message stats...")
-        message_calc = MessageCalculator(self._messages)
+        message_calc = MessageCalculator(filtered_messages)
         all_stats['messages'] = message_calc.calculate_all()
         
         # Calculate session stats
         logger.info("  Calculating session stats...")
-        session_calc = SessionCalculator(self._sessions, self._messages)
+        session_calc = SessionCalculator(filtered_sessions, filtered_messages)
         all_stats['sessions'] = session_calc.calculate_all()
         
         # Calculate code & diffs stats
         logger.info("  Calculating code & diffs stats...")
-        code_calc = CodeCalculator(self._code_diffs, self._tracking_lines)
+        code_calc = CodeCalculator(filtered_code_diffs, filtered_tracking_lines)
         all_stats['code'] = code_calc.calculate_all()
         
         # Calculate daily usage stats
         logger.info("  Calculating daily usage stats...")
-        daily_calc = DailyUsageCalculator(self._daily_stats)
+        daily_calc = DailyUsageCalculator(filtered_daily_stats)
         all_stats['daily'] = daily_calc.calculate_all()
         
         # Calculate tool usage stats
         logger.info("  Calculating tool usage stats...")
-        tool_calc = ToolCalculator(self._messages)
+        tool_calc = ToolCalculator(filtered_messages)
         all_stats['tools'] = tool_calc.calculate_all()
         
         # Calculate context stats
         logger.info("  Calculating context stats...")
-        context_calc = ContextCalculator(self._request_contexts)
+        context_calc = ContextCalculator(filtered_request_contexts)
         all_stats['context'] = context_calc.calculate_all()
         
-        # Cache results
-        if self.cache:
+        # Cache results (only for unfiltered queries)
+        if self.cache and time_range is None:
             self.cache.save_stats(all_stats)
         
         logger.info(f"Calculated stats for {len(all_stats)} categories")
         return all_stats
     
-    def get_stat(self, stat_id: str) -> Optional[Dict[str, Any]]:
+    def get_stat(self, stat_id: str, time_range: Optional[TimeRange] = None) -> Optional[Dict[str, Any]]:
         """
         Get a single stat by ID.
         
         Args:
             stat_id: The stat identifier
+            time_range: Optional TimeRange to filter data by
             
         Returns:
             Stat data or None if not found
         """
-        all_stats = self.calculate_all_stats()
+        all_stats = self.calculate_all_stats(time_range=time_range)
         
         # Search through categories
         for category, stats in all_stats.items():
@@ -200,6 +234,93 @@ class StatsOrchestrator:
                 return stats[stat_id]
         
         return None
+    
+    def get_time_series(
+        self,
+        stat_id: str,
+        time_range: TimeRange,
+        granularity: str = "day"
+    ) -> Dict[str, Any]:
+        """
+        Get time series data for a specific stat.
+        
+        Args:
+            stat_id: The stat identifier
+            time_range: TimeRange for the series
+            granularity: Time granularity (day, week, month)
+            
+        Returns:
+            Dictionary with time series data
+        """
+        # Ensure data is extracted
+        if self._messages is None:
+            self.extract_all_data()
+        
+        # Determine which category this stat belongs to
+        all_stats = self.calculate_all_stats()
+        stat_category = None
+        for category, stats in all_stats.items():
+            if stat_id in stats:
+                stat_category = category
+                break
+        
+        # Generate time series based on category
+        series_data = {}
+        
+        if stat_category == 'messages' or stat_category == 'tools':
+            # Message-based stats
+            series_data = TemporalFilter.get_time_series_data(
+                self._messages, time_range, granularity
+            )
+        elif stat_category == 'sessions':
+            # Session-based stats
+            series_data = TemporalFilter.get_session_time_series(
+                self._sessions, time_range, granularity
+            )
+        elif stat_category == 'code':
+            # Code diffs - use session timestamps
+            series_data = TemporalFilter.get_session_time_series(
+                self._sessions, time_range, granularity
+            )
+        elif stat_category == 'daily':
+            # Daily stats already have dates
+            from collections import defaultdict
+            from datetime import timedelta
+            
+            counts = defaultdict(int)
+            filtered_daily = TemporalFilter.filter_daily_stats(self._daily_stats, time_range)
+            
+            for stat in filtered_daily:
+                if granularity == "day":
+                    key = stat.date.isoformat()
+                    counts[key] += 1
+                elif granularity == "week":
+                    start_of_week = stat.date - timedelta(days=stat.date.weekday())
+                    key = start_of_week.isoformat()
+                    counts[key] += 1
+                elif granularity == "month":
+                    key = f"{stat.date.year}-{stat.date.month:02d}"
+                    counts[key] += 1
+            
+            series_data = dict(sorted(counts.items()))
+        elif stat_category == 'context':
+            # Context stats - use session timestamps
+            series_data = TemporalFilter.get_session_time_series(
+                self._sessions, time_range, granularity
+            )
+        else:
+            # Default: use message time series
+            series_data = TemporalFilter.get_time_series_data(
+                self._messages, time_range, granularity
+            )
+        
+        return {
+            'stat_id': stat_id,
+            'time_range': time_range.to_dict(),
+            'granularity': granularity,
+            'series': series_data,
+            'category': stat_category
+        }
     
     def invalidate_cache(self):
         """Clear cached data and stats."""

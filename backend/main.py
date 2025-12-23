@@ -4,8 +4,9 @@ import sys
 import logging
 from pathlib import Path
 from typing import Dict, Any, List, Optional
+from datetime import datetime
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -13,6 +14,7 @@ from pydantic import BaseModel
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from stats import StatsOrchestrator
+from stats.models.time_range import TimeRange
 from utils.config import Config
 
 # Configure logging
@@ -131,14 +133,76 @@ async def get_summary():
 
 
 @app.get("/api/stats/all")
-async def get_all_stats() -> Dict[str, Any]:
-    """Get all calculated statistics."""
+async def get_all_stats(
+    start_date: Optional[str] = Query(None, description="Start date (ISO format or preset)"),
+    end_date: Optional[str] = Query(None, description="End date (ISO format)"),
+    preset: Optional[str] = Query(None, description="Preset time range (last_7_days, last_30_days, etc.)")
+) -> Dict[str, Any]:
+    """Get all calculated statistics, optionally filtered by time range."""
     try:
         orchestrator = get_orchestrator()
-        stats = orchestrator.calculate_all_stats()
-        return stats
+        
+        # Parse time range if provided
+        time_range = None
+        if preset:
+            # Use preset
+            time_range = TimeRange.from_preset(preset)
+            logger.info(f"Using preset time range: {preset}")
+        elif start_date and end_date:
+            # Use custom range
+            time_range = TimeRange.from_iso_strings(start_date, end_date)
+            logger.info(f"Using custom time range: {start_date} to {end_date}")
+        
+        stats = orchestrator.calculate_all_stats(time_range=time_range)
+        
+        # Add metadata about the time range
+        response = {
+            'stats': stats,
+            'time_range': time_range.to_dict() if time_range else None
+        }
+        
+        return response
+    except ValueError as e:
+        logger.error(f"Invalid time range: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error calculating stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/stats/time-series/{stat_id}")
+async def get_time_series(
+    stat_id: str,
+    start_date: Optional[str] = Query(None, description="Start date (ISO format)"),
+    end_date: Optional[str] = Query(None, description="End date (ISO format)"),
+    preset: Optional[str] = Query("last_30_days", description="Preset time range"),
+    granularity: Optional[str] = Query("day", description="Time granularity (day, week, month)")
+) -> Dict[str, Any]:
+    """Get time series data for a specific stat."""
+    try:
+        orchestrator = get_orchestrator()
+        
+        # Parse time range
+        if preset:
+            time_range = TimeRange.from_preset(preset)
+        elif start_date and end_date:
+            time_range = TimeRange.from_iso_strings(start_date, end_date)
+        else:
+            # Default to last 30 days
+            time_range = TimeRange.from_preset("last_30_days")
+        
+        logger.info(f"Getting time series for stat_id='{stat_id}', preset='{preset}', granularity='{granularity}'")
+        
+        time_series = orchestrator.get_time_series(stat_id, time_range, granularity)
+        
+        logger.info(f"Time series has {len(time_series.get('series', {}))} data points")
+        
+        return time_series
+    except ValueError as e:
+        logger.error(f"Invalid parameters: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error getting time series: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -195,6 +259,26 @@ async def clear_cache():
     except Exception as e:
         logger.error(f"Error clearing cache: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/time-range/presets")
+async def get_time_range_presets() -> Dict[str, Any]:
+    """Get available time range presets."""
+    return {
+        "presets": [
+            {"id": "today", "label": "Today"},
+            {"id": "yesterday", "label": "Yesterday"},
+            {"id": "last_7_days", "label": "Last 7 Days"},
+            {"id": "last_30_days", "label": "Last 30 Days"},
+            {"id": "last_90_days", "label": "Last 90 Days"},
+            {"id": "this_week", "label": "This Week"},
+            {"id": "this_month", "label": "This Month"},
+            {"id": "last_month", "label": "Last Month"},
+            {"id": "this_quarter", "label": "This Quarter"},
+            {"id": "this_year", "label": "This Year"},
+            {"id": "all_time", "label": "All Time"}
+        ]
+    }
 
 
 if __name__ == "__main__":

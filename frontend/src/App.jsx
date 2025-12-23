@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { BarChart3, Activity, Database, AlertCircle, Search, Filter } from 'lucide-react'
 import { InfoTooltip } from './components/Tooltip'
+import { TimeRangeSelector } from './components/TimeRangeSelector'
+import { StatDetailModal } from './components/StatDetailModal'
 import { getStatDescription } from './statDescriptions'
 
 const API_BASE = 'http://127.0.0.1:8000'
@@ -14,23 +16,40 @@ function App() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [filterType, setFilterType] = useState('all')
+  const [timeRange, setTimeRange] = useState({ type: 'preset', preset: 'all_time' })
+  const [selectedStat, setSelectedStat] = useState(null)
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [timeRange])
 
   const loadData = async () => {
     try {
       setLoading(true)
       setError(null)
       
-      // Fetch summary
+      // Fetch summary for workspace count (only thing not in stats)
       const summaryRes = await axios.get(`${API_BASE}/api/summary`)
       setSummary(summaryRes.data)
       
-      // Fetch all stats
-      const statsRes = await axios.get(`${API_BASE}/api/stats/all`)
-      setStats(statsRes.data)
+      // Build query params for time range
+      const params = {}
+      if (timeRange.type === 'preset') {
+        params.preset = timeRange.preset
+      } else if (timeRange.type === 'custom') {
+        params.start_date = timeRange.start
+        params.end_date = timeRange.end
+      }
+      
+      // Fetch stats with time range filter
+      const statsRes = await axios.get(`${API_BASE}/api/stats/all`, { params })
+      
+      // Handle the new response format with stats nested
+      if (statsRes.data.stats) {
+        setStats(statsRes.data.stats)
+      } else {
+        setStats(statsRes.data)
+      }
       
       setLoading(false)
     } catch (err) {
@@ -38,6 +57,18 @@ function App() {
       setError(err.message)
       setLoading(false)
     }
+  }
+
+  const handleTimeRangeChange = (newTimeRange) => {
+    setTimeRange(newTimeRange)
+  }
+
+  const handleStatClick = (statId, statData, category) => {
+    setSelectedStat({ id: statId, data: statData, category })
+  }
+
+  const handleCloseModal = () => {
+    setSelectedStat(null)
   }
 
   const renderStatValue = (value, statType) => {
@@ -179,14 +210,24 @@ function App() {
       </header>
 
       {/* Summary Cards */}
-      {summary && (
+      {stats && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Time Range Selector */}
+          <div className="mb-6">
+            <TimeRangeSelector 
+              value={timeRange}
+              onChange={handleTimeRangeChange}
+            />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white rounded-lg shadow-md p-6 border border-slate-200 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-slate-500 text-sm font-medium">Total Messages</p>
-                  <p className="text-3xl font-bold text-slate-800 mt-2">{summary.total_messages.toLocaleString()}</p>
+                  <p className="text-3xl font-bold text-slate-800 mt-2">
+                    {stats.messages?.total_messages?.value?.toLocaleString() || '0'}
+                  </p>
                 </div>
                 <Database className="w-10 h-10 text-blue-500" />
               </div>
@@ -196,7 +237,9 @@ function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-slate-500 text-sm font-medium">Total Sessions</p>
-                  <p className="text-3xl font-bold text-slate-800 mt-2">{summary.total_sessions.toLocaleString()}</p>
+                  <p className="text-3xl font-bold text-slate-800 mt-2">
+                    {stats.sessions?.total_sessions?.value?.toLocaleString() || '0'}
+                  </p>
                 </div>
                 <Activity className="w-10 h-10 text-green-500" />
               </div>
@@ -206,7 +249,9 @@ function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-slate-500 text-sm font-medium">Code Diffs</p>
-                  <p className="text-3xl font-bold text-slate-800 mt-2">{summary.total_code_diffs.toLocaleString()}</p>
+                  <p className="text-3xl font-bold text-slate-800 mt-2">
+                    {stats.code?.total_diffs?.value?.toLocaleString() || '0'}
+                  </p>
                 </div>
                 <BarChart3 className="w-10 h-10 text-purple-500" />
               </div>
@@ -216,7 +261,9 @@ function App() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-slate-500 text-sm font-medium">Workspaces</p>
-                  <p className="text-3xl font-bold text-slate-800 mt-2">{summary.total_workspaces.toLocaleString()}</p>
+                  <p className="text-3xl font-bold text-slate-800 mt-2">
+                    {summary?.total_workspaces?.toLocaleString() || '246'}
+                  </p>
                 </div>
                 <Database className="w-10 h-10 text-orange-500" />
               </div>
@@ -349,7 +396,8 @@ function App() {
                         {filteredStats.map(([statId, statData]) => (
                           <div 
                             key={`${category}-${statId}`}
-                            className="bg-slate-50 rounded-lg p-4 hover:bg-slate-100 transition-colors border border-slate-200"
+                            className="bg-slate-50 rounded-lg p-4 hover:bg-slate-100 transition-colors border border-slate-200 cursor-pointer"
+                            onClick={() => handleStatClick(statId, statData, category)}
                           >
                             <div className="flex items-start justify-between">
                               <div className="flex-1">
@@ -391,6 +439,16 @@ function App() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Stat Detail Modal */}
+      {selectedStat && (
+        <StatDetailModal
+          stat={selectedStat.data}
+          statId={selectedStat.id}
+          category={selectedStat.category}
+          onClose={handleCloseModal}
+        />
       )}
     </div>
   )

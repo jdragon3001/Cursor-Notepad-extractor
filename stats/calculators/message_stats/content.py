@@ -108,7 +108,7 @@ class MessageContentStats(MessageStatsBase):
         languages = []
         for msg in self.messages:
             for block in msg.code_blocks + msg.suggested_code_blocks:
-                lang = block.get('language') or block.get('lang')
+                lang = block.get('languageId') or block.get('language') or block.get('lang')
                 if lang:
                     languages.append(lang)
         
@@ -129,7 +129,10 @@ class MessageContentStats(MessageStatsBase):
         files = []
         for msg in self.messages:
             for block in msg.code_blocks + msg.suggested_code_blocks:
-                file_path = block.get('filePath') or block.get('file')
+                file_path = block.get('filePath') or block.get('file') or block.get('uri')
+                # If uri is a dict, extract path
+                if isinstance(file_path, dict):
+                    file_path = file_path.get('path') or file_path.get('_fsPath')
                 if file_path:
                     files.append(file_path)
         

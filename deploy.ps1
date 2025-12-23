@@ -48,6 +48,8 @@ Write-Host "Starting Backend (FastAPI on port 8000)..." -ForegroundColor Green
 # Start backend in a new PowerShell window
 $backendScript = @"
 cd '$ROOT_DIR\backend'
+Write-Host 'Backend: Activating conda environment...' -ForegroundColor Yellow
+conda activate cursor-extractor
 Write-Host 'Backend: Starting FastAPI server on http://127.0.0.1:8000' -ForegroundColor Green
 python main.py
 "@
@@ -67,6 +69,8 @@ Write-Host "Starting Frontend (React on port 5173)..." -ForegroundColor Green
 # Start frontend in a new PowerShell window
 $frontendScript = @"
 cd '$ROOT_DIR\frontend'
+Write-Host 'Frontend: Activating conda environment...' -ForegroundColor Yellow
+conda activate cursor-extractor
 Write-Host 'Frontend: Starting Vite dev server on http://localhost:5173' -ForegroundColor Green
 npm run dev
 "@

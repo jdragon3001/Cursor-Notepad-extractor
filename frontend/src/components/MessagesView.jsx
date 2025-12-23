@@ -1,24 +1,83 @@
 import { MessageSquare, User, Bot, Code, Brain, Wrench, ChevronRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 /**
  * MessagesView - Browse messages with filtering (embedded in main dashboard)
  */
 export function MessagesView({ messages, loading, pagination, filters, onFilterChange, onPageChange, onMessageClick }) {
-  
+  const [currentTime, setCurrentTime] = useState(Date.now())
+
+  // Update current time every 30 seconds for relative timestamps
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now())
+    }, 30000) // Update every 30 seconds
+
+    return () => clearInterval(interval)
+  }, [])
+
   const formatDate = (isoString) => {
+    if (!isoString) return 'Unknown'
+    
     const date = new Date(isoString)
-    const now = new Date()
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return 'Invalid date'
+    }
+    
+    const now = new Date(currentTime)
     const diff = now - date
     
+    const seconds = Math.floor(diff / 1000)
     const minutes = Math.floor(diff / 60000)
     const hours = Math.floor(diff / 3600000)
     const days = Math.floor(diff / 86400000)
     
-    if (minutes < 1) return 'Just now'
+    // If timestamp is in the future or less than 1 second ago, show actual time
+    if (seconds < 1) {
+      return date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      })
+    }
+    
+    // Less than 60 seconds
+    if (seconds < 60) return `${seconds}s ago`
+    
+    // Less than 60 minutes - show exact minutes
     if (minutes < 60) return `${minutes}m ago`
-    if (hours < 24) return `${hours}h ago`
-    if (days < 7) return `${days}d ago`
-    return date.toLocaleDateString()
+    
+    // Less than 24 hours - show exact hours and minutes
+    if (hours < 24) {
+      const remainingMins = minutes % 60
+      if (remainingMins > 0) {
+        return `${hours}h ${remainingMins}m ago`
+      }
+      return `${hours}h ago`
+    }
+    
+    // Less than 7 days - show days and hours
+    if (days < 7) {
+      const remainingHours = hours % 24
+      if (remainingHours > 0) {
+        return `${days}d ${remainingHours}h ago`
+      }
+      return `${days}d ago`
+    }
+    
+    // More than a week - show full date and time
+    return date.toLocaleString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined,
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    })
   }
 
   return (
@@ -125,7 +184,7 @@ export function MessagesView({ messages, loading, pagination, filters, onFilterC
       )}
 
       {/* Messages List */}
-      {!loading && messages.length > 0 && (
+      {!loading && messages && messages.length > 0 && (
         <div className="space-y-3">
           {messages.map((message) => (
             <MessageCard 
@@ -139,7 +198,7 @@ export function MessagesView({ messages, loading, pagination, filters, onFilterC
       )}
 
       {/* Empty State */}
-      {!loading && messages.length === 0 && (
+      {!loading && (!messages || messages.length === 0) && (
         <div className="text-center py-12">
           <MessageSquare className="w-16 h-16 text-slate-300 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-slate-700 mb-2">No messages found</h3>

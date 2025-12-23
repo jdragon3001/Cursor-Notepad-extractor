@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from stats import StatsOrchestrator
 from stats.models.time_range import TimeRange
+from stats.consolidator import MessageConsolidator
 from utils.config import Config
 
 # Configure logging
@@ -301,9 +302,19 @@ async def get_messages(
         
         # Get all messages
         messages = orchestrator.messages
+        logger.info(f"Raw messages before consolidation: {len(messages)}")
+        
+        # Try to consolidate AI message fragments into logical conversation turns
+        try:
+            consolidated_messages = MessageConsolidator.consolidate(messages)
+            logger.info(f"Consolidated messages: {len(consolidated_messages)}")
+            messages_to_use = consolidated_messages if consolidated_messages else messages
+        except Exception as e:
+            logger.error(f"Consolidation failed, using raw messages: {e}", exc_info=True)
+            messages_to_use = messages
         
         # Apply filters
-        filtered_messages = messages
+        filtered_messages = messages_to_use
         
         # Filter by time range
         if start_date and end_date:
@@ -403,9 +414,28 @@ async def get_message_detail(message_id: str) -> Dict[str, Any]:
     try:
         orchestrator = get_orchestrator()
         
-        # Find the message
+        # Get and consolidate messages
         messages = orchestrator.messages
-        message = next((m for m in messages if m.bubble_id == message_id), None)
+        
+        try:
+            consolidated_messages = MessageConsolidator.consolidate(messages)
+            messages_to_search = consolidated_messages if consolidated_messages else messages
+        except Exception as e:
+            logger.error(f"Consolidation failed in detail endpoint: {e}")
+            messages_to_search = messages
+        
+        # Find the message (could be consolidated, so check for fragment IDs too)
+        message = None
+        for msg in messages_to_search:
+            if msg.bubble_id == message_id:
+                message = msg
+                break
+            # Check if this message_id is one of the fragments
+            if msg.raw_data and isinstance(msg.raw_data, dict):
+                fragment_ids = msg.raw_data.get('fragment_ids', [])
+                if message_id in fragment_ids:
+                    message = msg
+                    break
         
         if not message:
             raise HTTPException(status_code=404, detail=f"Message {message_id} not found")

@@ -106,24 +106,59 @@ class Session:
         parts = key.split(':')
         composer_id = parts[1] if len(parts) > 1 else data.get('composerId', '')
         
-        # Parse timestamps (handle both int and string)
-        created_at_ms = data.get('createdAt', 0)
-        if isinstance(created_at_ms, str):
-            try:
-                created_at_ms = int(created_at_ms)
-            except (ValueError, TypeError):
-                created_at_ms = 0
+        # Parse timestamps (handle both int/float and ISO string formats)
+        created_at_raw = data.get('createdAt', None)
+        created_at = None
         
-        created_at = datetime.fromtimestamp(created_at_ms / 1000) if created_at_ms else datetime.now()
+        if created_at_raw:
+            if isinstance(created_at_raw, str):
+                # Try parsing as ISO format string
+                try:
+                    created_at = datetime.fromisoformat(created_at_raw.replace('Z', '+00:00'))
+                    # Remove timezone info to keep all datetimes naive for consistency
+                    created_at = created_at.replace(tzinfo=None)
+                except (ValueError, TypeError):
+                    # If that fails, try as timestamp string
+                    try:
+                        created_at_ms = int(created_at_raw)
+                        created_at = datetime.fromtimestamp(created_at_ms / 1000)
+                    except (ValueError, TypeError):
+                        pass
+            elif isinstance(created_at_raw, (int, float)):
+                # Try as milliseconds timestamp
+                try:
+                    created_at = datetime.fromtimestamp(created_at_raw / 1000)
+                except (ValueError, TypeError, OSError):
+                    pass
         
-        last_updated_ms = data.get('lastUpdatedAt', created_at_ms)
-        if isinstance(last_updated_ms, str):
-            try:
-                last_updated_ms = int(last_updated_ms)
-            except (ValueError, TypeError):
-                last_updated_ms = created_at_ms
+        # Default to now only as last resort
+        if created_at is None:
+            created_at = datetime.now()
         
-        last_updated_at = datetime.fromtimestamp(last_updated_ms / 1000) if last_updated_ms else created_at
+        # Parse lastUpdatedAt similarly
+        last_updated_raw = data.get('lastUpdatedAt', None)
+        last_updated_at = None
+        
+        if last_updated_raw:
+            if isinstance(last_updated_raw, str):
+                try:
+                    last_updated_at = datetime.fromisoformat(last_updated_raw.replace('Z', '+00:00'))
+                    last_updated_at = last_updated_at.replace(tzinfo=None)
+                except (ValueError, TypeError):
+                    try:
+                        last_updated_ms = int(last_updated_raw)
+                        last_updated_at = datetime.fromtimestamp(last_updated_ms / 1000)
+                    except (ValueError, TypeError):
+                        pass
+            elif isinstance(last_updated_raw, (int, float)):
+                try:
+                    last_updated_at = datetime.fromtimestamp(last_updated_raw / 1000)
+                except (ValueError, TypeError, OSError):
+                    pass
+        
+        # Default to created_at if not set
+        if last_updated_at is None:
+            last_updated_at = created_at
         
         return cls(
             composer_id=composer_id,

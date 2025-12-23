@@ -1,234 +1,156 @@
-# Quick Start Guide - Cursor Data Stats
+# Cursor Stats Dashboard - Quick Start Guide
 
-## Running the Test Pipeline
+## Prerequisites
 
+### Required Software
+1. **Python 3.10+** with Conda
+2. **Node.js 18+** with npm
+3. **PowerShell** (Windows) or **Bash** (Mac/Linux)
+
+### Conda Environment
 ```bash
-# Activate environment
+conda create -n cursor-notepad-browser python=3.10
 conda activate cursor-notepad-browser
-
-# Run full test with fresh extraction
-python test_stats_pipeline.py
-
-# The test will:
-# 1. Extract all messages and sessions
-# 2. Calculate 18 message stats
-# 3. Display key metrics
-# 4. Export stats to stats_output.json
 ```
 
-## Adding a New Stat
+## Installation
 
-### 1. Add to Calculator
-
-Edit `stats/calculators/message_calculator.py` (or relevant calculator):
-
-```python
-def stat_020_new_stat_name(self) -> Dict[str, Any]:
-    """Stat #20: Description."""
-    # Calculate your metric
-    values = [calculation for msg in self.messages]
-    
-    return self.create_stat_result(
-        value=self.average(values),  # or count, sum, etc.
-        label='Human-readable label',
-        category='Messages',
-        data_source='bubbleId',
-        stat_type='numeric',  # or 'count', 'percentage'
-        # Optional fields:
-        median=self.median(values),
-        min=self.min_val(values),
-        max=self.max_val(values),
-        # ... add any other relevant fields
-    )
+### 1. Install Backend Dependencies
+```bash
+cd backend
+pip install -r requirements.txt
+cd ..
 ```
 
-### 2. Add to calculate_all()
-
-```python
-def calculate_all(self) -> Dict[str, Any]:
-    stats = {
-        # ... existing stats ...
-        'new_stat_name': self.stat_020_new_stat_name(),
-    }
-    return stats
+### 2. Install Frontend Dependencies
+```bash
+cd frontend
+npm install
+cd ..
 ```
 
-### 3. Test it
+## Running the Dashboard
 
-```python
-# Run the test pipeline
-python test_stats_pipeline.py
+### Option 1: PowerShell Script (Recommended for Windows)
+```powershell
+.\deploy.ps1
+```
+This will:
+- Clean up any processes on ports 8000 and 5173
+- Start the FastAPI backend in a new window
+- Start the React frontend in a new window
+- Display URLs for both services
 
-# Check stats_output.json for your new stat
+### Option 2: Manual Start
+
+**Backend (Terminal 1):**
+```bash
+cd backend
+conda activate cursor-notepad-browser
+python main.py
 ```
 
-## Available Utility Functions
-
-### BaseCalculator provides:
-
-**Counts:**
-- `self.count(items)` - Count items
-- `self.percentage(part, total)` - Calculate percentage
-
-**Statistics:**
-- `self.average(values)` - Mean
-- `self.median(values)` - Median
-- `self.percentile(values, p)` - Pth percentile
-- `self.std_dev(values)` - Standard deviation
-- `self.min_val(values)` - Minimum
-- `self.max_val(values)` - Maximum
-- `self.sum_val(values)` - Sum
-
-**Aggregation:**
-- `self.most_common(items, n)` - Top N items
-- `self.group_by(items, key_func)` - Group by key
-- `self.filter_by(items, predicate)` - Filter items
-- `self.distribution(values, bins)` - Histogram
-
-**Caching:**
-- `self.cached(key, calc_func)` - Cache expensive calculations
-
-## Message Properties
-
-Access via `msg.property` or `msg.helper_method()`:
-
-**Core:**
-- `msg.bubble_id` - Unique ID
-- `msg.composer_id` - Session ID
-- `msg.message_type` - 1=user, 2=AI
-- `msg.created_at` - datetime
-
-**Content:**
-- `msg.text` - Message text
-- `msg.code_blocks` - List of code blocks
-- `msg.suggested_code_blocks` - AI suggestions
-
-**Thinking:**
-- `msg.thinking` - Thinking content (str or dict)
-- `msg.thinking_duration_ms` - Duration
-
-**Tools:**
-- `msg.tool_results` - List of tool results
-
-**Context:**
-- `msg.attached_code_chunks` - User context
-- `msg.codebase_context_chunks` - Auto context
-
-**Model/Tokens:**
-- `msg.model_info` - Model details
-- `msg.token_count` - Token counts
-
-**Helper Properties:**
-- `msg.is_user_message` - Bool
-- `msg.is_ai_message` - Bool
-- `msg.has_text` - Bool
-- `msg.has_code` - Bool
-- `msg.has_thinking` - Bool
-- `msg.has_tools` - Bool
-- `msg.has_context` - Bool
-
-**Helper Methods:**
-- `msg.get_text_length()` - Character count
-- `msg.get_text_word_count()` - Word count
-- `msg.get_code_block_count()` - Total code blocks
-- `msg.get_code_line_count()` - Total lines
-- `msg.get_tool_count()` - Number of tools
-- `msg.get_tool_types()` - List of tool types
-- `msg.get_model_name()` - Model name
-- `msg.get_input_tokens()` - Input tokens
-- `msg.get_output_tokens()` - Output tokens
-- `msg.get_total_tokens()` - Total tokens
-
-## Session Properties
-
-Access via `session.property`:
-
-**Core:**
-- `session.composer_id` - Unique ID
-- `session.created_at` - datetime
-- `session.last_updated_at` - datetime
-
-**Info:**
-- `session.name` - Session name
-- `session.status` - Status
-- `session.is_archived` - Bool
-
-**Tokens:**
-- `session.context_tokens_used` - Token count
-- `session.context_token_limit` - Limit
-- `session.context_usage_percent` - Percentage
-
-**Code:**
-- `session.total_lines_added` - Lines added
-- `session.total_lines_removed` - Lines removed
-- `session.added_files` - List of files
-- `session.removed_files` - List of files
-
-**Helper Properties:**
-- `session.duration_seconds` - Duration
-- `session.duration_minutes` - Duration
-- `session.duration_hours` - Duration
-- `session.net_lines_changed` - Added - Removed
-- `session.total_lines_changed` - Added + Removed
-
-## File Structure Reference
-
+**Frontend (Terminal 2):**
+```bash
+cd frontend
+npm run dev
 ```
-stats/
-├── extractors/
-│   ├── base_extractor.py        # Extend this for new extractors
-│   ├── message_extractor.py     
-│   └── session_extractor.py     
-├── models/
-│   ├── message.py               # Message data class
-│   └── session.py               # Session data class
-├── calculators/
-│   ├── base_calculator.py       # Extend this for new calculators
-│   └── message_calculator.py    # Add stats here
-├── orchestrator.py              # Main coordinator
-└── cache.py                     # Caching system
-```
+
+## Access the Dashboard
+
+- **Frontend UI**: http://localhost:5173
+- **Backend API**: http://127.0.0.1:8000
+- **API Docs**: http://127.0.0.1:8000/docs
+
+## Available API Endpoints
+
+- `GET /` - Health check
+- `GET /api/health` - Detailed health check
+- `GET /api/summary` - Data extraction summary
+- `GET /api/stats/all` - All calculated statistics
+- `GET /api/stats/{category}` - Stats by category
+- `GET /api/stats/{category}/{stat_id}` - Single stat
+- `POST /api/cache/clear` - Clear stats cache
 
 ## Troubleshooting
 
-### Cache Issues
-```python
-# Clear cache and force fresh extraction
-orchestrator = StatsOrchestrator(db_path, cache_dir)
-orchestrator.invalidate_cache()
+### Port Already in Use
+The `deploy.ps1` script automatically cleans up ports. If manual cleanup is needed:
+
+**Windows:**
+```powershell
+# Find process on port
+netstat -ano | findstr :8000
+netstat -ano | findstr :5173
+
+# Kill process by PID
+taskkill /PID <PID> /F
 ```
 
-### Check Extraction
-```python
-# Get summary
-summary = orchestrator.get_summary()
-print(f"Messages: {summary['total_messages']}")
-print(f"Sessions: {summary['total_sessions']}")
+**Mac/Linux:**
+```bash
+# Find and kill process
+lsof -ti:8000 | xargs kill -9
+lsof -ti:5173 | xargs kill -9
 ```
 
-### Debug Specific Stat
-```python
-# Get single stat
-stat = orchestrator.get_stat('total_messages')
-print(stat)
+### Database Not Found
+Ensure Cursor IDE has been used and the database exists at:
+- **Windows**: `%USERPROFILE%\AppData\Roaming\Cursor\User\globalStorage\state.vscdb`
+- **Mac**: `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb`
+
+### Tailwind Not Loading
+If styles don't appear:
+1. Stop the frontend (Ctrl+C)
+2. Run `npm run dev` again
+3. Hard refresh browser (Ctrl+Shift+R)
+
+## Development Commands
+
+### Backend
+```bash
+cd backend
+python main.py          # Start server
 ```
 
-## Next Stats to Implement
+### Frontend
+```bash
+cd frontend
+npm run dev            # Development server
+npm run build          # Production build
+npm run preview        # Preview production build
+npm run lint           # Run ESLint
+```
 
-See `docs/planning/PURE-STATS-INDEX.md` for the complete list of 232 stats.
+## Project Structure
 
-**Priority stats (20-30):**
-- Stat #20: Tool success/failure
-- Stat #21-26: Context stats
-- Stat #27-30: External references
-- Stat #31-41: Code suggestions & acceptance
+```
+cursor-notepad-extractor/
+├── backend/           # FastAPI backend
+│   ├── main.py       # API server
+│   └── requirements.txt
+├── frontend/         # React frontend
+│   ├── src/
+│   │   ├── App.jsx   # Main component
+│   │   └── index.css # Tailwind styles
+│   └── package.json
+├── stats/            # Data extraction & calculation
+│   ├── extractors/   # Data extraction modules
+│   ├── calculators/  # Stats calculation modules
+│   ├── models/       # Data models
+│   └── orchestrator.py
+└── deploy.ps1        # Deployment script
+```
 
-**After that:**
-- Session stats (67-93)
-- Code metrics (94-105)
-- Daily stats (106-111)
+## Next Steps
 
----
+After running the dashboard:
+1. View the summary stats on the homepage
+2. Explore different stat categories
+3. Use the API docs at http://127.0.0.1:8000/docs
 
-*For detailed architecture, see `docs/planning/STATS-CALCULATION-ARCHITECTURE.md`*
+## Need Help?
 
+- Check `STRUCTURE.md` for architecture details
+- Check `docs/planning/` for implementation plans
+- Check `PROBLEM_LOG.txt` for known issues

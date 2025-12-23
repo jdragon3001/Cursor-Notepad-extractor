@@ -1,39 +1,71 @@
-"""Launch the Cursor Stats Dashboard."""
+"""Launch script for Cursor Stats Dashboard."""
 
 import subprocess
 import sys
+import time
 from pathlib import Path
+import webbrowser
 
-# Get the streamlit_app directory
-app_dir = Path(__file__).parent / "streamlit_app"
-app_file = app_dir / "app.py"
-
-if not app_file.exists():
-    print(f"Error: {app_file} not found!")
-    sys.exit(1)
-
-print("=" * 60)
-print("Starting Cursor Stats Dashboard...".center(60))
-print("=" * 60)
-print(f"\nApp location: {app_file}")
-print("\n📊 The dashboard will open in your browser")
-print("🔄 Press Ctrl+C to stop the server\n")
-print("=" * 60)
-
-# Launch streamlit
-try:
-    subprocess.run([
-        sys.executable, "-m", "streamlit", "run",
-        str(app_file),
-        "--server.port=8501",
-        "--server.address=localhost",
-        "--browser.gatherUsageStats=false"
-    ])
-except KeyboardInterrupt:
-    print("\n\n" + "=" * 60)
-    print("Dashboard stopped.".center(60))
+def main():
     print("=" * 60)
-except Exception as e:
-    print(f"\n❌ Error: {e}")
-    sys.exit(1)
+    print("🚀 Cursor Stats Dashboard Launcher".center(60))
+    print("=" * 60)
+    print()
+    
+    project_root = Path(__file__).parent
+    backend_dir = project_root / "backend"
+    frontend_dir = project_root / "frontend"
+    
+    # Start backend
+    print("Starting backend server...")
+    backend_process = subprocess.Popen(
+        [sys.executable, "main.py"],
+        cwd=backend_dir,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    
+    # Wait for backend to start
+    print("Waiting for backend to initialize...")
+    time.sleep(3)
+    
+    # Start frontend
+    print("Starting frontend...")
+    frontend_process = subprocess.Popen(
+        ["npm", "run", "dev"],
+        cwd=frontend_dir,
+        shell=True
+    )
+    
+    # Wait for frontend to start
+    time.sleep(3)
+    
+    print()
+    print("=" * 60)
+    print("✅ Dashboard is running!".center(60))
+    print("=" * 60)
+    print()
+    print("Backend API:  http://localhost:8000")
+    print("Frontend UI:  http://localhost:5173")
+    print()
+    print("Press Ctrl+C to stop both servers")
+    print()
+    
+    # Open browser
+    webbrowser.open("http://localhost:5173")
+    
+    try:
+        # Keep running until interrupted
+        backend_process.wait()
+        frontend_process.wait()
+    except KeyboardInterrupt:
+        print("\n\n🛑 Shutting down...")
+        backend_process.terminate()
+        frontend_process.terminate()
+        backend_process.wait()
+        frontend_process.wait()
+        print("✅ Stopped successfully")
 
+
+if __name__ == "__main__":
+    main()

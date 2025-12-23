@@ -119,15 +119,34 @@ class Message:
         bubble_id = key
         composer_id = parts[1] if len(parts) > 1 else ''
         
-        # Parse timestamp (handle both int and string)
-        created_at_ms = data.get('createdAt', 0)
-        if isinstance(created_at_ms, str):
-            try:
-                created_at_ms = int(created_at_ms)
-            except (ValueError, TypeError):
-                created_at_ms = 0
+        # Parse timestamp (handle both int/float and ISO string formats)
+        created_at_raw = data.get('createdAt', None)
+        created_at = None
         
-        created_at = datetime.fromtimestamp(created_at_ms / 1000) if created_at_ms else datetime.now()
+        if created_at_raw:
+            if isinstance(created_at_raw, str):
+                # Try parsing as ISO format string
+                try:
+                    created_at = datetime.fromisoformat(created_at_raw.replace('Z', '+00:00'))
+                    # Remove timezone info to keep all datetimes naive for consistency
+                    created_at = created_at.replace(tzinfo=None)
+                except (ValueError, TypeError):
+                    # If that fails, try as timestamp string
+                    try:
+                        created_at_ms = int(created_at_raw)
+                        created_at = datetime.fromtimestamp(created_at_ms / 1000)
+                    except (ValueError, TypeError):
+                        pass
+            elif isinstance(created_at_raw, (int, float)):
+                # Try as milliseconds timestamp
+                try:
+                    created_at = datetime.fromtimestamp(created_at_raw / 1000)
+                except (ValueError, TypeError, OSError):
+                    pass
+        
+        # Only use datetime.now() as absolute last resort
+        if created_at is None:
+            created_at = datetime.now()
         
         return cls(
             bubble_id=bubble_id,

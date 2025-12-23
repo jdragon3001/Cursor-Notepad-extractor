@@ -22,55 +22,31 @@ class MessageReferencesStats(MessageStatsBase):
         }
     
     def stat_027_web_references(self) -> Dict[str, Any]:
-        """Stat #27: Web references."""
-        total_refs = sum(len(m.web_references) for m in self.messages)
-        messages_with_refs = len([m for m in self.messages if len(m.web_references) > 0])
+        """Stat #27: Web search usage (from toolFormerData)."""
+        web_search_count = 0
+        messages_with_search = set()
         
-        # Extract URLs
-        urls = []
         for m in self.messages:
-            for ref in m.web_references:
-                if isinstance(ref, dict):
-                    url = ref.get('url') or ref.get('link') or ref.get('href')
-                    if url:
-                        urls.append(url)
-                elif isinstance(ref, str):
-                    urls.append(ref)
-        
-        top_refs = self.most_common(urls, n=20) if urls else []
+            if isinstance(m.tool_former_data, dict):
+                tool_name = m.tool_former_data.get('name', '')
+                if tool_name == 'web_search':
+                    web_search_count += 1
+                    messages_with_search.add(m.bubble_id)
         
         return self.create_stat_result(
-            value=total_refs,
-            label='Web references',
+            value=web_search_count,
+            label='Web searches performed',
             category='Messages',
-            data_source='bubbleId',
+            data_source='toolFormerData',
             stat_type='count',
-            messages_with_refs=messages_with_refs,
-            percentage=self.percentage(messages_with_refs, len(self.messages)),
-            top_references=top_refs
+            messages_with_web_search=len(messages_with_search),
+            percentage=self.percentage(len(messages_with_search), len(self.messages))
         )
     
     def stat_028_web_searches_performed(self) -> Dict[str, Any]:
-        """Stat #28: Web searches performed."""
-        # Count messages where web search was used
-        searches = 0
-        for m in self.messages:
-            if m.raw_data:
-                # Check for web search indicators
-                if m.raw_data.get('useWeb') or m.raw_data.get('webSearch'):
-                    searches += 1
-                elif m.raw_data.get('capabilities') and 'web' in str(m.raw_data.get('capabilities')):
-                    if len(m.web_references) > 0:
-                        searches += 1
-        
-        return self.create_stat_result(
-            value=searches,
-            label='Web searches performed',
-            category='Messages',
-            data_source='bubbleId',
-            stat_type='count',
-            percentage=self.percentage(searches, len(self.messages))
-        )
+        """Stat #28: Duplicate - returns same as stat_027."""
+        # This is kept for backward compatibility but returns same data
+        return self.stat_027_web_references()
     
     def stat_029_docs_references(self) -> Dict[str, Any]:
         """Stat #29: Documentation references."""
@@ -100,21 +76,28 @@ class MessageReferencesStats(MessageStatsBase):
         )
     
     def stat_030_messages_using_web(self) -> Dict[str, Any]:
-        """Stat #30: Messages using web (useWeb=true)."""
-        using_web = 0
+        """Stat #30: Messages using browser tools (MCP)."""
+        browser_tool_count = 0
+        messages_with_browser = set()
+        browser_tools_used = {}
+        
         for m in self.messages:
-            if m.raw_data:
-                if m.raw_data.get('useWeb') is True:
-                    using_web += 1
-                elif 'web' in m.capabilities:
-                    using_web += 1
+            if isinstance(m.tool_former_data, dict):
+                tool_name = m.tool_former_data.get('name', '')
+                if 'browser' in tool_name.lower() or tool_name == 'web_search':
+                    browser_tool_count += 1
+                    messages_with_browser.add(m.bubble_id)
+                    browser_tools_used[tool_name] = browser_tools_used.get(tool_name, 0) + 1
+        
+        top_browser_tools = sorted(browser_tools_used.items(), key=lambda x: x[1], reverse=True)[:10]
         
         return self.create_stat_result(
-            value=using_web,
-            label='Messages using web capability',
+            value=browser_tool_count,
+            label='Browser tool invocations',
             category='Messages',
-            data_source='bubbleId',
+            data_source='toolFormerData',
             stat_type='count',
-            percentage=self.percentage(using_web, len(self.messages))
+            messages_with_browser_tools=len(messages_with_browser),
+            percentage=self.percentage(len(messages_with_browser), len(self.messages)),
+            top_browser_tools=top_browser_tools
         )
-

@@ -14,13 +14,10 @@ class MessageContextStats(MessageStatsBase):
     
     def calculate(self) -> Dict[str, Any]:
         """Calculate all context stats."""
+        # NOTE: Most context stats moved to ContextCalculator which uses MessageRequestContext
+        # Message objects don't have populated context fields - that data is in MessageRequestContext
         return {
-            'attached_code_chunks': self.stat_021_attached_code_chunks(),
-            'codebase_context_chunks': self.stat_022_codebase_context_chunks(),
-            'lines_in_attached_chunks': self.stat_023_lines_in_attached_chunks(),
-            'relevant_files': self.stat_024_relevant_files(),
-            'recently_viewed_files': self.stat_025_recently_viewed_files(),
-            'unique_files_in_context': self.stat_026_unique_files_in_context(),
+            # All context stats removed - see ContextCalculator for file/chunk context stats
         }
     
     def stat_021_attached_code_chunks(self) -> Dict[str, Any]:

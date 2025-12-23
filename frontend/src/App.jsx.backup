@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { BarChart3, Activity, Database, AlertCircle, Search, Filter, MessageSquare } from 'lucide-react'
+import { BarChart3, Activity, Database, AlertCircle, Search, Filter, MessageSquare, User, Bot, Code, Brain, Wrench, ChevronRight } from 'lucide-react'
 import { InfoTooltip } from './components/Tooltip'
 import { TimeRangeSelector } from './components/TimeRangeSelector'
 import { StatDetailModal } from './components/StatDetailModal'
 import { MessageDetailModal } from './components/MessageDetailModal'
-import { MessagesView } from './components/MessagesView'
 import { getStatDescription } from './statDescriptions'
 
 const API_BASE = 'http://127.0.0.1:8000'
@@ -268,6 +267,13 @@ function App() {
               <h1 className="text-3xl font-bold text-slate-800">Cursor Stats Dashboard</h1>
             </div>
             <div className="flex items-center gap-3">
+              <button
+                onClick={() => setCurrentView('browse')}
+                className="bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50 font-medium py-2 px-4 rounded-lg transition-colors flex items-center space-x-2"
+              >
+                <List className="w-4 h-4" />
+                <span>Browse Data</span>
+              </button>
               <button 
                 onClick={loadData}
                 className="bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center space-x-2"
@@ -460,95 +466,69 @@ function App() {
               </div>
             </div>
 
-            {/* Content Area */}
+            {/* Stats List */}
             <div className="p-6">
-              {/* Messages Browse View */}
-              {activeCategory === 'messages' && (
-                <MessagesView 
-                  messages={messages}
-                  loading={messagesLoading}
-                  pagination={messagesPagination}
-                  filters={messageFilters}
-                  onFilterChange={handleMessageFilterChange}
-                  onPageChange={handleMessagePageChange}
-                  onMessageClick={(msgId) => setSelectedMessageId(msgId)}
-                />
-              )}
-
-              {/* Stats List View */}
-              {activeCategory !== 'messages' && (
-                <div className="space-y-4">
-                  {Object.entries(stats)
-                    .filter(([category]) => activeCategory === 'all' || activeCategory === category)
-                    .filter(([category]) => category !== 'messages')
-                    .map(([category, categoryStats]) => {
-                      const filteredStats = filterStats(categoryStats)
-                      
-                      if (filteredStats.length === 0) return null
-                      
-                      return (
-                        <div key={category} className="space-y-3">
-                          {activeCategory === 'all' && (
-                            <h3 className="text-lg font-semibold text-slate-800 border-b pb-2 mb-3">
-                              {category.replace('_', ' ').toUpperCase()}
-                            </h3>
-                          )}
-                          {filteredStats.map(([statId, statData]) => (
-                            <div 
-                              key={`${category}-${statId}`}
-                              className="bg-slate-50 rounded-lg p-4 hover:bg-slate-100 transition-colors border border-slate-200 cursor-pointer"
-                              onClick={() => handleStatClick(statId, statData, category)}
-                            >
-                              <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                  <div className="flex items-center space-x-2 mb-2">
-                                    <span className="text-xs font-mono bg-primary-100 text-primary-700 px-2 py-1 rounded">
-                                      {statId}
-                                    </span>
-                                    <span className="text-xs font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded">
-                                      {statData.type}
-                                    </span>
-                                    <InfoTooltip description={getStatDescription(statId)} />
-                                  </div>
-                                  <p className="text-slate-700 font-medium mb-1">{statData.label}</p>
-                                  <p className="text-xs text-slate-500">Source: {statData.data_source}</p>
+              <div className="space-y-4">
+                {Object.entries(stats)
+                  .filter(([category]) => activeCategory === 'all' || activeCategory === category)
+                  .map(([category, categoryStats]) => {
+                    const filteredStats = filterStats(categoryStats)
+                    
+                    if (filteredStats.length === 0) return null
+                    
+                    return (
+                      <div key={category} className="space-y-3">
+                        {activeCategory === 'all' && (
+                          <h3 className="text-lg font-semibold text-slate-800 border-b pb-2 mb-3">
+                            {category.replace('_', ' ').toUpperCase()}
+                          </h3>
+                        )}
+                        {filteredStats.map(([statId, statData]) => (
+                          <div 
+                            key={`${category}-${statId}`}
+                            className="bg-slate-50 rounded-lg p-4 hover:bg-slate-100 transition-colors border border-slate-200 cursor-pointer"
+                            onClick={() => handleStatClick(statId, statData, category)}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center space-x-2 mb-2">
+                                  <span className="text-xs font-mono bg-primary-100 text-primary-700 px-2 py-1 rounded">
+                                    {statId}
+                                  </span>
+                                  <span className="text-xs font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded">
+                                    {statData.type}
+                                  </span>
+                                  <InfoTooltip description={getStatDescription(statId)} />
                                 </div>
-                                <div className="text-right ml-4">
-                                  <div className="text-2xl font-bold text-slate-800">
-                                    {renderStatValue(statData.value, statData.type)}
-                                  </div>
+                                <p className="text-slate-700 font-medium mb-1">{statData.label}</p>
+                                <p className="text-xs text-slate-500">Source: {statData.data_source}</p>
+                              </div>
+                              <div className="text-right ml-4">
+                                <div className="text-2xl font-bold text-slate-800">
+                                  {renderStatValue(statData.value, statData.type)}
                                 </div>
                               </div>
                             </div>
-                          ))}
-                        </div>
-                      )
-                    })}
-                  
-                  {/* No Results Message */}
-                  {Object.entries(stats)
-                    .filter(([category]) => activeCategory === 'all' || activeCategory === category)
-                    .filter(([category]) => category !== 'messages')
-                    .every(([_, categoryStats]) => filterStats(categoryStats).length === 0) && (
-                    <div className="text-center py-12">
-                      <AlertCircle className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold text-slate-700 mb-2">No stats found</h3>
-                      <p className="text-slate-500">Try adjusting your search or filters</p>
-                    </div>
-                  )}
-                </div>
-              )}
+                          </div>
+                        ))}
+                      </div>
+                    )
+                  })}
+                
+                {/* No Results Message */}
+                {Object.entries(stats)
+                  .filter(([category]) => activeCategory === 'all' || activeCategory === category)
+                  .every(([_, categoryStats]) => filterStats(categoryStats).length === 0) && (
+                  <div className="text-center py-12">
+                    <AlertCircle className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-slate-700 mb-2">No stats found</h3>
+                    <p className="text-slate-500">Try adjusting your search or filters</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      )}
-
-      {/* Message Detail Modal */}
-      {selectedMessageId && (
-        <MessageDetailModal
-          messageId={selectedMessageId}
-          onClose={() => setSelectedMessageId(null)}
-        />
       )}
 
       {/* Stat Detail Modal */}
@@ -558,14 +538,6 @@ function App() {
           statId={selectedStat.id}
           category={selectedStat.category}
           onClose={handleCloseModal}
-        />
-      )}
-
-      {/* Message Detail Modal */}
-      {selectedMessageId && (
-        <MessageDetailModal
-          messageId={selectedMessageId}
-          onClose={() => setSelectedMessageId(null)}
         />
       )}
     </div>

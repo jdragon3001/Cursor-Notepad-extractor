@@ -307,6 +307,43 @@ See `docs/planning/APP-ARCHITECTURE.md` for complete roadmap.
 
 ---
 
+## 🎨 Frontend Structure (`frontend/`)
+
+React + Vite application for the dashboard UI.
+
+### Core Application
+- `App.jsx` - Main application with stats dashboard and view routing
+- `main.jsx` - React entry point
+- `index.html` - HTML template
+
+### Components (`src/components/`)
+- `Tooltip.jsx` - Info tooltips for stat descriptions
+- `TimeRangeSelector.jsx` - Time range filtering (presets + custom)
+- `StatDetailModal.jsx` - Drill-down modal with time series charts
+- `MessageDetailModal.jsx` - Full message detail view with raw/formatted toggle
+
+### Pages (`src/pages/`)
+- `BrowsePage.jsx` - Browse messages, sessions, and raw data
+  - `MessagesTab` component - Paginated message list with filters
+  - `MessageCard` component - Individual message preview cards
+
+### Configuration
+- `statDescriptions.js` - Descriptions for all statistics
+- `tailwind.config.js`, `postcss.config.js` - Styling
+- `vite.config.js` - Build configuration
+- `package.json` - Dependencies and scripts
+
+### Features
+✅ Stats dashboard with 124+ metrics
+✅ Temporal filtering (11 presets + custom ranges)
+✅ Drill-down modals with time series charts
+✅ Browse messages with pagination
+✅ Search, filter, and sort messages
+✅ Raw/formatted data toggle
+✅ Responsive design (desktop optimized)
+
+---
+
 ## 🔍 **Key Discoveries**
 
 1. **cursorDiskKV is the goldmine** - 68K+ messages with full content

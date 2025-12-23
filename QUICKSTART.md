@@ -1,156 +1,109 @@
-# Cursor Stats Dashboard - Quick Start Guide
+# 🎯 For New Users: How to Use This
 
-## Prerequisites
+## What You Need
+1. ✅ Cursor IDE installed (not VS Code)
+2. ✅ Python 3.8+ installed
+3. ✅ Node.js 16+ installed
 
-### Required Software
-1. **Python 3.10+** with Conda
-2. **Node.js 18+** with npm
-3. **PowerShell** (Windows) or **Bash** (Mac/Linux)
+---
 
-### Conda Environment
+## Installation (Copy-Paste These Commands)
+
 ```bash
-conda create -n cursor-notepad-browser python=3.10
-conda activate cursor-notepad-browser
-```
-
-## Installation
-
-### 1. Install Backend Dependencies
-```bash
-cd backend
+# 1. Install Python packages
 pip install -r requirements.txt
-cd ..
-```
+pip install -r backend/requirements.txt
 
-### 2. Install Frontend Dependencies
-```bash
+# 2. Install Node.js packages
 cd frontend
 npm install
 cd ..
+
+# 3. Launch the dashboard
+python launch_dashboard.py
 ```
 
-## Running the Dashboard
+**⏱️ Time:** ~5 minutes (downloading packages)
 
-### Option 1: PowerShell Script (Recommended for Windows)
-```powershell
-.\deploy.ps1
-```
-This will:
-- Clean up any processes on ports 8000 and 5173
-- Start the FastAPI backend in a new window
-- Start the React frontend in a new window
-- Display URLs for both services
+---
 
-### Option 2: Manual Start
+## What Happens When You Launch?
 
-**Backend (Terminal 1):**
+1. 🖥️ **Backend starts** → API server on port 8000
+2. 🌐 **Frontend starts** → Web dashboard on port 5173  
+3. 🚀 **Browser opens** → Shows your Cursor stats!
+
+---
+
+## What You'll See
+
+A beautiful dashboard showing:
+- 💬 **51 Message Stats** - Your AI chat usage
+- 📝 **27 Session Stats** - Your coding sessions  
+- 🔧 **10 Tool Stats** - File edits, searches, etc.
+- 📊 **12 Code Stats** - Your code changes
+- 📅 **6 Daily Stats** - Usage patterns
+- 🔍 **18 Context Stats** - What context you provide
+
+**Total: 124 statistics about your Cursor usage!**
+
+---
+
+## Common Issues & Quick Fixes
+
+### "pip: command not found"
 ```bash
-cd backend
-conda activate cursor-notepad-browser
-python main.py
+pip3 install -r requirements.txt  # Try pip3 instead
 ```
 
-**Frontend (Terminal 2):**
+### "python: command not found"
 ```bash
-cd frontend
-npm run dev
+python3 launch_dashboard.py  # Try python3 instead
 ```
 
-## Access the Dashboard
+### "Port 8000 already in use"
+Close other apps using that port, or restart your computer.
 
-- **Frontend UI**: http://localhost:5173
-- **Backend API**: http://127.0.0.1:8000
-- **API Docs**: http://127.0.0.1:8000/docs
+### "No stats showing"
+Make sure you've actually used Cursor IDE - you need some history!
 
-## Available API Endpoints
+---
 
-- `GET /` - Health check
-- `GET /api/health` - Detailed health check
-- `GET /api/summary` - Data extraction summary
-- `GET /api/stats/all` - All calculated statistics
-- `GET /api/stats/{category}` - Stats by category
-- `GET /api/stats/{category}/{stat_id}` - Single stat
-- `POST /api/cache/clear` - Clear stats cache
+## Platform Notes
 
-## Troubleshooting
+### 🪟 Windows Users
+- Use `.\deploy.ps1` for best experience
+- Database location: `C:\Users\YourName\AppData\Roaming\Cursor\User\globalStorage\state.vscdb`
 
-### Port Already in Use
-The `deploy.ps1` script automatically cleans up ports. If manual cleanup is needed:
+### 🍎 macOS Users  
+- Use `python3` and `pip3` in commands
+- Database location: `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb`
 
-**Windows:**
-```powershell
-# Find process on port
-netstat -ano | findstr :8000
-netstat -ano | findstr :5173
+### 🐧 Linux Users
+- Use `python3` and `pip3` in commands
+- Database location: `~/.config/Cursor/User/globalStorage/state.vscdb`
 
-# Kill process by PID
-taskkill /PID <PID> /F
-```
+---
 
-**Mac/Linux:**
-```bash
-# Find and kill process
-lsof -ti:8000 | xargs kill -9
-lsof -ti:5173 | xargs kill -9
-```
+## 🆘 Need Help?
 
-### Database Not Found
-Ensure Cursor IDE has been used and the database exists at:
-- **Windows**: `%USERPROFILE%\AppData\Roaming\Cursor\User\globalStorage\state.vscdb`
-- **Mac**: `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb`
+1. **INSTALLATION.md** - Detailed setup guide
+2. **TROUBLESHOOTING.md** - Fix common problems
+3. **USER_GUIDE.md** - Learn how to use the dashboard
 
-### Tailwind Not Loading
-If styles don't appear:
-1. Stop the frontend (Ctrl+C)
-2. Run `npm run dev` again
-3. Hard refresh browser (Ctrl+Shift+R)
+---
 
-## Development Commands
+## 📸 What It Looks Like
 
-### Backend
-```bash
-cd backend
-python main.py          # Start server
-```
+After launching, you'll see:
+- A clean, modern web interface
+- Search box to find specific stats
+- Category filters (Messages, Sessions, Tools, etc.)
+- Individual stat cards with values and details
+- All running locally on your computer (your data stays private!)
 
-### Frontend
-```bash
-cd frontend
-npm run dev            # Development server
-npm run build          # Production build
-npm run preview        # Preview production build
-npm run lint           # Run ESLint
-```
+---
 
-## Project Structure
+## That's It!
 
-```
-cursor-notepad-extractor/
-├── backend/           # FastAPI backend
-│   ├── main.py       # API server
-│   └── requirements.txt
-├── frontend/         # React frontend
-│   ├── src/
-│   │   ├── App.jsx   # Main component
-│   │   └── index.css # Tailwind styles
-│   └── package.json
-├── stats/            # Data extraction & calculation
-│   ├── extractors/   # Data extraction modules
-│   ├── calculators/  # Stats calculation modules
-│   ├── models/       # Data models
-│   └── orchestrator.py
-└── deploy.ps1        # Deployment script
-```
-
-## Next Steps
-
-After running the dashboard:
-1. View the summary stats on the homepage
-2. Explore different stat categories
-3. Use the API docs at http://127.0.0.1:8000/docs
-
-## Need Help?
-
-- Check `STRUCTURE.md` for architecture details
-- Check `docs/planning/` for implementation plans
-- Check `PROBLEM_LOG.txt` for known issues
+Three commands to install, one command to launch. Enjoy exploring your Cursor stats! 🎉

@@ -1,50 +1,66 @@
-# Cursor Stats Dashboard - React + FastAPI
+# Cursor Stats Dashboard
+
+A beautiful web dashboard to visualize and analyze your Cursor IDE usage statistics. Works on **Windows, macOS, and Linux**.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 16+
-- npm
+- **Python 3.8+** with pip ([Download](https://www.python.org/downloads/))
+- **Node.js 16+** with npm ([Download](https://nodejs.org/))
+- **Cursor IDE** with some usage history
 
-### Installation
+### Installation & Launch
 
-1. **Install Python dependencies**:
+**Step 1: Install Dependencies**
 ```bash
+# Install Python packages
+pip install -r requirements.txt
 pip install -r backend/requirements.txt
-```
 
-2. **Install Frontend dependencies**:
-```bash
+# Install Node.js packages
 cd frontend
 npm install
 cd ..
 ```
 
-### Running the Dashboard
+**Step 2: Launch**
 
-**Easy Way** (Recommended):
+Choose your preferred method:
+
+**🎯 Option A: Easy Launch (Recommended)**
 ```bash
 python launch_dashboard.py
 ```
 
-This will start both backend and frontend servers and open the dashboard in your browser.
-
-**Manual Way**:
-
-Terminal 1 (Backend):
-```bash
-cd backend
-python main.py
+**🪟 Option B: Windows PowerShell**
+```powershell
+.\deploy.ps1
 ```
 
-Terminal 2 (Frontend):
+**📋 Option C: Manual (Two Terminals)**
 ```bash
+# Terminal 1
+cd backend
+python main.py
+
+# Terminal 2
 cd frontend
 npm run dev
 ```
 
-Then open http://localhost:5173 in your browser.
+**That's it!** Open http://localhost:5173 to see your stats.
+
+> 💡 **First time?** See `INSTALLATION.md` for detailed setup instructions and troubleshooting.
+
+## 📍 Database Locations
+
+The dashboard automatically finds your Cursor database at:
+
+- **Windows**: `C:\Users\<YourName>\AppData\Roaming\Cursor\User\globalStorage\state.vscdb`
+- **macOS**: `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb`
+- **Linux**: `~/.config/Cursor/User/globalStorage/state.vscdb`
+
+No configuration needed - it just works!
 
 ## 📊 Features
 

@@ -48,8 +48,6 @@ Write-Host "Starting Backend (FastAPI on port 8000)..." -ForegroundColor Green
 # Start backend in a new PowerShell window
 $backendScript = @"
 cd '$ROOT_DIR\backend'
-conda activate cursor-notepad-browser
-Write-Host 'Backend: Activating conda environment...' -ForegroundColor Green
 Write-Host 'Backend: Starting FastAPI server on http://127.0.0.1:8000' -ForegroundColor Green
 python main.py
 "@

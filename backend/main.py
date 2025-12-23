@@ -44,9 +44,8 @@ def get_orchestrator() -> StatsOrchestrator:
     global _orchestrator
     if _orchestrator is None:
         try:
-            # Get global database path
-            user_home = Path.home()
-            db_path = user_home / "AppData" / "Roaming" / "Cursor" / "User" / "globalStorage" / Config.DB_FILENAME
+            # Get global database path (cross-platform)
+            db_path = Config.get_global_db_path()
             
             if not db_path.exists():
                 raise FileNotFoundError(f"Database not found at {db_path}")

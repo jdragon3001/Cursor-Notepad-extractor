@@ -40,10 +40,63 @@ function App() {
     }
   }
 
-  const renderStatValue = (value) => {
+  const renderStatValue = (value, statType) => {
     if (value === null || value === undefined) return 'N/A'
-    if (typeof value === 'object') return JSON.stringify(value, null, 2)
+    
+    // Handle distribution type - format as nice list
+    if (statType === 'distribution' && typeof value === 'object') {
+      if (Array.isArray(value)) {
+        // Array of items
+        return (
+          <div className="text-sm space-y-1">
+            {value.slice(0, 5).map((item, idx) => (
+              <div key={idx} className="flex justify-between">
+                <span>{item[0] || item.name || item.label || String(item)}</span>
+                <span className="font-semibold">{item[1] || item.count || item.value || ''}</span>
+              </div>
+            ))}
+            {value.length > 5 && <div className="text-slate-500">... and {value.length - 5} more</div>}
+          </div>
+        )
+      } else {
+        // Object with keys
+        const entries = Object.entries(value).slice(0, 5)
+        return (
+          <div className="text-sm space-y-1">
+            {entries.map(([key, val]) => (
+              <div key={key} className="flex justify-between gap-4">
+                <span className="text-slate-600">{key}:</span>
+                <span className="font-semibold">{typeof val === 'number' ? val.toLocaleString() : String(val)}</span>
+              </div>
+            ))}
+            {Object.keys(value).length > 5 && (
+              <div className="text-slate-500">... and {Object.keys(value).length - 5} more</div>
+            )}
+          </div>
+        )
+      }
+    }
+    
+    // Handle numeric types
     if (typeof value === 'number') return value.toLocaleString()
+    
+    // Handle arrays
+    if (Array.isArray(value)) {
+      if (value.length === 0) return 'None'
+      if (value.length <= 3) return value.join(', ')
+      return `${value.slice(0, 3).join(', ')} ... (+${value.length - 3} more)`
+    }
+    
+    // Handle objects (last resort)
+    if (typeof value === 'object') {
+      const entries = Object.entries(value)
+      if (entries.length === 0) return 'None'
+      if (entries.length <= 2) {
+        return entries.map(([k, v]) => `${k}: ${v}`).join(', ')
+      }
+      return `${entries.length} items`
+    }
+    
     return String(value)
   }
 
@@ -313,9 +366,9 @@ function App() {
                                 <p className="text-xs text-slate-500">Source: {statData.data_source}</p>
                               </div>
                               <div className="text-right ml-4">
-                                <p className="text-2xl font-bold text-slate-800">
-                                  {renderStatValue(statData.value)}
-                                </p>
+                                <div className="text-2xl font-bold text-slate-800">
+                                  {renderStatValue(statData.value, statData.type)}
+                                </div>
                               </div>
                             </div>
                           </div>

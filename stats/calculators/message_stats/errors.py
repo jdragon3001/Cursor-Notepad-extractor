@@ -13,86 +13,65 @@ class MessageErrorsStats(MessageStatsBase):
         super().__init__(messages)
     
     def calculate(self) -> Dict[str, Any]:
-        """Calculate all error stats."""
+        """
+        Calculate all error stats.
+        
+        NOTE: Stats 53-55 removed - Cursor doesn't populate lints/consoleLogs arrays in message data.
+        Linter errors ARE tracked in messageRequestContext (see context_stats), not in bubbleId messages.
+        Terminal interactions stat remains but uses different fields (toolFormerData, lastTerminalCwd).
+        """
         return {
-            'messages_with_lints': self.stat_053_messages_with_lints(),
-            'linter_errors': self.stat_054_linter_errors(),
-            'messages_with_console_logs': self.stat_055_messages_with_console_logs(),
+            # Removed: messages_with_lints (always 0 - field not used)
+            # Removed: linter_errors (always 0 - field not used)
+            # Removed: messages_with_console_logs (always 0 - field not used)
             'terminal_interactions': self.stat_056_terminal_interactions(),
         }
     
-    def stat_053_messages_with_lints(self) -> Dict[str, Any]:
-        """Stat #53: Messages with lints."""
-        with_lints = self.filter_by(self.messages, lambda m: m.has_errors and len(m.lints) > 0)
-        total = len(self.messages)
-        
-        return self.create_stat_result(
-            value=len(with_lints),
-            label='Messages with linter errors',
-            category='Messages',
-            data_source='bubbleId',
-            stat_type='count',
-            percentage=self.percentage(len(with_lints), total)
-        )
+    # REMOVED STAT #53 - Messages with lints
+    # This stat always returned 0 because Cursor doesn't populate the m.lints array in bubbleId messages.
+    # Linter error data IS available in messageRequestContext (see context_stats module).
     
-    def stat_054_linter_errors(self) -> Dict[str, Any]:
-        """Stat #54: Total linter errors."""
-        total_lints = sum(len(m.lints) for m in self.messages)
-        messages_with_lints = len([m for m in self.messages if len(m.lints) > 0])
-        
-        # Extract error types
-        error_types = []
-        for m in self.messages:
-            for lint in m.lints:
-                if isinstance(lint, dict):
-                    error_type = lint.get('type') or lint.get('severity') or lint.get('rule')
-                    if error_type:
-                        error_types.append(error_type)
-        
-        top_errors = self.most_common(error_types, n=20) if error_types else []
-        
-        return self.create_stat_result(
-            value=total_lints,
-            label='Total linter errors',
-            category='Messages',
-            data_source='bubbleId',
-            stat_type='count',
-            messages_with_lints=messages_with_lints,
-            average_per_message=total_lints / messages_with_lints if messages_with_lints > 0 else 0,
-            top_error_types=top_errors
-        )
+    # REMOVED STAT #54 - Total linter errors  
+    # This stat always returned 0 because Cursor doesn't populate the m.lints array in bubbleId messages.
+    # Real linter errors: 174 contexts with 1,206 errors (see context_stats.total_linter_errors).
     
-    def stat_055_messages_with_console_logs(self) -> Dict[str, Any]:
-        """Stat #55: Messages with console logs."""
-        with_logs = self.filter_by(self.messages, lambda m: len(m.console_logs) > 0)
-        total = len(self.messages)
-        
-        return self.create_stat_result(
-            value=len(with_logs),
-            label='Messages with console logs',
-            category='Messages',
-            data_source='bubbleId',
-            stat_type='count',
-            percentage=self.percentage(len(with_logs), total)
-        )
+    # REMOVED STAT #55 - Messages with console logs
+    # This stat always returned 0 because Cursor doesn't populate the m.console_logs array in bubbleId messages.
     
     def stat_056_terminal_interactions(self) -> Dict[str, Any]:
-        """Stat #56: Terminal interactions around messages."""
-        # Check for terminal-related data in raw_data
-        with_terminal = 0
+        """
+        Stat #56: Terminal interactions around messages.
+        
+        Checks for terminal-related data in messages.
+        Note: Only ~3% of messages have terminal context (lastTerminalCwd).
+        """
+        # Check for terminal-related data
+        with_terminal_cwd = 0
+        with_terminal_capability = 0
+        
         for m in self.messages:
             if m.raw_data:
-                if 'terminalOutput' in m.raw_data or 'terminalCommand' in m.raw_data:
-                    with_terminal += 1
-                elif 'terminal' in m.capabilities:
-                    with_terminal += 1
+                # Check for lastTerminalCwd field (actually exists in ~3% of messages)
+                if 'lastTerminalCwd' in m.raw_data and m.raw_data['lastTerminalCwd']:
+                    with_terminal_cwd += 1
+                
+                # Check if terminal capability was available
+                if 'terminal' in m.capabilities:
+                    with_terminal_capability += 1
+        
+        total = len(self.messages)
         
         return self.create_stat_result(
-            value=with_terminal,
-            label='Messages with terminal interactions',
+            value=with_terminal_cwd,
+            label='Messages with terminal context',
             category='Messages',
             data_source='bubbleId',
             stat_type='count',
-            percentage=self.percentage(with_terminal, len(self.messages))
+            percentage=self.percentage(with_terminal_cwd, total),
+            breakdown={
+                'with_terminal_cwd': with_terminal_cwd,
+                'with_terminal_capability': with_terminal_capability,
+                'total_messages': total
+            }
         )
 

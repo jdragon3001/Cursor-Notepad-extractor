@@ -119,32 +119,28 @@ class Message:
         bubble_id = key
         composer_id = parts[1] if len(parts) > 1 else ''
         
-        # Parse timestamp (handle both int/float and ISO string formats)
+        # Parse timestamp - handle both ISO string and numeric formats
         created_at_raw = data.get('createdAt', None)
         created_at = None
         
         if created_at_raw:
             if isinstance(created_at_raw, str):
-                # Try parsing as ISO format string
                 try:
+                    # ISO format: "2025-10-08T04:07:43.744Z"
                     created_at = datetime.fromisoformat(created_at_raw.replace('Z', '+00:00'))
-                    # Remove timezone info to keep all datetimes naive for consistency
-                    created_at = created_at.replace(tzinfo=None)
+                    created_at = created_at.replace(tzinfo=None)  # Keep naive
                 except (ValueError, TypeError):
-                    # If that fails, try as timestamp string
                     try:
-                        created_at_ms = int(created_at_raw)
-                        created_at = datetime.fromtimestamp(created_at_ms / 1000)
+                        # Maybe it's a timestamp as string
+                        created_at = datetime.fromtimestamp(int(created_at_raw) / 1000)
                     except (ValueError, TypeError):
                         pass
             elif isinstance(created_at_raw, (int, float)):
-                # Try as milliseconds timestamp
                 try:
                     created_at = datetime.fromtimestamp(created_at_raw / 1000)
                 except (ValueError, TypeError, OSError):
                     pass
         
-        # Only use datetime.now() as absolute last resort
         if created_at is None:
             created_at = datetime.now()
         

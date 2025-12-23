@@ -59,3 +59,5 @@ for i in range(len(dates) - 1, -1, -1):
 
 print(f"\nCurrent streak from today: {streak_from_today} days")
 
+
+

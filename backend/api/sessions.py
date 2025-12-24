@@ -106,8 +106,41 @@ async def get_session_detail(orchestrator, session_id: str) -> Dict[str, Any]:
             logger.error(f"Consolidation failed for session {session_id}: {e}")
             consolidated_session_messages = session_messages
         
-        # Sort by timestamp
-        consolidated_session_messages.sort(key=lambda m: m.created_at)
+        # Sort by timestamp - NEWEST FIRST for conversation view
+        consolidated_session_messages.sort(key=lambda m: m.created_at, reverse=True)
+        
+        # Get file changes for this session from code tracking lines
+        file_changes = []
+        try:
+            from stats.extractors.code_tracking_extractor import CodeTrackingExtractor
+            tracking_extractor = CodeTrackingExtractor(orchestrator.db_path)
+            all_tracking_lines = tracking_extractor.extract()
+            
+            # Filter for this session and group by file
+            session_tracking = [t for t in all_tracking_lines if t.composer_id == session_id]
+            
+            # Group by file name
+            files_dict = {}
+            for tracking in session_tracking:
+                if tracking.file_name not in files_dict:
+                    files_dict[tracking.file_name] = {
+                        'file_name': tracking.file_name,
+                        'file_extension': tracking.file_extension,
+                        'line_count': 0,
+                        'first_edit': tracking.timestamp,
+                        'last_edit': tracking.timestamp
+                    }
+                files_dict[tracking.file_name]['line_count'] += 1
+                if tracking.timestamp < files_dict[tracking.file_name]['first_edit']:
+                    files_dict[tracking.file_name]['first_edit'] = tracking.timestamp
+                if tracking.timestamp > files_dict[tracking.file_name]['last_edit']:
+                    files_dict[tracking.file_name]['last_edit'] = tracking.timestamp
+            
+            file_changes = list(files_dict.values())
+            file_changes.sort(key=lambda f: f['last_edit'], reverse=True)
+            
+        except Exception as e:
+            logger.error(f"Error getting file changes: {e}")
         
         # Convert messages to detailed format
         messages_data = []
@@ -151,7 +184,8 @@ async def get_session_detail(orchestrator, session_id: str) -> Dict[str, Any]:
                 'total_lines_removed': session.total_lines_removed,
                 'files_modified_count': files_modified,
             },
-            'messages': messages_data
+            'messages': messages_data,
+            'file_changes': file_changes
         }
     except HTTPException:
         raise

@@ -1,3 +1,1 @@
-"""API routes for the backend."""
-
-
+"""API routes package."""

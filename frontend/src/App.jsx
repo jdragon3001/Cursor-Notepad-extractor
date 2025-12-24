@@ -6,6 +6,7 @@ import { TimeRangeSelector } from './components/TimeRangeSelector'
 import { StatDetailModal } from './components/StatDetailModal'
 import { MessageDetailModal } from './components/MessageDetailModal'
 import { MessagesView } from './components/MessagesView'
+import { ConversationsView } from './components/ConversationsView'
 import { getStatDescription } from './statDescriptions'
 
 const API_BASE = 'http://127.0.0.1:8000'
@@ -443,6 +444,17 @@ function App() {
                   <MessageSquare className="w-4 h-4 inline mr-2" />
                   MESSAGES ({messagesPagination?.total_count?.toLocaleString() || stats.messages?.total_messages?.value?.toLocaleString() || '0'})
                 </button>
+                
+                <button
+                  onClick={() => setActiveCategory('conversations')}
+                  className={`px-6 py-4 text-sm font-medium whitespace-nowrap transition-colors ${
+                    activeCategory === 'conversations'
+                      ? 'text-primary-600 border-b-2 border-primary-600 bg-white'
+                      : 'text-slate-600 hover:text-slate-800 hover:bg-white'
+                  }`}
+                >
+                  CONVERSATIONS ({stats.sessions?.total_sessions?.value?.toLocaleString() || '0'})
+                </button>
 
                 {Object.keys(stats).filter(cat => cat !== 'messages').map((category) => (
                   <button
@@ -474,9 +486,14 @@ function App() {
                   onMessageClick={(msgId) => setSelectedMessageId(msgId)}
                 />
               )}
+              
+              {/* Conversations View */}
+              {activeCategory === 'conversations' && (
+                <ConversationsView />
+              )}
 
               {/* Stats List View */}
-              {activeCategory !== 'messages' && (
+              {activeCategory !== 'messages' && activeCategory !== 'conversations' && (
                 <div className="space-y-4">
                   {Object.entries(stats)
                     .filter(([category]) => activeCategory === 'all' || activeCategory === category)

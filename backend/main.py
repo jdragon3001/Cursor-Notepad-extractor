@@ -514,6 +514,27 @@ async def get_message_detail(message_id: str) -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=str(e))
 
 
+# ============== SESSION/CONVERSATION ENDPOINTS ==============
+
+@app.get("/api/sessions")
+async def get_sessions(
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    sort: str = Query("recent"),
+    search: Optional[str] = Query(None)
+):
+    """Get paginated list of sessions."""
+    from backend.api.sessions import get_sessions as sessions_handler
+    orchestrator = get_orchestrator()
+    return await sessions_handler(orchestrator, page, limit, sort, search)
+
+@app.get("/api/sessions/{session_id}")  
+async def get_session_detail(session_id: str):
+    """Get session detail with all messages."""
+    from backend.api.sessions import get_session_detail as session_detail_handler
+    orchestrator = get_orchestrator()
+    return await session_detail_handler(orchestrator, session_id)
+
 if __name__ == "__main__":
     import uvicorn
     
@@ -524,4 +545,5 @@ if __name__ == "__main__":
         port=8000,
         log_level="info"
     )
+
 

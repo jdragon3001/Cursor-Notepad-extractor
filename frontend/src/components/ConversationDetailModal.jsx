@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { X, User, Bot, Clock, Code, Terminal, FileText, Lightbulb, ChevronDown, ChevronUp, FileEdit } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import { DiffViewer } from './DiffViewer'
-import { ToolResultDisplay } from './ToolResultDisplay'
+import { X, User, Bot, Clock, Code, Terminal, FileText, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 const API_BASE = 'http://127.0.0.1:8000'
 
@@ -15,7 +13,6 @@ export function ConversationDetailModal({ sessionId, onClose }) {
   const [loading, setLoading] = useState(true)
   const [session, setSession] = useState(null)
   const [messages, setMessages] = useState([])
-  const [fileChanges, setFileChanges] = useState([])
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -31,7 +28,6 @@ export function ConversationDetailModal({ sessionId, onClose }) {
       const response = await axios.get(`${API_BASE}/api/sessions/${sessionId}`)
       setSession(response.data.session)
       setMessages(response.data.messages)
-      setFileChanges(response.data.file_changes || [])
     } catch (err) {
       console.error('Error loading session detail:', err)
       setError(err.response?.data?.detail || 'Failed to load conversation')
@@ -89,35 +85,6 @@ export function ConversationDetailModal({ sessionId, onClose }) {
 
           {!loading && !error && messages.length > 0 && (
             <div className="space-y-6">
-              {/* Files Changed Section */}
-              {fileChanges && fileChanges.length > 0 && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <FileEdit className="w-5 h-5 text-blue-600" />
-                    <h3 className="font-semibold text-blue-900">Files Changed ({fileChanges.length})</h3>
-                  </div>
-                  <div className="space-y-2">
-                    {fileChanges.map((file, index) => (
-                      <div key={index} className="flex items-center justify-between text-sm bg-white rounded px-3 py-2 border border-blue-100">
-                        <div className="flex items-center gap-2 min-w-0 flex-1">
-                          <FileText className="w-4 h-4 text-slate-600 flex-shrink-0" />
-                          <span className="font-mono text-slate-700 truncate" title={file.file_name}>
-                            {file.file_name.split('/').pop() || file.file_name}
-                          </span>
-                          <span className="text-xs text-slate-500">
-                            ({file.file_extension || 'file'})
-                          </span>
-                        </div>
-                        <span className="text-xs text-slate-500 whitespace-nowrap ml-2">
-                          {file.line_count} {file.line_count === 1 ? 'edit' : 'edits'}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Messages */}
               {messages.map((message, index) => (
                 <MessageBubble key={message.id || index} message={message} />
               ))}
@@ -205,10 +172,10 @@ function MessageBubble({ message }) {
 
         {/* Main Text */}
         {message.text && (
-          <div className="prose prose-slate prose-sm max-w-none mb-3">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <div className="prose prose-slate max-w-none mb-3">
+            <div className="text-slate-800 whitespace-pre-wrap break-words">
               {message.text}
-            </ReactMarkdown>
+            </div>
           </div>
         )}
 
@@ -231,7 +198,7 @@ function MessageBubble({ message }) {
         {message.code_blocks && message.code_blocks.length > 0 && (
           <div className="space-y-3 mb-3">
             {message.code_blocks.map((block, index) => (
-              <DiffViewer key={index} codeBlock={block} />
+              <CodeBlockDisplay key={index} block={block} />
             ))}
           </div>
         )}
@@ -239,9 +206,14 @@ function MessageBubble({ message }) {
         {/* Suggested Code Blocks */}
         {message.suggested_code_blocks && message.suggested_code_blocks.length > 0 && (
           <div className="space-y-3 mb-3">
-            <div className="text-sm font-semibold text-blue-600 mb-2">Suggested Edits</div>
             {message.suggested_code_blocks.map((block, index) => (
-              <DiffViewer key={index} codeBlock={block} />
+              <div key={index}>
+                <div className="text-xs text-slate-600 mb-1 flex items-center gap-2">
+                  <Code className="w-3 h-3" />
+                  <span>Suggested Edit: {block.file_path || 'code'}</span>
+                </div>
+                <CodeBlockDisplay block={block} />
+              </div>
             ))}
           </div>
         )}
@@ -285,5 +257,70 @@ function MessageBubble({ message }) {
   )
 }
 
+/**
+ * CodeBlockDisplay - Display a code block with syntax highlighting
+ */
+function CodeBlockDisplay({ block }) {
+  const language = block.language || block.lang || 'text'
+  const code = block.code || block.content || ''
+  
+  return (
+    <div className="rounded-lg overflow-hidden border border-slate-300">
+      {block.file_path && (
+        <div className="bg-slate-700 text-slate-200 px-3 py-1 text-xs font-mono">
+          {block.file_path}
+        </div>
+      )}
+      <SyntaxHighlighter
+        language={language}
+        style={vscDarkPlus}
+        customStyle={{
+          margin: 0,
+          borderRadius: 0,
+          fontSize: '0.85rem'
+        }}
+      >
+        {code}
+      </SyntaxHighlighter>
+    </div>
+  )
+}
 
+/**
+ * ToolResultDisplay - Display a tool call and its result
+ */
+function ToolResultDisplay({ tool, index, expanded, onToggle }) {
+  const toolName = tool.tool_name || tool.name || 'Tool'
+  const toolResult = tool.result || tool.output || ''
+  
+  return (
+    <div className="border border-slate-300 rounded-lg overflow-hidden">
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between p-3 bg-slate-50 hover:bg-slate-100 transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <Terminal className="w-4 h-4 text-slate-600" />
+          <span className="text-sm font-medium text-slate-800">{toolName}</span>
+          {tool.status && (
+            <span className={`text-xs px-2 py-0.5 rounded-full ${
+              tool.status === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+            }`}>
+              {tool.status}
+            </span>
+          )}
+        </div>
+        {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+      </button>
+      
+      {expanded && (
+        <div className="p-3 bg-slate-900 text-slate-100 text-xs font-mono overflow-x-auto">
+          <pre className="whitespace-pre-wrap break-words">
+            {typeof toolResult === 'string' ? toolResult : JSON.stringify(toolResult, null, 2)}
+          </pre>
+        </div>
+      )}
+    </div>
+  )
+}
 

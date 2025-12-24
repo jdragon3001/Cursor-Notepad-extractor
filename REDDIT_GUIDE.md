@@ -1,20 +1,21 @@
-# Cursor Stats Dashboard - Installation Guide
+# Cursor Stats Dashboard - Reddit Installation Guide
 
 ## What This Is
 
-A local web dashboard that visualizes your Cursor IDE usage statistics. Shows metrics including:
+A local web dashboard that visualizes your Cursor IDE usage statistics. Shows 124+ metrics including:
 - Message and session counts
-- Tool usage
+- Tool usage patterns
+- Code changes and diffs
 - Daily usage trends
-- More
+- Context provided to AI
 
-Your data stays on your computer. This runs 100% locally.
+**Important:** Your data stays on your computer. This runs 100% locally.
 
 ---
 
 ## Requirements
 
-- **Cursor IDE** with some usage history
+- **Cursor IDE** (not VS Code) with some usage history
 - **Python 3.8+** ([Download](https://www.python.org/downloads/))
 - **Node.js 16+** ([Download](https://nodejs.org/))
 - **5-10 minutes** for setup

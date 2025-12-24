@@ -20,9 +20,7 @@ def main():
     print("Starting backend server...")
     backend_process = subprocess.Popen(
         [sys.executable, "main.py"],
-        cwd=backend_dir,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        cwd=backend_dir
     )
     
     # Wait for backend to start

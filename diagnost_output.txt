@@ -1,0 +1,116 @@
+﻿python : INFO:stats.extractors.base_extractor:Connected to database: state.vscdb
+At C:\Users\jackw\AppData\Local\Temp\ps-script-4c2e9a18-6dd2-4814-928f-6b0786d88cfa.ps1:111 char:53
++ ... extractor"; python scripts/validation/diagnose_stat_issues.py 2>&1 |  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO:stats.extr...se: state.vscdb:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO:stats.extractors.message_extractor:Extracting messages from cursorDiskKV...
+INFO:stats.extractors.message_extractor:Extracted 70458 messages (0 errors)
+INFO:stats.extractors.base_extractor:Disconnected from database: state.vscdb
+INFO:stats.extractors.base_extractor:Connected to database: state.vscdb
+INFO:stats.extractors.session_extractor:Extracting sessions from cursorDiskKV...
+INFO:stats.extractors.session_extractor:Extracted 1024 sessions (0 errors)
+INFO:stats.extractors.base_extractor:Disconnected from database: state.vscdb
+ERROR:__main__:Error during diagnosis: 'Session' object has no attribute 'session_id'
+Traceback (most recent call last):
+  File "C:\notepad extractor\Cursor-Notepad-extractor\scripts\validation\diagnose_stat_issues.py", line 320, in main
+    diagnose_sessions_per_workspace(sessions)
+  File "C:\notepad extractor\Cursor-Notepad-extractor\scripts\validation\diagnose_stat_issues.py", line 195, in 
+diagnose_sessions_per_workspace
+    print(f"\n   Session {i} (ID: {session.session_id[:20]}...):")
+                                   ^^^^^^^^^^^^^^^^^^
+AttributeError: 'Session' object has no attribute 'session_id'
+
+================================================================================
+CURSOR STATS DIAGNOSTIC TOOL
+================================================================================
+
+This tool will help identify why certain stats appear incorrect.
+
+Γ£à Using database: C:\Users\jackw\AppData\Roaming\Cursor\User\globalStorage\state.vscdb
+
+================================================================================
+DATA SOURCES CHECK
+================================================================================
+
+≡ƒôè cursorDiskKV table:
+   bubbleId entries (messages): 70458
+   composerData entries (sessions): 1086
+
+≡ƒôà Data date range (sample of 1000 messages):
+   Earliest: 2025-10-08
+   Latest: 2025-10-08
+   Span: 0 days
+
+≡ƒôè Workspace databases found: 244
+   Γ£à Workspace databases are available
+   ΓÜá∩╕Å  But they may not be used in extraction yet!
+
+≡ƒôÑ Extracting messages...
+Γ£à Extracted 70458 messages
+
+≡ƒôÑ Extracting sessions...
+Γ£à Extracted 1024 sessions
+
+================================================================================
+ACTIVITY STREAK DIAGNOSIS
+================================================================================
+
+≡ƒôè Total unique active days: 1
+≡ƒôà First activity: 2025-12-22
+≡ƒôà Last activity: 2025-12-22
+≡ƒôà Total span: 1 days
+
+≡ƒöÑ Longest streak: 1 days
+
+ΓÜá∩╕Å  No consecutive day streaks found!
+
+≡ƒöì Showing sample of dates to understand gaps:
+   2025-12-22
+
+≡ƒöÑ Current streak (from today): 1 days
+
+Γ¥î ISSUE DETECTED: Longest streak is 1 day
+   This means no consecutive days of activity were found.
+   Possible causes:
+   1. Data extraction is only getting messages from single days
+   2. Timezone issues causing date grouping problems
+   3. Missing historical data
+
+================================================================================
+INACTIVE DAYS DIAGNOSIS
+================================================================================
+
+≡ƒôè Date range: 2025-12-22 to 2025-12-22
+≡ƒôè Total days in range: 1
+Γ£à Active days: 1
+Γ¥î Inactive days: 0
+≡ƒôê Activity rate: 100.0%
+
+ΓÜá∩╕Å  ISSUE DETECTED: Zero inactive days
+   This means you were active EVERY single day in the date range.
+   Possible causes:
+   1. Data range is too small (only spans days you were active)
+   2. Missing older historical data
+
+≡ƒöì Checking for gaps in the 1 active days...
+   No gaps found - truly active every day!
+
+================================================================================
+SESSIONS PER WORKSPACE DIAGNOSIS
+================================================================================
+
+≡ƒôè Total sessions: 1024
+≡ƒôü Unique workspaces detected: 0
+≡ƒôè Sessions with workspace info: 0
+≡ƒôè Sessions without workspace info: 1024
+
+Γ¥î ISSUE DETECTED: Only 1 or 0 workspaces detected
+   This makes 'sessions per workspace' equal to total sessions.
+   Possible causes:
+   1. Only extracting from global DB (not workspace DBs)
+   2. Workspace information not being parsed correctly
+   3. All sessions are from the same workspace
+
+≡ƒöì Checking session workspace data:

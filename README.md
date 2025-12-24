@@ -1,187 +1,145 @@
-# Cursor Notepad Extractor
+# Cursor Stats Dashboard
 
-A streamlined utility for finding, extracting, and managing notes stored in Cursor editor databases. Features a modern, clean interface with sophisticated UI design for production-ready user experience.
+A beautiful web dashboard to visualize and analyze your Cursor IDE usage statistics. Works on **Windows, macOS, and Linux**.
 
-## ✅ **Project Status: Cleaned & Optimized**
+## 🚀 Quick Start
 
-Successfully extracted 214 note entries from 163 Cursor workspace databases. Project has been cleaned up to remove unnecessary files and minimize dependencies.
+### Prerequisites
+- **Python 3.8+** with pip ([Download](https://www.python.org/downloads/))
+- **Node.js 16+** with npm ([Download](https://nodejs.org/))
+- **Cursor IDE** with some usage history
 
-## 🚀 **Choose Your Setup Method**
+### Installation & Launch
 
-### **Option 1: Standalone Executable (Easiest) ⭐**
-**Perfect for non-technical users - no setup required!**
+**Step 1: Install Dependencies**
 ```bash
-# 1. Download CursorNoteSearch.exe (16MB)
-# 2. Double-click to run
-# 3. That's it! No Python, conda, or dependencies needed
+# Install Python packages
+pip install -r requirements.txt
+pip install -r backend/requirements.txt
+
+# Install Node.js packages
+cd frontend
+npm install
+cd ..
 ```
-📁 **[Download: CursorNoteSearch.exe](dist/CursorNoteSearch.exe)** (16MB)
 
-### **Option 2: Python Setup (For Developers)**
-**Full source code with customization capabilities**
+**Step 2: Launch**
 
-**New Computer Setup (Automated):**
+Choose your preferred method:
+
+**🎯 Option A: Easy Launch (Recommended)**
 ```bash
-# 1. Download/copy the project folder to any computer
-# 2. Double-click this file to set everything up:
-setup_for_new_computer.bat
+python launch_dashboard.py
 ```
 
-**Manual Setup:**
+**🪟 Option B: Windows PowerShell**
+```powershell
+.\deploy.ps1
+```
+
+**📋 Option C: Manual (Two Terminals)**
 ```bash
-# 1. Install Miniconda (if not already installed)
-# Download from: https://docs.conda.io/en/latest/miniconda.html
+# Terminal 1
+cd backend
+python main.py
 
-# 2. Run the application (it will create environment automatically)
-start_note_search.bat
+# Terminal 2
+cd frontend
+npm run dev
 ```
 
-**Expert Setup:**
+**That's it!** Open http://localhost:5173 to see your stats.
+
+> 💡 **First time?** See `INSTALLATION.md` for detailed setup instructions and troubleshooting.
+
+## 📍 Database Locations
+
+The dashboard automatically finds your Cursor database at:
+
+- **Windows**: `C:\Users\<YourName>\AppData\Roaming\Cursor\User\globalStorage\state.vscdb`
+- **macOS**: `~/Library/Application Support/Cursor/User/globalStorage/state.vscdb`
+- **Linux**: `~/.config/Cursor/User/globalStorage/state.vscdb`
+
+No configuration needed - it just works!
+
+## 📊 Features
+
+- **139 Stats** - All calculated statistics from your Cursor usage
+- **Search & Filter** - Find specific stats quickly
+- **Category Organization** - Stats organized into 6 categories
+- **Real-time Data** - Live connection to your Cursor database
+- **Beautiful UI** - Modern, professional React interface
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐         ┌──────────────────┐
+│  React Frontend │ ◄─────► │  FastAPI Backend │
+│  (Port 5173)    │  REST   │  (Port 8000)     │
+└─────────────────┘         └──────────────────┘
+                                     │
+                                     ▼
+                            ┌─────────────────┐
+                            │ StatsOrchestrator│
+                            │   Extractors     │
+                            │   Calculators    │
+                            └─────────────────┘
+```
+
+## 📁 Project Structure
+
+```
+cursor-notepad-extractor/
+├── backend/
+│   ├── main.py              # FastAPI server
+│   ├── requirements.txt     # Python dependencies
+│   └── api/
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx         # Main React component
+│   │   └── index.css       # TailwindCSS styles
+│   ├── package.json
+│   └── vite.config.js
+├── stats/                   # Your existing stats code
+│   ├── orchestrator.py
+│   ├── calculators/
+│   ├── extractors/
+│   └── models/
+└── launch_dashboard.py      # Easy launcher
+```
+
+## 🎯 API Endpoints
+
+- `GET /` - Health check
+- `GET /api/summary` - Data summary
+- `GET /api/stats/all` - All statistics
+- `GET /api/stats/{category}` - Stats by category
+- `GET /api/stats/{category}/{stat_id}` - Single stat
+- `POST /api/cache/clear` - Clear cache
+
+## 🔧 Development
+
+**Backend (FastAPI)**:
 ```bash
-conda create -n cursor-notepad-browser python=3.10 -y
-conda activate cursor-notepad-browser
-pip install reportlab python-docx
-python note_search_gui.py
+cd backend
+uvicorn main:app --reload
 ```
 
-## 🌍 **Portability Features**
-
-**✅ Works on any Windows computer** - No hardcoded paths
-**✅ Works for any user** - Automatically finds the current user's Cursor data
-**✅ Multiple distribution methods** - Executable or Python source
-**✅ Auto-setup** - Creates conda environment if it doesn't exist (Python version)
-**✅ Zero setup** - Just download and run (Executable version)
-
-### **What's Automatically Detected:**
-- **User home directory** - `%USERPROFILE%\AppData\Roaming\Cursor\...`
-- **Cursor workspace databases** - Finds all workspace storage automatically  
-- **Conda environment** - Creates one if none exists (Python version)
-- **Dependencies** - All included in executable, auto-installed in Python version
-
-## 🎯 **Which Version Should You Choose?**
-
-| Feature | 🚀 Executable Version | 🐍 Python Version |
-|---------|----------------------|-------------------|
-| **Setup Required** | None - just download | conda + dependencies |
-| **File Size** | 16MB standalone | ~1MB source code |
-| **Technical Knowledge** | None required | Basic command line |
-| **Customization** | Limited | Full source access |
-| **Updates** | Download new .exe | Edit source directly |
-| **Performance** | Good (2-5s startup) | Excellent (instant) |
-| **Perfect For** | End users, sharing | Developers, power users |
-
-## Features
-
-- **Modern, clean UI** - Professional design with smooth interactions and visual feedback
-- **Auto-scanning on startup** - Automatically finds your notes when you open the GUI
-- **Smart search** - Search through notes content and titles with real-time filtering  
-- **Individual note parsing** - Separates individual notes within notepad files
-- **Multiple export formats** - Export to TXT, PDF, DOCX, and Markdown formats
-- **Copy to clipboard** - Quick copying of note content with visual confirmation
-- **Sort and filter** - Sort notes by title or modification date
-
-## 📁 **Project Structure (Portable)**
-
-After cleanup, the project contains only essential files:
-
-```
-📁 Cursor Notepad Extractor/
-├── 🚀 setup_for_new_computer.bat  # First-time setup (run this on new computer)
-├── 🚀 start_note_search.bat       # Daily launcher (double-click to run)
-├── note_search_gui.py             # Main application
-├── note_finder.py                 # Database scanner (auto-detects user paths)
-├── note_parser.py                 # Note content parser
-├── requirements.txt               # Dependencies
-├── cursor_notes_found.txt         # Your extracted notes (763KB)
-├── your_cursor_notes.txt          # Clean notepad content (18KB)
-├── 📁 database/
-│   ├── cursor_db.py              # Database access
-│   └── __init__.py
-├── 📁 utils/
-│   ├── config.py                 # Auto-detects user paths
-│   └── __init__.py
-└── 📁 docs/
-    ├── README.md                 # This file
-    ├── STRUCTURE.md              # Project architecture
-    ├── PROBLEM_LOG.txt           # Issue tracking
-    └── DEPRECATED.txt            # What to avoid
-```
-
-## 📋 **System Requirements**
-
-**Required:**
-- Windows 10/11 (uses Windows-specific paths)
-- Python 3.10+ (installed automatically via conda)
-- Cursor editor installed (with workspace data)
-
-**Automatically Installed:**
-- Miniconda (if you run setup script)
-- reportlab (PDF export)
-- python-docx (Word export)
-
-**Built-in (no installation needed):**
-- tkinter (GUI)
-- sqlite3 (database access)
-- pathlib, json, threading (utilities)
-
-## 🎮 **Usage Examples**
-
-### **First Time on New Computer:**
-1. Copy project folder to computer
-2. Double-click `setup_for_new_computer.bat`
-3. Wait for setup to complete
-4. Application launches automatically
-
-### **Daily Use:**
-1. Double-click `start_note_search.bat`
-2. Wait for auto-scan: "Auto-scan complete: Found X notes"
-3. Search for notepad content: Type `notepad`
-4. Browse and export your notes
-
-### **Find Specific Projects:**
-- Type `notepad` → Your actual notepad content
-- Type `macro` → Automation project notes
-- Type `RAG` → AI system specifications  
-- Type `ghost` → Desktop widget project
-- Type `download` → File sharing tool ideas
-
-## 🎯 Quick Start - Find Your Notepads
-
-### Simple Method (Recommended):
+**Frontend (React + Vite)**:
 ```bash
-python note_search_gui.py
+cd frontend
+npm run dev
 ```
 
-**The GUI will automatically scan for notes when it starts!** Just wait for it to complete, then type `notepad` in the search box to filter your notepad entries.
+## 🎨 Technology Stack
 
-### Manual Method:
-```bash
-python note_finder.py    # Extract notes
-python simple_note_search.py    # Alternative GUI
-```
+- **Frontend**: React 18, Vite, TailwindCSS, Axios, Lucide Icons
+- **Backend**: FastAPI, Python 3.8+, Pydantic
+- **Data**: SQLite, NumPy, Your existing stats system
 
-## 🛠️ Troubleshooting
+## 📝 Notes
 
-### "No notes file found"
-Run `python note_finder.py` first to scan databases
-
-### "Memory issues"
-Use `simple_note_search.py` instead of `main.py`
-
-### "Can't find specific notes"
-Try different search terms - notes might be stored under different keys
-
-## 📝 Next Steps
-
-1. **Search for your notepad content** using the GUI
-2. **Export important notes** to separate files
-3. **Organize by project** using filtered exports
-4. **Set up regular backups** of important notes
-
----
-
-**Success!** 🎉 Your Cursor notepad content has been successfully extracted and is now searchable and exportable.
-
-## Development Notes
-
-Created by Claude Sonnet 4 for extracting Cursor editor notepad content from SQLite workspace storage databases. Handles memory efficiently and provides practical search/export functionality. 
+- Backend runs on `http://localhost:8000`
+- Frontend runs on `http://localhost:5173`
+- CORS is configured for local development
+- All your existing Python stats code is preserved and used

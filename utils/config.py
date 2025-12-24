@@ -11,15 +11,36 @@ from typing import Optional
 class Config:
     """Application configuration management."""
     
-    # Dynamic workspace storage path - works on any Windows user account
+    # Dynamic workspace storage path - works on Windows, Mac, and Linux
     @classmethod
     def get_default_workspace_path(cls) -> str:
         """Get the default Cursor workspace path for the current user."""
-        # Use expanduser to get the current user's home directory
         user_home = Path.home()
-        # Standard Cursor workspace path relative to user directory
-        workspace_path = user_home / "AppData" / "Roaming" / "Cursor" / "User" / "workspaceStorage"
+        
+        # Platform-specific paths
+        if os.name == 'nt':  # Windows
+            workspace_path = user_home / "AppData" / "Roaming" / "Cursor" / "User" / "workspaceStorage"
+        elif os.uname().sysname == 'Darwin':  # macOS
+            workspace_path = user_home / "Library" / "Application Support" / "Cursor" / "User" / "workspaceStorage"
+        else:  # Linux
+            workspace_path = user_home / ".config" / "Cursor" / "User" / "workspaceStorage"
+        
         return str(workspace_path)
+    
+    @classmethod
+    def get_global_db_path(cls) -> Path:
+        """Get the global Cursor database path (cross-platform)."""
+        user_home = Path.home()
+        
+        # Platform-specific paths for global database
+        if os.name == 'nt':  # Windows
+            db_path = user_home / "AppData" / "Roaming" / "Cursor" / "User" / "globalStorage" / cls.DB_FILENAME
+        elif os.uname().sysname == 'Darwin':  # macOS
+            db_path = user_home / "Library" / "Application Support" / "Cursor" / "User" / "globalStorage" / cls.DB_FILENAME
+        else:  # Linux
+            db_path = user_home / ".config" / "Cursor" / "User" / "globalStorage" / cls.DB_FILENAME
+        
+        return db_path
     
     # Application settings
     APP_NAME = "Cursor Notepad Extractor"

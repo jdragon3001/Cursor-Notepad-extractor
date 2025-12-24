@@ -73,13 +73,13 @@ Successfully extracted and provided searchable access to 214 note entries from C
 ### **Dependencies Optimized:**
 - ✅ **Core dependencies:** Built-in Python modules only (tkinter, sqlite3, pathlib, json)
 - ✅ **Optional dependencies:** reportlab (PDF), python-docx (DOCX) - installed and working
-- ✅ **Environment:** Using existing `cursor-notepad-browser` conda environment
+- ✅ **Environment:** Using existing `cursor-extractor` conda environment
 
 ## 🎮 **SIMPLIFIED WORKFLOW**
 
 ### **Single Command Startup:**
 ```bash
-conda activate cursor-notepad-browser
+conda activate cursor-extractor
 python note_search_gui.py
 ```
 

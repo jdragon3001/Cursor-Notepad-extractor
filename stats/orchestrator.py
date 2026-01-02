@@ -24,6 +24,7 @@ from stats.calculators.tool_stats import ToolCalculator
 from stats.calculators.context_stats import ContextCalculator
 from stats.filters.temporal_filter import TemporalFilter
 from stats.cache import StatsCache
+from stats.consolidator import MessageConsolidator
 
 logger = logging.getLogger(__name__)
 
@@ -175,17 +176,27 @@ class StatsOrchestrator:
             filtered_daily_stats = self._daily_stats
             filtered_request_contexts = self._request_contexts
         
+        # Consolidate messages (merge AI message fragments into logical turns)
+        logger.info("Consolidating messages...")
+        try:
+            consolidated_messages = MessageConsolidator.consolidate(filtered_messages)
+            logger.info(f"  Consolidated {len(filtered_messages)} raw messages into {len(consolidated_messages)} logical messages")
+            messages_for_stats = consolidated_messages if consolidated_messages else filtered_messages
+        except Exception as e:
+            logger.error(f"  Consolidation failed, using raw messages: {e}")
+            messages_for_stats = filtered_messages
+        
         logger.info("Calculating stats...")
         all_stats = {}
         
         # Calculate message stats
         logger.info("  Calculating message stats...")
-        message_calc = MessageCalculator(filtered_messages)
+        message_calc = MessageCalculator(messages_for_stats)
         all_stats['messages'] = message_calc.calculate_all()
         
         # Calculate session stats
         logger.info("  Calculating session stats...")
-        session_calc = SessionCalculator(filtered_sessions, filtered_messages)
+        session_calc = SessionCalculator(filtered_sessions, messages_for_stats)
         all_stats['sessions'] = session_calc.calculate_all()
         
         # Calculate code & diffs stats
@@ -200,7 +211,7 @@ class StatsOrchestrator:
         
         # Calculate tool usage stats
         logger.info("  Calculating tool usage stats...")
-        tool_calc = ToolCalculator(filtered_messages)
+        tool_calc = ToolCalculator(messages_for_stats)
         all_stats['tools'] = tool_calc.calculate_all()
         
         # Calculate context stats

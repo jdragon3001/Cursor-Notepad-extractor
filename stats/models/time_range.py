@@ -63,8 +63,9 @@ class TimeRange:
         Returns:
             TimeRange object
         """
+        # Get current time - make sure we're using the actual current time
         now = datetime.now()
-        today = date.today()
+        today = now.date()  # Use now.date() to ensure consistency
         
         if preset == "today":
             start = datetime.combine(today, datetime.min.time())
@@ -127,9 +128,9 @@ class TimeRange:
             label = str(now.year)
         
         elif preset == "all_time":
-            # Use a very early date
-            start = datetime(2020, 1, 1)
-            end = now
+            # ALL TIME means ALL TIME - don't filter anything by date
+            start = datetime(1970, 1, 1)  # Unix epoch - earlier than any possible data
+            end = datetime(2099, 12, 31, 23, 59, 59)  # Far future - includes everything
             label = "All Time"
         
         else:

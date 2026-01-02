@@ -293,6 +293,7 @@ async def get_messages(
     has_tools: Optional[bool] = Query(None, description="Filter messages with tool usage"),
     session_id: Optional[str] = Query(None, description="Filter by session ID"),
     search: Optional[str] = Query(None, description="Search in message text"),
+    preset: Optional[str] = Query(None, description="Preset time range (last_7_days, last_30_days, etc.)"),
     start_date: Optional[str] = Query(None, description="Start date filter"),
     end_date: Optional[str] = Query(None, description="End date filter"),
 ) -> Dict[str, Any]:
@@ -302,7 +303,25 @@ async def get_messages(
         
         # Get all messages
         messages = orchestrator.messages
-        logger.info(f"Raw messages before consolidation: {len(messages)}")
+        logger.info(f"Raw messages before filtering: {len(messages)}")
+        
+        # Determine time range to apply
+        from stats.filters.temporal_filter import TemporalFilter
+        if preset:
+            # Use preset time range
+            time_filter = TimeRange.from_preset(preset)
+            logger.info(f"Using preset time range: {preset}")
+        elif start_date and end_date:
+            # Use custom time range
+            time_filter = TimeRange.from_iso_strings(start_date, end_date)
+            logger.info(f"Using custom time range: {start_date} to {end_date}")
+        else:
+            # Default to all_time for consistency with stats
+            time_filter = TimeRange.from_preset('all_time')
+            logger.info("Using default all_time filter")
+        
+        messages = TemporalFilter.filter_messages(messages, time_filter)
+        logger.info(f"After time filter: {len(messages)}")
         
         # Try to consolidate AI message fragments into logical conversation turns
         try:
@@ -313,14 +332,10 @@ async def get_messages(
             logger.error(f"Consolidation failed, using raw messages: {e}", exc_info=True)
             messages_to_use = messages
         
-        # Apply filters
+        # Apply additional filters
         filtered_messages = messages_to_use
         
-        # Filter by time range
-        if start_date and end_date:
-            time_range = TimeRange.from_iso_strings(start_date, end_date)
-            from stats.filters.temporal_filter import TemporalFilter
-            filtered_messages = TemporalFilter.filter_messages(filtered_messages, time_range)
+        # NOTE: Time filtering already applied above, no need to apply again here
         
         # Filter by type
         if message_type == "user":

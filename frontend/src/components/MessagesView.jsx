@@ -170,8 +170,26 @@ export function MessagesView({ messages, loading, pagination, filters, onFilterC
 
       {/* Results Count */}
       {pagination && (
-        <div className="text-sm text-slate-600">
-          Showing {((pagination.page - 1) * pagination.limit) + 1} - {Math.min(pagination.page * pagination.limit, pagination.total_count)} of {pagination.total_count.toLocaleString()} messages
+        <div className="flex items-center justify-between text-sm text-slate-600">
+          <div>
+            {filters.search ? (
+              <span>
+                <span className="font-semibold">{pagination.total_count.toLocaleString()}</span> results for "{filters.search}"
+              </span>
+            ) : (
+              <span>
+                Showing {((pagination.page - 1) * pagination.limit) + 1} - {Math.min(pagination.page * pagination.limit, pagination.total_count)} of {pagination.total_count.toLocaleString()} messages
+              </span>
+            )}
+          </div>
+          {filters.search && (
+            <button
+              onClick={() => onFilterChange('search', '')}
+              className="text-primary-600 hover:text-primary-700 font-medium"
+            >
+              Clear search
+            </button>
+          )}
         </div>
       )}
 
@@ -179,7 +197,9 @@ export function MessagesView({ messages, loading, pagination, filters, onFilterC
       {loading && (
         <div className="text-center py-12">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-          <p className="text-slate-600 mt-4">Loading messages...</p>
+          <p className="text-slate-600 mt-4">
+            {filters.search ? `Searching for "${filters.search}"...` : 'Loading messages...'}
+          </p>
         </div>
       )}
 
@@ -201,8 +221,12 @@ export function MessagesView({ messages, loading, pagination, filters, onFilterC
       {!loading && (!messages || messages.length === 0) && (
         <div className="text-center py-12">
           <MessageSquare className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-slate-700 mb-2">No messages found</h3>
-          <p className="text-slate-500">Try adjusting your filters</p>
+          <h3 className="text-xl font-semibold text-slate-700 mb-2">
+            {filters.search ? `No results for "${filters.search}"` : 'No messages found'}
+          </h3>
+          <p className="text-slate-500">
+            {filters.search ? 'Try a different search term' : 'Try adjusting your filters'}
+          </p>
         </div>
       )}
 

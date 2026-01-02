@@ -550,6 +550,91 @@ async def get_session_detail(session_id: str):
     orchestrator = get_orchestrator()
     return await session_detail_handler(orchestrator, session_id)
 
+# ============== CODE DIFF ENDPOINTS ==============
+
+@app.get("/api/code-diffs")
+async def get_code_diffs(
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    sort: str = Query("recent"),
+    session_id: Optional[str] = Query(None),
+    search: Optional[str] = Query(None)
+):
+    """Get paginated list of code diffs."""
+    from backend.api.code import get_code_diffs as code_diffs_handler
+    orchestrator = get_orchestrator()
+    return await code_diffs_handler(orchestrator, page, limit, sort, session_id, search)
+
+@app.get("/api/code-diffs/{diff_id}")
+async def get_code_diff_detail(diff_id: str):
+    """Get detailed information about a specific code diff."""
+    from backend.api.code import get_code_diff_detail as code_diff_detail_handler
+    orchestrator = get_orchestrator()
+    return await code_diff_detail_handler(orchestrator, diff_id)
+
+# ============== DAILY ACTIVITY ENDPOINTS ==============
+
+@app.get("/api/daily-activity")
+async def get_daily_activity(
+    start_date: Optional[str] = Query(None),
+    end_date: Optional[str] = Query(None)
+):
+    """Get daily activity summary."""
+    from backend.api.daily import get_daily_activity as daily_activity_handler
+    orchestrator = get_orchestrator()
+    return await daily_activity_handler(orchestrator, start_date, end_date)
+
+@app.get("/api/daily-activity/{date_str}")
+async def get_daily_detail(date_str: str):
+    """Get detailed information for a specific day."""
+    from backend.api.daily import get_daily_detail as daily_detail_handler
+    orchestrator = get_orchestrator()
+    return await daily_detail_handler(orchestrator, date_str)
+
+# ============== TOOLS ENDPOINTS ==============
+
+@app.get("/api/tools")
+async def get_tool_calls(
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    tool_type: Optional[str] = Query(None),
+    session_id: Optional[str] = Query(None),
+    search: Optional[str] = Query(None)
+):
+    """Get paginated list of tool calls."""
+    from backend.api.tools import get_tool_calls as tools_handler
+    orchestrator = get_orchestrator()
+    return await tools_handler(orchestrator, page, limit, tool_type, session_id, search)
+
+@app.get("/api/tools/{tool_id}")
+async def get_tool_detail(tool_id: str):
+    """Get detailed information about a specific tool call."""
+    from backend.api.tools import get_tool_detail as tool_detail_handler
+    orchestrator = get_orchestrator()
+    return await tool_detail_handler(orchestrator, tool_id)
+
+# ============== CONTEXT ENDPOINTS ==============
+
+@app.get("/api/context")
+async def get_context_items(
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    context_type: Optional[str] = Query(None),
+    session_id: Optional[str] = Query(None),
+    search: Optional[str] = Query(None)
+):
+    """Get paginated list of context items."""
+    from backend.api.context import get_context_items as context_handler
+    orchestrator = get_orchestrator()
+    return await context_handler(orchestrator, page, limit, context_type, session_id, search)
+
+@app.get("/api/context/{context_id}")
+async def get_context_detail(context_id: str):
+    """Get detailed information about a specific context item."""
+    from backend.api.context import get_context_detail as context_detail_handler
+    orchestrator = get_orchestrator()
+    return await context_detail_handler(orchestrator, context_id)
+
 if __name__ == "__main__":
     import uvicorn
     

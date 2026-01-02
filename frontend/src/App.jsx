@@ -7,6 +7,11 @@ import { StatDetailModal } from './components/StatDetailModal'
 import { MessageDetailModal } from './components/MessageDetailModal'
 import { MessagesView } from './components/MessagesView'
 import { ConversationsView } from './components/ConversationsView'
+import { SessionsView } from './components/SessionsView'
+import { CodeDiffsView } from './components/CodeDiffsView'
+import { DailyActivityView } from './components/DailyActivityView'
+import { ToolsView } from './components/ToolsView'
+import { ContextView } from './components/ContextView'
 import { getStatDescription } from './statDescriptions'
 
 const API_BASE = 'http://127.0.0.1:8000'
@@ -489,11 +494,42 @@ function App() {
               
               {/* Conversations View */}
               {activeCategory === 'conversations' && (
-                <ConversationsView />
+                <ConversationsView timeRange={timeRange} />
+              )}
+
+              {/* Sessions View */}
+              {activeCategory === 'sessions' && (
+                <SessionsView timeRange={timeRange} />
+              )}
+
+              {/* Code Diffs View */}
+              {activeCategory === 'code' && (
+                <CodeDiffsView timeRange={timeRange} />
+              )}
+
+              {/* Daily Activity View */}
+              {activeCategory === 'daily' && (
+                <DailyActivityView timeRange={timeRange} />
+              )}
+
+              {/* Tools View */}
+              {activeCategory === 'tools' && (
+                <ToolsView timeRange={timeRange} />
+              )}
+
+              {/* Context View */}
+              {activeCategory === 'context' && (
+                <ContextView timeRange={timeRange} />
               )}
 
               {/* Stats List View */}
-              {activeCategory !== 'messages' && activeCategory !== 'conversations' && (
+              {activeCategory !== 'messages' && 
+               activeCategory !== 'conversations' && 
+               activeCategory !== 'sessions' && 
+               activeCategory !== 'code' && 
+               activeCategory !== 'daily' && 
+               activeCategory !== 'tools' && 
+               activeCategory !== 'context' && (
                 <div className="space-y-4">
                   {Object.entries(stats)
                     .filter(([category]) => activeCategory === 'all' || activeCategory === category)

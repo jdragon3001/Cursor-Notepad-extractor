@@ -321,6 +321,13 @@ React + Vite application for the dashboard UI.
 - `TimeRangeSelector.jsx` - Time range filtering (presets + custom)
 - `StatDetailModal.jsx` - Drill-down modal with time series charts
 - `MessageDetailModal.jsx` - Full message detail view with raw/formatted toggle
+- `MessagesView.jsx` - Browse messages tab with pagination and filters
+- `ConversationsView.jsx` - Browse conversations/sessions tab
+- `SessionsView.jsx` - Browse all sessions with detail modals ✨ NEW
+- `CodeDiffsView.jsx` - Browse code diffs with change details ✨ NEW
+- `DailyActivityView.jsx` - Calendar heatmap and daily activity ✨ NEW
+- `ToolsView.jsx` - Browse AI tool calls with parameters/results ✨ NEW
+- `ContextView.jsx` - Browse context items (linter, git, etc.) ✨ NEW
 
 ### Pages (`src/pages/`)
 - `BrowsePage.jsx` - Browse messages, sessions, and raw data
@@ -337,10 +344,41 @@ React + Vite application for the dashboard UI.
 ✅ Stats dashboard with 124+ metrics
 ✅ Temporal filtering (11 presets + custom ranges)
 ✅ Drill-down modals with time series charts
-✅ Browse messages with pagination
-✅ Search, filter, and sort messages
-✅ Raw/formatted data toggle
+✅ Browse messages with pagination and filters
+✅ Browse conversations/sessions with full threads
+✅ Browse all sessions with details ✨ NEW
+✅ Browse code diffs with change previews ✨ NEW
+✅ Calendar heatmap view of daily activity ✨ NEW
+✅ Browse AI tool calls with parameters/results ✨ NEW
+✅ Browse context items (linter, git, files, etc.) ✨ NEW
+✅ Search, filter, and sort across all views
+✅ Modal detail views for all data types
 ✅ Responsive design (desktop optimized)
+
+---
+
+## 🆕 **Recent Updates - January 1, 2026**
+
+### Tab Data Views Implementation
+Transformed 5 tabs from stats-only views to full data browsing experiences:
+
+1. **SESSIONS Tab**: Browse all coding sessions with durations, message counts, code changes
+2. **CODE Tab**: View all code diffs with line-by-line changes
+3. **DAILY Tab**: Calendar heatmap + daily activity breakdowns (composer/tab stats)
+4. **TOOLS Tab**: Browse all AI tool calls (read_file, grep, search_replace, etc.)
+5. **CONTEXT Tab**: View context provided to AI (linter errors, git status, file context, TODOs)
+
+**New Backend Endpoints**:
+- `/api/code-diffs` - List and detail code diffs
+- `/api/daily-activity` - Daily activity calendar and day details
+- `/api/tools` - List and detail tool calls
+- `/api/context` - List and detail context items
+
+**New Frontend Components**:
+- `SessionsView.jsx`, `CodeDiffsView.jsx`, `DailyActivityView.jsx`
+- `ToolsView.jsx`, `ContextView.jsx`
+
+See `docs/planning/TABS-DATA-VIEWS-IMPLEMENTATION-COMPLETE-JAN-1-2026.md` for full details.
 
 ---
 
@@ -355,4 +393,4 @@ React + Vite application for the dashboard UI.
 
 ---
 
-*Last updated: December 23, 2025 - Temporal Filtering & Drill-Down Implementation Complete*
+*Last updated: January 1, 2026 - Tab Data Views Implementation Complete*
